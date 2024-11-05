@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:03:20 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/05 17:06:04 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/05 17:13:14 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,8 @@
 /* Readline Libraries */
 # include <readline/readline.h>
 # include <readline/history.h>
+
+/*Include libft*/
+# include "../libft/libft.h"
 
 #endif

@@ -13,12 +13,16 @@ READLINE = -lreadline
 SRCS_DIR = srcs
 OBJS_DIR = objs
 INCS_DIR = includes
+LIBFT_DIR = libft
 
 #Source files
 SRCS = $(SRCS_DIR)/main.c \
 
 #Object files
 OBJS = $(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)
+
+#Libft files
+LIBFT = $(LIBFT_DIR)/libft.a
 
 #Default target
 all : $(NAME)
@@ -31,16 +35,22 @@ $(OBJS_DIR):
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c | $(OBJS_DIR)
 	@$(CC) $(CFLAGS) -I$(INCS_DIR)  -c $< -o $@
 
+# Make libft
+$(LIBFT):
+	@make -C $(LIBFT_DIR)
+
 #Link program
-$(NAME): $(OBJS)
-	@$(CC) $(OBJS) $(READLINE) -o $(NAME)
+$(NAME): $(LIBFT) $(OBJS)
+	@$(CC) $(OBJS) $(LIBFT) $(READLINE) -o $(NAME)
 
 # Clean object files
 clean:
+	@make -C $(LIBFT_DIR) clean
 	@rm -rf $(OBJS_DIR)
 
 # Clean everything
 fclean: clean
+	@make -C $(LIBFT_DIR) fclean
 	@rm -f $(NAME)
 
 # Rebuild
