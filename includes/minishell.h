@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:03:20 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/07 16:53:07 by asplavni         ###   ########.fr       */
+/*   Updated: 2024/11/07 17:00:59 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,12 @@
 /*Include libft*/
 # include "../libft/libft.h"
 
-// typedef struct s_command
-// {
-// 	char	**args;
-// 	char	*function;
-// 	char	**splitted_input;
-// }			t_command;
+typedef struct s_command
+{
+	char	**args;
+	char	*function;
+	char	**splitted_input;
+}			t_command;
 
 typedef struct s_tokens
 {
