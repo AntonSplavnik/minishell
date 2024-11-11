@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:03:20 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/11 11:24:30 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/11 16:05:03 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ typedef enum e_token_type
 	TOKEN_WORD, //all regular words or arguments
 	TOKEN_COMMAND, //built-in commands
 	TOKEN_QUOTES, // quotes ""
-} t_token_type;
+}			t_token_type;
 
 typedef struct s_token
 {
@@ -55,5 +55,11 @@ typedef struct s_command
 	char	*function;
 	t_token	*tokens;
 }			t_command;
+
+
+//tokenisation.c
+void	input_to_token(t_token *token_list, char *args);
+t_token	create_token(char *input);
+
 
 #endif
