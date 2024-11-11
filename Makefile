@@ -17,6 +17,7 @@ LIBFT_DIR = libft
 
 #Source files
 SRCS = $(SRCS_DIR)/main.c \
+		$(SRCS_DIR)/tokenisation.c \
 
 #Object files
 OBJS = $(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)

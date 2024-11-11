@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:02:10 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/11 16:17:15 by asplavni         ###   ########.fr       */
+/*   Updated: 2024/11/11 17:38:10 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	main(void)
 {
-	t_token	**token_list;
+	t_token	*token_list;
 	char	*args;
 
 	token_list = malloc(sizeof(t_token));
@@ -27,8 +27,13 @@ int	main(void)
 		{
 			add_history(args);
 		}
-		input_to_token(token_list, args);
+		input_to_token(&token_list, args);
+		t_token *current = token_list;
+		while(current)
+		{
+			ft_printf("The content of the node is %s and its type is %d", current->content, current->type);
+			current = current->next;
+		}
 	}
-
 	return (0);
 }
