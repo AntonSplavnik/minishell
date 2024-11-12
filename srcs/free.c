@@ -1,41 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/05 17:02:10 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/12 13:23:31 by abillote         ###   ########.fr       */
+/*   Created: 2024/11/12 12:43:11 by abillote          #+#    #+#             */
+/*   Updated: 2024/11/12 12:49:48 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	main(void)
+void	free_token_list(t_token **token_list)
 {
-	t_token	*token_list;
-	char	*args;
+	t_token	*temp;
 
-	token_list = NULL;
-	while (1)
+	while (*token_list)
 	{
-		//store input with readline
-		args = readline("minishell$ ");
-		if (!args)
-			break ;
-		//add raw_input to history if it's not empty
-		if (args[0] != '\0')
-		{
-			add_history(args);
-		}
-		input_to_token(&token_list, args);
-
-		//print token to check our code
-		print_token(token_list);
-
-		//clean tokens
-		free_token_list(&token_list);
+		temp = *token_list;
+		*token_list = (*token_list)->next;
+		free(temp->content);
+		free(temp);
 	}
-	return (0);
+	*token_list = NULL;
 }
