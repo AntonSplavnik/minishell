@@ -20,6 +20,7 @@ SRCS = $(SRCS_DIR)/main.c \
 		$(SRCS_DIR)/parcing/tokenisation.c \
 		$(SRCS_DIR)/parcing/parcing_utils.c \
 		$(SRCS_DIR)/free.c \
+		$(SRCS_DIR)/errors.c \
 		$(SRCS_DIR)/utils_to_print.c \
 
 #Object files

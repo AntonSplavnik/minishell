@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:02:10 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/13 15:39:30 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/13 16:44:51 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int	main(void)
 {
 	t_token	*token_list;
 	char	*args;
+	t_error	error;
 
 	token_list = NULL;
 	while (1)
@@ -29,7 +30,12 @@ int	main(void)
 		{
 			add_history(args);
 		}
-		input_to_token(&token_list, args);
+		error = input_to_token(&token_list, args);
+		if (error != SUCCESS)
+		{
+			free(args);
+			continue ;
+		}
 
 		//print token to check our code
 		print_token(token_list);
