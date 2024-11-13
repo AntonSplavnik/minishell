@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:03:20 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/13 16:46:40 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/13 16:51:10 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ typedef enum e_error
 	ERR_READLINE = 2,
 	ERR_PARCING = 3,
 	//..add any other relevant error
-	//do not forget to add them in print_error function
+	//do not forget to add them in print_error function in errors.c
 }	t_error;
 
 typedef enum e_token_type
