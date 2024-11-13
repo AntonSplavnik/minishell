@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:02:10 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/12 13:23:31 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/13 15:34:21 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,9 @@ int	main(void)
 		//print token to check our code
 		print_token(token_list);
 
-		//clean tokens
+		//free functions
 		free_token_list(&token_list);
+		free(args);
 	}
 	return (0);
 }

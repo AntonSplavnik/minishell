@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 12:54:58 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/12 13:36:57 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/13 15:28:56 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,16 @@
 
 //this needs to be updated with all the types we define
 const char	*g_token_type_str[] = {
-[TYPE_WORD] = "TYPE_WORD",
+[TYPE_ARG] = "TYPE_ARG",
 [TYPE_COMMAND] = "TYPE_COMMAND",
-[TYPE_QUOTES] = "TYPE_QUOTES",
-[TOKEN_ERROR] = "TOKEN_ERROR"
+[TYPE_DQUOTE] = "TYPE_DQUOTE",
+[TYPE_SQUOTE] = "TYPE_SQUOTE",
+[TYPE_PIPE] = "TYPE_PIPE",
+[TYPE_REDIRIN] = "TYPE_REDIRIN",
+[TYPE_REDIROUT] = "TYPE_REDIROUT",
+[TYPE_REDIRAPPEND] = "TYPE_REDIAPPEND",
+[TYPE_HEREDOC] = "TYPE_HEREDOC",
+[TOKEN_EMPTY] = "TOKEN_EMPTY"
 };
 
 void	print_token(t_token *token_list)

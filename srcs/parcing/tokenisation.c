@@ -6,11 +6,11 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 11:21:21 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/12 13:35:37 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/13 15:17:04 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 void	input_to_token(t_token **token_list, char *args)
 {
@@ -70,14 +70,32 @@ void	add_token(t_token **token_list, char *input, t_token_type type)
 
 t_token_type	get_token_type(char *input)
 {
-	int	i;
-
-	i = 0;
-	while (g_token_types[i].content)
-	{
-		if (strcmp(g_token_types[i].content, input) == 0)
-			return (g_token_types[i].type);
-		i++;
-	}
-	return (TYPE_WORD);
+	if (is_command(input) == 1)
+		return (TYPE_COMMAND);
+	if (ft_strcmp(input, "\"") == 0)
+		return (TYPE_DQUOTE);
+	if (ft_strcmp(input, "'") == 0)
+		return (TYPE_SQUOTE);
+	if (ft_strcmp(input, "|") == 0)
+		return (TYPE_PIPE);
+	if (ft_strcmp(input, "<") == 0)
+		return (TYPE_REDIRIN);
+	if (ft_strcmp(input, ">") == 0)
+		return (TYPE_REDIROUT);
+	if (ft_strcmp(input, ">>") == 0)
+		return (TYPE_REDIRAPPEND);
+	if (ft_strcmp(input, "<<") == 0)
+		return (TYPE_HEREDOC);
+	if (ft_strcmp(input, "") == 0)
+		return (TOKEN_EMPTY);
+	else
+	//while (g_token_types[i].content)
+	//{
+	//	if (strcmp(g_token_types[i].content, input) == 0)
+	//		return (g_token_types[i].type);
+	//	i++;
+	//}
+		return (TYPE_ARG);
 }
+
+
