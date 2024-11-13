@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 11:21:21 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/13 15:17:04 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/13 15:42:47 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,13 +89,5 @@ t_token_type	get_token_type(char *input)
 	if (ft_strcmp(input, "") == 0)
 		return (TOKEN_EMPTY);
 	else
-	//while (g_token_types[i].content)
-	//{
-	//	if (strcmp(g_token_types[i].content, input) == 0)
-	//		return (g_token_types[i].type);
-	//	i++;
-	//}
 		return (TYPE_ARG);
 }
-
-

@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:03:20 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/13 15:17:06 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/13 15:40:14 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,13 +62,6 @@ typedef struct s_token_map
 	t_token_type	type;
 }			t_token_map;
 
-//static const t_token_map	g_token_types[] = {
-//{"echo", TYPE_COMMAND},
-//{"pwd", TYPE_COMMAND},
-//{"\"", TYPE_QUOTES},
-//{NULL, TOKEN_ERROR}
-//};
-
 // typedef struct s_command
 // {
 // 	char	**args;
@@ -80,8 +73,8 @@ typedef struct s_token_map
 //tokenisation.c
 void				input_to_token(t_token **token_list, char *args);
 t_token				*create_token(char *input, t_token_type type);
-void				add_token(t_token **token_list, char *input,\
-						 t_token_type type);
+void				add_token(t_token **token_list, char *input, \
+						t_token_type type);
 t_token_type		get_token_type(char *input);
 
 //parcing_utils
