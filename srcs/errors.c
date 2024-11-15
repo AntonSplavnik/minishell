@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:08:53 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/15 13:23:12 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/15 16:02:20 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,13 @@
 //print error message in stderr
 void	print_error(t_error error_code)
 {
-	if (error_code == '0')
+	if (error_code == 0)
 		ft_putendl_fd("SUCCESS\n", 2);
-	else if (error_code == '1')
+	else if (error_code == 1)
+		ft_putendl_fd("Please enter ./minishell without any arguments\n", 2);
+	else if (error_code == 2)
 		ft_putendl_fd("Memory allocation failed\n", 2);
-	else if (error_code == '2')
+	else if (error_code == 3)
 		ft_putendl_fd("Parcing failed\n", 2);
 }
 
