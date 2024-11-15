@@ -6,12 +6,13 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 15:06:52 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/13 15:19:27 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/15 12:49:43 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+/*Check if the token type is a command*/
 int	is_command(char *input)
 {
 	if (ft_strcmp(input, "echo") == 0)
