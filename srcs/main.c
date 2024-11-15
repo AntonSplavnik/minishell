@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:02:10 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/15 17:23:01 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/15 17:31:59 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,12 @@ int	main(int argc, char **argv, char **env)
 		print_error(ERR_LAUNCH);
 		return (0);
 	}
-	while (1)
-	{
-		//store env
+	//store env
 		error = init_env(&env_list, env);
 		if (error != SUCCESS)
-			break ;
+			return (1) ;
+	while (1)
+	{
 		//store input with readline
 		args = readline("minishell$ ");
 		if (!args)
@@ -50,7 +50,7 @@ int	main(int argc, char **argv, char **env)
 		}
 
 		//print env variable to check our code
-		//print_env(env_list);
+		// print_env(env_list);
 		//print token to check our code
 		print_token(token_list);
 
@@ -58,5 +58,6 @@ int	main(int argc, char **argv, char **env)
 		free_token_list(&token_list);
 		free(args);
 	}
+	free_env_list(&env_list);
 	return (0);
 }
