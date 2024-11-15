@@ -6,12 +6,15 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 11:21:21 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/13 16:49:01 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/15 13:24:50 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+/*Takes the input from readline, split it
+and store each part into tokens in a token list.
+Return an error status*/
 t_error	input_to_token(t_token **token_list, char *args)
 {
 	char	**splitted_arg;
@@ -40,6 +43,7 @@ t_error	input_to_token(t_token **token_list, char *args)
 	return (SUCCESS);
 }
 
+/*Create and return a token node with its type and content*/
 t_token	*create_token(char *input, t_token_type type)
 {
 	t_token	*new_token;
@@ -58,6 +62,8 @@ t_token	*create_token(char *input, t_token_type type)
 	return (new_token);
 }
 
+/*Add a new token to the list of tokens
+Return an error status*/
 t_error	add_token(t_token **token_list, char *input, t_token_type type)
 {
 	t_token	*new_token;
@@ -78,6 +84,7 @@ t_error	add_token(t_token **token_list, char *input, t_token_type type)
 	return (SUCCESS);
 }
 
+/*Return the type of the token according to its content*/
 t_token_type	get_token_type(char *input)
 {
 	if (is_command(input) == 1)

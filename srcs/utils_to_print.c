@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 12:54:58 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/13 15:28:56 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/15 13:24:23 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ const char	*g_token_type_str[] = {
 [TOKEN_EMPTY] = "TOKEN_EMPTY"
 };
 
+//Print token listen
 void	print_token(t_token *token_list)
 {
 	t_token	*current;

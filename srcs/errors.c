@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:08:53 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/13 16:47:51 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/15 13:23:12 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	print_error(t_error error_code)
 		ft_putendl_fd("Parcing failed\n", 2);
 }
 
+//free a pointer and print error message
 t_error	handle_error(t_error error_code, void *ptr_to_free)
 {
 	if (ptr_to_free)
@@ -31,6 +32,7 @@ t_error	handle_error(t_error error_code, void *ptr_to_free)
 	return (error_code);
 }
 
+//free the token list and print error message
 t_error	handle_error_free_all(t_error error_code, \
 								t_token **token_list, char *args)
 {
