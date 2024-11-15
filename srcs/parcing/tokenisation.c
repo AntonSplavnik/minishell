@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 11:21:21 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/15 13:24:50 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/15 16:33:35 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ t_error	input_to_token(t_token **token_list, char *args)
 			while (splitted_arg[i])
 				free(splitted_arg[i++]);
 			free(splitted_arg);
-			return (handle_error_free_all(ERR_PARCING, token_list, NULL));
+			return (handle_error_free_tokens(ERR_PARCING, token_list, NULL));
 		}
 		i++;
 	}
