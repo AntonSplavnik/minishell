@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:03:20 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/15 17:17:12 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/16 11:58:41 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef enum e_error
 	//do not forget to add them in print_error function in errors.c
 }	t_error;
 
+//When you add token type, add it in the utils to print file as well
 typedef enum e_token_type
 {
 	TYPE_ARG, //all regular words or arguments
@@ -57,6 +58,7 @@ typedef enum e_token_type
 	TYPE_REDIROUT, // > (output redirection)
 	TYPE_REDIRAPPEND, // >> (append output redirection)
 	TYPE_HEREDOC, // << (here document)
+	TYPE_ENVVAR, // $VAR (includes $?)
 	TOKEN_EMPTY,
 }			t_token_type;
 

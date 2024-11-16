@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 12:54:58 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/15 17:12:03 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/16 11:58:53 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ const char	*g_token_type_str[] = {
 [TYPE_REDIROUT] = "TYPE_REDIROUT",
 [TYPE_REDIRAPPEND] = "TYPE_REDIAPPEND",
 [TYPE_HEREDOC] = "TYPE_HEREDOC",
+[TYPE_ENVVAR] = "TYPE_ENVVAR",
 [TOKEN_EMPTY] = "TOKEN_EMPTY"
 };
 
