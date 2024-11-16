@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:03:20 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/16 11:58:41 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/16 16:16:01 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ t_env				*create_envvar(char *env);
 
 //utils
 char				*ft_strndup(const char *s, size_t n);
+int					ft_strcmp(const char *s1, const char *s2);
 
 //free.c
 void				free_token_list(t_token **token_list);
