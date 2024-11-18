@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 11:21:21 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/16 11:59:57 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/18 12:14:43 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,6 @@ t_token_type	get_token_type(char *input)
 {
 	if (is_command(input) == 1)
 		return (TYPE_COMMAND);
-	if (input[0] == '$')
-		return (TYPE_ENVVAR);
 	if (ft_strcmp(input, "\"") == 0)
 		return (TYPE_DQUOTE);
 	if (ft_strcmp(input, "'") == 0)
