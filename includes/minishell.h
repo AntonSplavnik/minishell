@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:03:20 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/18 17:32:08 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/19 18:09:25 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,15 +76,23 @@ typedef struct s_token
 }			t_token;
 
 //PARCING
-//tokenisation.c
+//token_creation.c
 t_error				input_to_token(t_token **token_list, char *args);
 t_token				*create_token(char *input, t_token_type type);
 t_error				add_token(t_token **token_list, \
 					char *input, t_token_type type);
 t_token_type		get_token_type(char *input, t_token **token_list);
-
-//parcing_utils.c
 int					is_command(t_token **token_list);
+
+
+//token_extraction.c
+t_error				ft_split_token(t_token **token_list, \
+						char *args, size_t *i, char **token);
+
+//token_utils.c
+int					is_space(char c);
+int					is_delimiter(char c);
+int				get_delimiter_len(const char *str);
 
 //ENV
 //init_env.c

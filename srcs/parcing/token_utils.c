@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parcing_utils.c                                    :+:      :+:    :+:   */
+/*   token_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 15:06:52 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/18 17:34:18 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/19 18:08:53 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,17 +35,25 @@
 //		return (0);
 //}
 
-//Each first word and each word after a pipe is a command
-int is_command(t_token **token_list)
+int	is_space(char c)
 {
-	t_token *current;
+	return (c == ' ' || c == '\t' || c == '\n' || \
+			c == '\v' || c == '\f' || c == '\r');
+}
 
-	current = *token_list;
-	if (!token_list || !*token_list)
-		return (1);
-	while (current->next)
-		current = current->next;
-	if (current ->type == TYPE_PIPE)
+int	is_delimiter(char c)
+{
+	return (c == '<' || c == '>' || c == '|');
+}
+
+int	get_delimiter_len(const char *str)
+{
+	if (!str || !*str)
+		return (0);
+	if ((*str == '<' && *(str + 1) == '<') || \
+		(*str == '>' && *(str + 1) == '>'))
+		return (2);
+	if (is_delimiter(*str))
 		return (1);
 	return (0);
 }

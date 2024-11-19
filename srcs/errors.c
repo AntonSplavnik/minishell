@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:08:53 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/15 17:17:28 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/19 17:08:06 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	print_error(t_error error_code)
 	else if (error_code == 2)
 		ft_putendl_fd("Memory allocation failed\n", 2);
 	else if (error_code == 3)
-		ft_putendl_fd("Parcing failed\n", 2);
+		ft_putendl_fd("Syntax error\n", 2);
 	else if (error_code == 4)
 		ft_putendl_fd("Environment could not be set\n", 2);
 }
