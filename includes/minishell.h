@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:03:20 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/18 12:14:25 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/18 17:32:08 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,10 @@ t_error				input_to_token(t_token **token_list, char *args);
 t_token				*create_token(char *input, t_token_type type);
 t_error				add_token(t_token **token_list, \
 					char *input, t_token_type type);
-t_token_type		get_token_type(char *input);
+t_token_type		get_token_type(char *input, t_token **token_list);
 
 //parcing_utils.c
-int					is_command(char *input);
+int					is_command(t_token **token_list);
 
 //ENV
 //init_env.c
