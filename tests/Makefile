@@ -3,19 +3,20 @@
 NAME = test_tokenizer
 
 # Paths
-SRC_PATH = ../srcs
+SRCS_DIR = ../srcs
 INC_PATH = ../includes
 LIBFT_PATH = ../libft
 
 # Source files
-SRC = 	$(SRC_PATH)/parcing/tokenisation.c \
-		$(SRC_PATH)/parcing/parcing_utils.c \
-		$(SRC_PATH)/env/init_env.c \
-		$(SRC_PATH)/utils/ft_strndup.c \
-		$(SRC_PATH)/utils/ft_strcmp.c \
-		$(SRC_PATH)/free.c \
-		$(SRC_PATH)/errors.c \
-		$(SRC_PATH)/utils_to_print.c \
+SRC = 	$(SRCS_DIR)/parcing/input_to_token.c \
+		$(SRCS_DIR)/parcing/token_utils.c \
+		$(SRCS_DIR)/parcing/ft_split_token.c \
+		$(SRCS_DIR)/env/init_env.c \
+		$(SRCS_DIR)/utils/ft_strndup.c \
+		$(SRCS_DIR)/utils/ft_strcmp.c \
+		$(SRCS_DIR)/free.c \
+		$(SRCS_DIR)/errors.c \
+		$(SRCS_DIR)/utils_to_print.c \
 		tests_tokenizer.c \
 
 # Compiler and flags

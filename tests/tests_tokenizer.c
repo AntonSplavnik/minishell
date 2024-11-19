@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 12:28:42 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/18 12:21:18 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/19 17:58:02 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	print_test_result(char *test_name, int success)
 	else
 		printf("Test %s : SUCCESS\n\n", test_name);
 }
-void	test_single_command_pwd(void)
+int	test_single_command_pwd(void)
 {
 	t_token	*token_list;
 	char	*input;
@@ -49,8 +49,9 @@ void	test_single_command_pwd(void)
 		success = 0;
 	print_test_result("Single command pwd without arguments", success);
 	free_token_list(&token_list);
+	return (success);
 }
-void	test_single_command_ls(void)
+int	test_single_command_ls(void)
 {
 	t_token *token_list;
 	char	*input;
@@ -67,9 +68,10 @@ void	test_single_command_ls(void)
 		success = 0;
 	print_test_result("single command ls", success);
 	free_token_list(&token_list);
+	return (success);
 }
 
-void	test_single_command_echo(void)
+int	test_single_command_echo(void)
 {
 	t_token *token_list;
 	char	*input;
@@ -86,9 +88,10 @@ void	test_single_command_echo(void)
 		success = 0;
 	print_test_result("single command echo", success);
 	free_token_list(&token_list);
+	return (success);
 }
 
-void	test_single_command_echo_flag(void)
+int	test_single_command_echo_flag(void)
 {
 	t_token *token_list;
 	char	*input;
@@ -106,8 +109,9 @@ void	test_single_command_echo_flag(void)
 		success = 0;
 	print_test_result("single command echo with flag", success);
 	free_token_list(&token_list);
+	return (success);
 }
-void	test_basic_double_quotes(void)
+int	test_basic_double_quotes(void)
 {
 	t_token	*token_list;
 	char	*input;
@@ -123,9 +127,10 @@ void	test_basic_double_quotes(void)
 		success = 0;
 	print_test_result("Basic double quotes", success);
 	free_token_list(&token_list);
+	return (success);
 }
 
-void	test_basic_single_quotes(void)
+int	test_basic_single_quotes(void)
 {
 	t_token	*token_list;
 	char	*input;
@@ -141,9 +146,10 @@ void	test_basic_single_quotes(void)
 		success = 0;
 	print_test_result("Basic single quotes", success);
 	free_token_list(&token_list);
+	return (success);
 }
 
-void	test_missing_last_single_quotes(void)
+int	test_missing_last_single_quotes(void)
 {
 	t_token	*token_list;
 	char	*input;
@@ -156,9 +162,10 @@ void	test_missing_last_single_quotes(void)
 		success = 1;
 	print_test_result("Missing last single quote", success);
 	free_token_list(&token_list);
+	return (success);
 }
 
-void	test_missing_first_single_quotes(void)
+int	test_missing_first_single_quotes(void)
 {
 	t_token	*token_list;
 	char	*input;
@@ -171,9 +178,10 @@ void	test_missing_first_single_quotes(void)
 		success = 1;
 	print_test_result("Missing first single quote", success);
 	free_token_list(&token_list);
+	return (success);
 }
 
-void	test_missing_last_double_quotes(void)
+int	test_missing_last_double_quotes(void)
 {
 	t_token	*token_list;
 	char	*input;
@@ -186,9 +194,10 @@ void	test_missing_last_double_quotes(void)
 		success = 1;
 	print_test_result("Missing last double quote", success);
 	free_token_list(&token_list);
+	return (success);
 }
 
-void	test_missing_first_double_quotes(void)
+int	test_missing_first_double_quotes(void)
 {
 	t_token	*token_list;
 	char	*input;
@@ -201,9 +210,10 @@ void	test_missing_first_double_quotes(void)
 		success = 1;
 	print_test_result("Missing first double quote", success);
 	free_token_list(&token_list);
+	return (success);
 }
 
-void test_input_redirection(void)
+int test_input_redirection(void)
 {
 	t_token	*token_list;
 	char	*input;
@@ -220,9 +230,10 @@ void test_input_redirection(void)
 		success = 0;
 	print_test_result("Basic input redirection", success);
 	free_token_list(&token_list);
+	return (success);
 }
 
-void test_input_redirection_without_spaces(void)
+int test_input_redirection_without_spaces(void)
 {
 	t_token	*token_list;
 	char	*input;
@@ -239,9 +250,10 @@ void test_input_redirection_without_spaces(void)
 		success = 0;
 	print_test_result("Input redirection without spaces", success);
 	free_token_list(&token_list);
+	return (success);
 }
 
-void test_input_redirection_double_quotes(void)
+int test_input_redirection_double_quotes(void)
 {
 	t_token	*token_list;
 	char	*input;
@@ -252,14 +264,16 @@ void test_input_redirection_double_quotes(void)
 	success = 1;
 	if (input_to_token(&token_list, input) != SUCCESS)
 		success = 0;
-	if (success && (!verify_token(token_list, "cat", TYPE_COMMAND) ||
-		!verify_token(token_list->next, "\"<input.txt\"", TYPE_ARG)))
+	if (success && (!verify_token(token_list, "echo", TYPE_COMMAND) ||
+		!verify_token(token_list->next, "\"< input.txt\"", TYPE_ARG)))
 		success = 0;
 	print_test_result("Input redirection with double quotes", success);
+	//print_token(token_list);
 	free_token_list(&token_list);
+	return (success);
 }
 
-void test_input_redirection_single_quotes(void)
+int test_input_redirection_single_quotes(void)
 {
 	t_token	*token_list;
 	char	*input;
@@ -270,14 +284,16 @@ void test_input_redirection_single_quotes(void)
 	success = 1;
 	if (input_to_token(&token_list, input) != SUCCESS)
 		success = 0;
-	if (success && (!verify_token(token_list, "cat", TYPE_COMMAND) ||
-		!verify_token(token_list->next, "\'<input.txt\'", TYPE_ARG)))
+	if (success && (!verify_token(token_list, "echo", TYPE_COMMAND) ||
+		!verify_token(token_list->next, "\'< input.txt\'", TYPE_ARG)))
 		success = 0;
 	print_test_result("Input redirection with single quotes", success);
+	//print_token(token_list);
 	free_token_list(&token_list);
+	return (success);
 }
 
-void test_output_redirection(void)
+int test_output_redirection(void)
 {
 	t_token	*token_list;
 	char	*input;
@@ -295,9 +311,10 @@ void test_output_redirection(void)
 		success = 0;
 	print_test_result("Basic output redirection", success);
 	free_token_list(&token_list);
+	return (success);
 }
 
-void test_output_redirection_without_spaces(void)
+int test_output_redirection_without_spaces(void)
 {
 	t_token	*token_list;
 	char	*input;
@@ -315,9 +332,10 @@ void test_output_redirection_without_spaces(void)
 		success = 0;
 	print_test_result("Output redirection without spaces", success);
 	free_token_list(&token_list);
+	return (success);
 }
 
-void test_output_redirection_double_quotes(void)
+int test_output_redirection_double_quotes(void)
 {
 	t_token	*token_list;
 	char	*input;
@@ -333,8 +351,9 @@ void test_output_redirection_double_quotes(void)
 		success = 0;
 	print_test_result("Output redirection double quote", success);
 	free_token_list(&token_list);
+	return (success);
 }
-void test_output_redirection_double_quotes_2(void)
+int test_output_redirection_double_quotes_2(void)
 {
 	t_token	*token_list;
 	char	*input;
@@ -352,9 +371,10 @@ void test_output_redirection_double_quotes_2(void)
 		success = 0;
 	print_test_result("Output redirection double quotes around output", success);
 	free_token_list(&token_list);
+	return (success);
 }
 
-void test_output_redirection_single_quotes(void)
+int test_output_redirection_single_quotes(void)
 {
 	t_token	*token_list;
 	char	*input;
@@ -370,8 +390,9 @@ void test_output_redirection_single_quotes(void)
 		success = 0;
 	print_test_result("Output redirection single quote", success);
 	free_token_list(&token_list);
+	return (success);
 }
-void test_output_redirection_single_quotes_2(void)
+int test_output_redirection_single_quotes_2(void)
 {
 	t_token	*token_list;
 	char	*input;
@@ -389,9 +410,10 @@ void test_output_redirection_single_quotes_2(void)
 		success = 0;
 	print_test_result("Output redirection single quotes around output", success);
 	free_token_list(&token_list);
+	return (success);
 }
 
-void test_simple_pipe(void)
+int test_simple_pipe(void)
 {
 	t_token *token_list;
 	char *input;
@@ -409,9 +431,10 @@ void test_simple_pipe(void)
 		success = 0;
 	print_test_result("Simple pipe", success);
 	free_token_list(&token_list);
+	return (success);
 }
 
-void test_env_variable(void)
+int test_env_variable(void)
 {
 	t_token *token_list;
 	char *input;
@@ -427,9 +450,10 @@ void test_env_variable(void)
 		success = 0;
 	print_test_result("Environment variable", success);
 	free_token_list(&token_list);
+	return (success);
 }
 
-void test_env_variable_double_quotes(void)
+int test_env_variable_double_quotes(void)
 {
 	t_token *token_list;
 	char *input;
@@ -445,9 +469,10 @@ void test_env_variable_double_quotes(void)
 		success = 0;
 	print_test_result("Environment variable with double quotes", success);
 	free_token_list(&token_list);
+	return (success);
 }
 
-void test_env_variable_single_quotes(void)
+int test_env_variable_single_quotes(void)
 {
 	t_token *token_list;
 	char *input;
@@ -463,9 +488,10 @@ void test_env_variable_single_quotes(void)
 		success = 0;
 	print_test_result("Environment variable with single quotes", success);
 	free_token_list(&token_list);
+	return (success);
 }
 
-void test_complex_command(void)
+int test_complex_command(void)
 {
 	t_token *token_list;
 	char *input;
@@ -486,17 +512,19 @@ void test_complex_command(void)
 		success = 0;
 	if (success && (!verify_token(token_list->next->next->next->next, "grep", TYPE_COMMAND)))
 		success = 0;
-	if (success && (!verify_token(token_list->next->next->next->next->next, "pattern", TYPE_ARG)))
+	if (success && (!verify_token(token_list->next->next->next->next->next, "'pattern'", TYPE_ARG)))
 		success = 0;
 	if (success && (!verify_token(token_list->next->next->next->next->next->next, ">", TYPE_REDIROUT)))
 		success = 0;
 	if (success && (!verify_token(token_list->next->next->next->next->next->next->next, "output.txt", TYPE_ARG)))
 		success = 0;
 	print_test_result("Complex command", success);
+	//print_token(token_list);
 	free_token_list(&token_list);
+	return (success);
 }
 
-void	test_heredoc_basic()
+int	test_heredoc_basic()
 {
 	t_token *token_list;
 	char *input;
@@ -515,9 +543,10 @@ void	test_heredoc_basic()
 		success = 0;
 	print_test_result("Basic heredoc", success);
 	free_token_list(&token_list);
+	return (success);
 }
 
-void test_complex_heredoc(void)
+int test_complex_heredoc(void)
 {
 	t_token *token_list;
 	char *input;
@@ -538,7 +567,7 @@ void test_complex_heredoc(void)
 		success = 0;
 	if (success && (!verify_token(token_list->next->next->next->next, "grep", TYPE_COMMAND)))
 		success = 0;
-	if (success && (!verify_token(token_list->next->next->next->next->next, "pattern", TYPE_ARG)))
+	if (success && (!verify_token(token_list->next->next->next->next->next, "'pattern'", TYPE_ARG)))
 		success = 0;
 	if (success && (!verify_token(token_list->next->next->next->next->next->next, ">", TYPE_REDIROUT)))
 		success = 0;
@@ -546,38 +575,155 @@ void test_complex_heredoc(void)
 		success = 0;
 	print_test_result("Complex heredoc", success);
 	free_token_list(&token_list);
+	return (success);
 }
 
 int	main(void)
 {
+	int	count = 0;
+	int	success = 0;
+
 	printf("-----Tokenizer Tests-----\n\n");
-	test_single_command_pwd();
-	test_single_command_ls();
-	test_single_command_echo();
-	test_single_command_echo_flag();
-	test_basic_double_quotes();
-	test_basic_single_quotes();
-	test_missing_last_single_quotes();
-	test_missing_first_single_quotes();
-	test_missing_last_double_quotes();
-	test_missing_first_double_quotes();
-	test_input_redirection();
-	test_input_redirection_without_spaces();
-	test_input_redirection_double_quotes();
-	test_input_redirection_single_quotes();
-	test_output_redirection();
-	test_output_redirection_without_spaces();
-	test_output_redirection_double_quotes();
-	test_output_redirection_double_quotes_2();
-	test_output_redirection_single_quotes();
-	test_output_redirection_single_quotes_2();
-	test_simple_pipe();
-	test_env_variable();
-	test_env_variable_double_quotes();
-	test_env_variable_single_quotes();
-	test_complex_command();
-	test_heredoc_basic();
-	test_complex_heredoc();
+	if (test_single_command_pwd())
+	{
+		count++;
+		success++;
+	}
+	if (test_single_command_ls())
+	{
+		count++;
+		success++;
+	}
+	if (test_single_command_echo())
+	{
+		count++;
+		success++;
+	}
+	if (test_single_command_echo_flag())
+	{
+		count++;
+		success++;
+	}
+	if (test_basic_double_quotes())
+	{
+		count++;
+		success++;
+	}
+	if (test_basic_single_quotes())
+	{
+		count++;
+		success++;
+	}
+	if (test_missing_last_single_quotes())
+	{
+		count++;
+		success++;
+	}
+	if (test_missing_first_single_quotes())
+	{
+		count++;
+		success++;
+	}
+	if (test_missing_last_double_quotes())
+	{
+		count++;
+		success++;
+	}
+	if (test_missing_first_double_quotes())
+	{
+		count++;
+		success++;
+	}
+	if (test_input_redirection())
+	{
+		count++;
+		success++;
+	}
+	if (test_input_redirection_without_spaces())
+	{
+		count++;
+		success++;
+	}
+	if (test_input_redirection_double_quotes())
+	{
+		count++;
+		success++;
+	}
+	if (test_input_redirection_single_quotes())
+	{
+		count++;
+		success++;
+	}
+	if (test_output_redirection())
+	{
+		count++;
+		success++;
+	}
+	if (test_output_redirection_without_spaces())
+	{
+		count++;
+		success++;
+	}
+	if (test_output_redirection_double_quotes())
+	{
+		count++;
+		success++;
+	}
+	if (test_output_redirection_double_quotes_2())
+	{
+		count++;
+		success++;
+	}
+	if (test_output_redirection_single_quotes())
+	{
+		count++;
+		success++;
+	}
+	if (test_output_redirection_single_quotes_2())
+	{
+		count++;
+		success++;
+	}
+	if (test_simple_pipe())
+	{
+		count++;
+		success++;
+	}
+	if (test_env_variable())
+	{
+		count++;
+		success++;
+	}
+	if (test_env_variable_double_quotes())
+	{
+		count++;
+		success++;
+	}
+	if (test_env_variable_single_quotes())
+	{
+		count++;
+		success++;
+	}
+	if (test_complex_command())
+	{
+		count++;
+		success++;
+	}
+	if (test_heredoc_basic())
+	{
+		count++;
+		success++;
+	}
+	if (test_complex_heredoc())
+	{
+		count++;
+		success++;
+	}
+	printf("SUCCESS : %d out of %d\n", success, count);
+	if (success == count)
+		printf("ALL GOOD, CONGRATS!\n\n");
+	else
+		printf("SOME ERRORS, TRY AGAIN!\n\n");
 	printf("-----Tests Completed-----\n");
 	return (0);
 }

@@ -15,10 +15,14 @@ OBJS_DIR = objs
 INCS_DIR = includes
 LIBFT_DIR = libft
 
+#Default target
+all : $(NAME)
+
 #Source files
 SRCS = $(SRCS_DIR)/main.c \
-		$(SRCS_DIR)/parcing/tokenisation.c \
-		$(SRCS_DIR)/parcing/parcing_utils.c \
+		$(SRCS_DIR)/parcing/token_creation.c \
+		$(SRCS_DIR)/parcing/token_utils.c \
+		$(SRCS_DIR)/parcing/token_extraction.c \
 		$(SRCS_DIR)/env/init_env.c \
 		$(SRCS_DIR)/utils/ft_strndup.c \
 		$(SRCS_DIR)/utils/ft_strcmp.c \
@@ -33,9 +37,6 @@ HEADERS = $(INCS_DIR)/minishell.h $(LIBFT_DIR)/libft.h
 
 #Libft files
 LIBFT = $(LIBFT_DIR)/libft.a
-
-#Default target
-all : $(NAME)
 
 #Create obj directories
 $(OBJS_DIR):
