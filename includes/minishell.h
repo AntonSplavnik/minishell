@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:03:20 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/19 18:09:25 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/19 21:39:41 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,14 @@ typedef struct s_token
 	struct s_token	*next;
 }			t_token;
 
+//Used to store quote information and pass it to different functions
+typedef struct s_quote_info
+{
+	int		in_inner_quote;
+	char	inner_quote;
+	char	outer_quote;
+}			t_quote_info;
+
 //PARCING
 //token_creation.c
 t_error				input_to_token(t_token **token_list, char *args);
@@ -84,7 +92,6 @@ t_error				add_token(t_token **token_list, \
 t_token_type		get_token_type(char *input, t_token **token_list);
 int					is_command(t_token **token_list);
 
-
 //token_extraction.c
 t_error				ft_split_token(t_token **token_list, \
 						char *args, size_t *i, char **token);
@@ -92,7 +99,7 @@ t_error				ft_split_token(t_token **token_list, \
 //token_utils.c
 int					is_space(char c);
 int					is_delimiter(char c);
-int				get_delimiter_len(const char *str);
+int					get_delimiter_len(const char *str);
 
 //ENV
 //init_env.c

@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 14:54:55 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/19 18:07:49 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/19 21:41:39 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ static char	*extract_delimiter_token(const char *str, size_t *i, t_error *error)
 	return (token);
 }
 
-static size_t	handle_quoted_content(char *args, size_t *i, char outer_quote, \
-					int *in_inner_quote, char *inner_quote)
+static size_t	handle_quoted_content(char *args, size_t *i, \
+										t_quote_info *quotes)
 {
 	size_t	len;
 
@@ -52,20 +52,21 @@ static size_t	handle_quoted_content(char *args, size_t *i, char outer_quote, \
 	(*i)++;
 	while (args[*i])
 	{
-		if (!*in_inner_quote && args[*i] == outer_quote)
+		if (!quotes->in_inner_quote && args[*i] == quotes->outer_quote)
 		{
 			(*i)++;
 			len++;
 			break ;
 		}
-		else if (!*in_inner_quote && (args[*i] == '\'' || args[*i] == '"') && \
-				args[*i] != outer_quote)
+		else if (!quotes->in_inner_quote && \
+				(args[*i] == '\'' || args[*i] == '"') && \
+				args[*i] != quotes->outer_quote)
 		{
-			*in_inner_quote = 1;
-			*inner_quote = args[*i];
+			quotes->in_inner_quote = 1;
+			quotes->inner_quote = args[*i];
 		}
-		else if (*in_inner_quote && args[*i] == *inner_quote)
-			*in_inner_quote = 0;
+		else if (quotes->in_inner_quote && args[*i] == quotes->inner_quote)
+			quotes->in_inner_quote = 0;
 		(*i)++;
 		len++;
 	}
@@ -74,19 +75,17 @@ static size_t	handle_quoted_content(char *args, size_t *i, char outer_quote, \
 
 static char	*extract_quoted_token(char *args, size_t *i, t_error *error)
 {
-	char	outer_quote;
-	size_t	start;
-	int		in_inner_quote;
-	char	inner_quote;
-	size_t	len;
+	t_quote_info	quotes;
+	size_t			start;
+	size_t			len;
 
-	outer_quote = args[*i];
+	quotes.outer_quote = args[*i];
 	start = *i;
-	in_inner_quote = 0;
-	inner_quote = 0;
-	len = handle_quoted_content(args, i, outer_quote, \
-		&in_inner_quote, &inner_quote);
-	if (len == 1 || (args[*i - 1] != outer_quote && !in_inner_quote))
+	quotes.in_inner_quote = 0;
+	quotes.inner_quote = 0;
+	len = handle_quoted_content(args, i, &quotes);
+	if (len == 1 || (args[*i - 1] != quotes.outer_quote \
+		&& !quotes.in_inner_quote))
 	{
 		*error = ERR_PARCING;
 		return (NULL);
