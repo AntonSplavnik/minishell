@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 12:54:58 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/15 13:24:23 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/18 12:15:29 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,21 @@ void	print_token(t_token *token_list)
 		current = current->next;
 	}
 	ft_printf("Total nodes: %d\n", node_count);
+}
+
+void	print_env(t_env *env_list)
+{
+	t_env	*current;
+	int		node_count;
+
+	current = env_list;
+	node_count = 0;
+	while (current)
+	{
+		ft_printf("Variables %d:\n", node_count++);
+		ft_printf("  ├─ Key: '%s'\n", current->key);
+		ft_printf("  └─ Value: %s\n", current->value);
+		current = current->next;
+	}
+	ft_printf("Total env variables: %d\n", node_count);
 }

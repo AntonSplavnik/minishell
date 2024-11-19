@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 12:43:11 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/12 12:49:48 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/15 17:17:40 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,4 +24,19 @@ void	free_token_list(t_token **token_list)
 		free(temp);
 	}
 	*token_list = NULL;
+}
+
+void	free_env_list(t_env **env_list)
+{
+	t_env	*temp;
+
+	while (*env_list)
+	{
+		temp = *env_list;
+		*env_list = (*env_list)->next;
+		free(temp->key);
+		free(temp->value);
+		free(temp);
+	}
+	*env_list = NULL;
 }

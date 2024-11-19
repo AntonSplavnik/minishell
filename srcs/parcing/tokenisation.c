@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 11:21:21 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/15 13:24:50 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/18 17:32:37 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,12 @@ t_error	input_to_token(t_token **token_list, char *args)
 	while (splitted_arg[i])
 	{
 		if (add_token(token_list, splitted_arg[i], \
-				get_token_type(splitted_arg[i])) != SUCCESS)
+				get_token_type(splitted_arg[i], token_list)) != SUCCESS)
 		{
 			while (splitted_arg[i])
 				free(splitted_arg[i++]);
 			free(splitted_arg);
-			return (handle_error_free_all(ERR_PARCING, token_list, NULL));
+			return (handle_error_free_tokens(ERR_PARCING, token_list, NULL));
 		}
 		i++;
 	}
@@ -85,9 +85,9 @@ t_error	add_token(t_token **token_list, char *input, t_token_type type)
 }
 
 /*Return the type of the token according to its content*/
-t_token_type	get_token_type(char *input)
+t_token_type	get_token_type(char *input, t_token **token_list)
 {
-	if (is_command(input) == 1)
+	if (is_command(token_list) == 1)
 		return (TYPE_COMMAND);
 	if (ft_strcmp(input, "\"") == 0)
 		return (TYPE_DQUOTE);

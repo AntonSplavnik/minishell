@@ -6,11 +6,11 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 11:43:45 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/13 15:00:09 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/16 16:21:47 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../includes/minishell.h"
 
 int	ft_strcmp(const char *s1, const char *s2)
 {

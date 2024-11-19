@@ -3,22 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:02:10 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/15 13:48:34 by asplavni         ###   ########.fr       */
+/*   Updated: 2024/11/19 11:09:06 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	main(void)
+int	main(int argc, char **argv, char **env)
 {
 	t_token	*token_list;
 	char	*args;
 	t_error	error;
+	t_env	*env_list;
 
+	(void) argv;
 	token_list = NULL;
+	env_list = NULL;
+	if (argc != 1)
+	{
+		print_error(ERR_LAUNCH);
+		return (0);
+	}
+	//store env
+		error = init_env(&env_list, env);
+		if (error != SUCCESS)
+			return (1) ;
 	while (1)
 	{
 		//store input with readline
@@ -37,6 +49,8 @@ int	main(void)
 			continue ;
 		}
 
+		//print env variable to check our code
+		// print_env(env_list);
 		//print token to check our code
 		print_token(token_list);
 
@@ -44,6 +58,7 @@ int	main(void)
 		free_token_list(&token_list);
 		free(args);
 	}
+	free_env_list(&env_list);
 	return (0);
 }
 // testing brach
