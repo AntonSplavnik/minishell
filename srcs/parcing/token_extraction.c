@@ -6,12 +6,13 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 14:54:55 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/19 21:41:39 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/28 16:09:51 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+//extract regular string
 static char	*extract_unquoted_token(const char *str, size_t *i, t_error *error)
 {
 	size_t	start;
@@ -30,6 +31,7 @@ static char	*extract_unquoted_token(const char *str, size_t *i, t_error *error)
 	return (ft_substr(str, start, len));
 }
 
+//handle the delimiter (<, >, <<, >>, |)
 static char	*extract_delimiter_token(const char *str, size_t *i, t_error *error)
 {
 	size_t	len;
@@ -43,6 +45,7 @@ static char	*extract_delimiter_token(const char *str, size_t *i, t_error *error)
 	return (token);
 }
 
+//Handle the quotes
 static size_t	handle_quoted_content(char *args, size_t *i, \
 										t_quote_info *quotes)
 {
@@ -73,6 +76,7 @@ static size_t	handle_quoted_content(char *args, size_t *i, \
 	return (len);
 }
 
+//Extract the quoted token
 static char	*extract_quoted_token(char *args, size_t *i, t_error *error)
 {
 	t_quote_info	quotes;
@@ -98,6 +102,7 @@ static char	*extract_quoted_token(char *args, size_t *i, t_error *error)
 	return (ft_substr(args, start, len));
 }
 
+//Split the next token by checking spaces, quotes and delimiters and store it
 t_error	ft_split_token(t_token **token_list, char *args, \
 						size_t *i, char **token)
 {

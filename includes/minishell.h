@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:03:20 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/28 14:50:08 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/28 18:27:58 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,13 +75,20 @@ typedef struct s_token
 	struct s_token	*next;
 }			t_token;
 
-//Used to store quote information and pass it to different functions
+//Used during token extraction to store quote information and pass it to different functions
 typedef struct s_quote_info
 {
 	int		in_inner_quote;
 	char	inner_quote;
 	char	outer_quote;
 }			t_quote_info;
+
+//Main Shell structure, to enhanced and figure out how to use it
+typedef struct s_shell
+{
+	t_env	*env_list;
+	int		exit_status;
+} t_shell;
 
 //PARCING
 //token_creation.c
@@ -113,6 +120,7 @@ t_env				*create_envvar(char *env);
 //utils
 char				*ft_strndup(const char *s, size_t n);
 int					ft_strcmp(const char *s1, const char *s2);
+char				*ft_strcpy(char *dest, const char *src);
 
 //free.c
 void				free_token_list(t_token **token_list);
