@@ -8,9 +8,10 @@ INC_PATH = ../includes
 LIBFT_PATH = ../libft
 
 # Source files
-SRC = 	$(SRCS_DIR)/parcing/input_to_token.c \
+SRC = 	$(SRCS_DIR)/parcing/token_creation.c \
 		$(SRCS_DIR)/parcing/token_utils.c \
-		$(SRCS_DIR)/parcing/ft_split_token.c \
+		$(SRCS_DIR)/parcing/token_extraction.c \
+		$(SRCS_DIR)/parcing/token_expansion.c \
 		$(SRCS_DIR)/env/init_env.c \
 		$(SRCS_DIR)/utils/ft_strndup.c \
 		$(SRCS_DIR)/utils/ft_strcmp.c \

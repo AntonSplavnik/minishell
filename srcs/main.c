@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:02:10 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/19 11:09:06 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/28 14:48:24 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,9 @@ int	main(int argc, char **argv, char **env)
 			add_history(args);
 		}
 		error = input_to_token(&token_list, args);
-		if (error != SUCCESS)
+		if (error == SUCCESS)
+			error = expand_token(&token_list, env_list);
+		else if (error != SUCCESS)
 		{
 			free(args);
 			continue ;
@@ -61,4 +63,3 @@ int	main(int argc, char **argv, char **env)
 	free_env_list(&env_list);
 	return (0);
 }
-// testing brach

@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:03:20 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/19 21:39:41 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/28 14:50:08 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,9 @@ int					is_command(t_token **token_list);
 //token_extraction.c
 t_error				ft_split_token(t_token **token_list, \
 						char *args, size_t *i, char **token);
+
+//token_expansion.c
+t_error 			expand_tokens(t_token **token_list, t_env *env_list);
 
 //token_utils.c
 int					is_space(char c);
