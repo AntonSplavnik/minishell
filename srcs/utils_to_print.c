@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 12:54:58 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/18 12:15:29 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/29 18:24:36 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	print_token(t_token *token_list)
 	while (current)
 	{
 		ft_printf("Node %d:\n", node_count++);
-		ft_printf("  ├─ Content: '%s'\n", current->content);
+		ft_printf("  ├─ Content: %s\n", current->content);
 		ft_printf("  └─ Type: %s\n", g_token_type_str[current->type]);
 		current = current->next;
 	}
