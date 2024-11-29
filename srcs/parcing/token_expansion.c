@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:43:49 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/29 17:37:20 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/29 18:06:44 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,22 +59,6 @@ void	get_var_length(const char *str, t_env *env_list, size_t *i, size_t *expande
 
 /*Get the env var value. For $?, need to figure out how to store it in the shell struct to return it
 If no var existing, return an empty string*/
-//void expand_var(const char *str, t_env *env_list, size_t *i, char *expanded)
-//{
-//	char *var_name;
-//	char *var_value;
-//	size_t j;
-
-//	var_name = get_var_name(str);
-//	var_value = get_var_value(env_list, var_name);
-//	j = ft_strlen(expanded);
-//	ft_strcpy(expanded + j, var_value);
-//	ft_strlcat(expanded, var_value, ft_strlen(expanded) + ft_strlen(var_value) + 1);
-//	printf("expanded: %s\n", expanded);
-//	*i += ft_strlen(var_name) + 1;
-//	free(var_name);
-//}
-
 void expand_var(const char *str, t_env *env_list, size_t *i, char *expanded)
 {
     char *var_name;
@@ -147,6 +131,20 @@ size_t	calculate_expanded_length(t_token *token, t_env *env_list)
 	return (calculate_length_loop(token, env_list, &expanded_len));
 }
 
+size_t	handle_quotes(char c, int *in_dquote, int *in_squote, size_t i)
+{
+	if ((c == '\'' && !(*in_dquote)) || \
+			(c == '"' && !(*in_squote)))
+	{
+		if (c == '\'')
+			*in_squote = !(*in_squote);
+		else
+			*in_dquote = !(*in_dquote);
+		return (i + 1);
+	}
+	return (i);
+}
+
 void fill_token_content_after_expansion(t_token *token, char *expanded, t_env *env_list)
 {
 	size_t	i;
@@ -161,16 +159,8 @@ void fill_token_content_after_expansion(t_token *token, char *expanded, t_env *e
 	expanded[j] = '\0';
 	while (token->content[i])
 	{
-		if ((token->content[i] == '\'' && !in_dquote) || \
-			(token->content[i] == '"' && !in_squote))
-		{
-			if (token->content[i] == '\'')
-				in_squote = !in_squote;
-			else
-				in_dquote = !in_dquote;
-			i++;
-		}
-		else if (token->content[i] == '$' && !in_squote && token->content[i + 1])
+		i = handle_quotes(token->content[i], &in_dquote, &in_squote, i);
+		if (token->content[i] == '$' && !in_squote && token->content[i + 1])
 		{
 			expanded[j] = '\0';
 			expand_var(token->content + i + 1, env_list, &i, expanded);
