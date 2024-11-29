@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 14:54:55 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/29 17:16:38 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/29 18:14:26 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,31 +46,21 @@ static char	*extract_delimiter_token(const char *str, size_t *i, t_error *error)
 }
 
 //Handle the quotes
-static size_t	handle_quoted_content(char *args, size_t *i, \
-										t_quote_info *quotes)
+static size_t handle_quoted_content(char *args, size_t *i, t_quote_info *quotes)
 {
-	size_t	len;
+	size_t len;
 
 	len = 1;
 	(*i)++;
 	while (args[*i])
 	{
-		if (!quotes->in_inner_quote && args[*i] == quotes->outer_quote)
+		if (args[*i] == quotes->outer_quote)
 		{
 			quotes->num_outer_quote = 2;
 			(*i)++;
 			len++;
-			break ;
+			break;
 		}
-		else if (!quotes->in_inner_quote && \
-				(args[*i] == '\'' || args[*i] == '"') && \
-				args[*i] != quotes->outer_quote)
-		{
-			quotes->in_inner_quote = 1;
-			quotes->inner_quote = args[*i];
-		}
-		else if (quotes->in_inner_quote && args[*i] == quotes->inner_quote)
-			quotes->in_inner_quote = 0;
 		(*i)++;
 		len++;
 	}
@@ -90,8 +80,7 @@ static char	*extract_quoted_token(char *args, size_t *i, t_error *error)
 	quotes.inner_quote = 0;
 	quotes.num_outer_quote = 1;
 	len = handle_quoted_content(args, i, &quotes);
-	if (len == 1 || (args[*i - 1] != quotes.outer_quote \
-		&& !quotes.in_inner_quote) || quotes.num_outer_quote != 2)
+	if (len == 1 || quotes.num_outer_quote != 2)
 	{
 		*error = ERR_PARCING;
 		return (NULL);
