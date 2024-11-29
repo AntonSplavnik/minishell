@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:02:10 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/28 18:24:49 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/29 18:36:18 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	main(int argc, char **argv, char **env)
 	//store env
 		error = init_env(&env_list, env);
 		if (error != SUCCESS)
-			return (1) ;
+			return (1);
 	while (1)
 	{
 		//store input with readline
@@ -53,7 +53,7 @@ int	main(int argc, char **argv, char **env)
 		if (error != SUCCESS)
 		{
 			handle_error_free_tokens(error, &token_list, args);
-			continue;
+			continue ;
 		}
 
 		//print env variable to check our code

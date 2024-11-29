@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:03:20 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/29 17:15:08 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/29 18:50:47 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,8 @@ typedef struct s_token
 	struct s_token	*next;
 }			t_token;
 
-//Used during token extraction to store quote information and pass it to different functions
+//Used during token extraction to store
+//quote information and pass it to different functions
 typedef struct s_quote_info
 {
 	int		in_inner_quote;
@@ -89,7 +90,7 @@ typedef struct s_shell
 {
 	t_env	*env_list;
 	int		exit_status;
-} t_shell;
+}	t_shell;
 
 //PARCING
 //token_creation.c
@@ -105,12 +106,28 @@ t_error				ft_split_token(t_token **token_list, \
 						char *args, size_t *i, char **token);
 
 //token_expansion.c
-t_error 			expand_tokens(t_token **token_list, t_env *env_list);
+t_error				expand_tokens(t_token **token_list, t_env *env_list);
 
-//token_utils.c
+//token_extraction_utils.c
 int					is_space(char c);
 int					is_delimiter(char c);
 int					get_delimiter_len(const char *str);
+
+//token_expansion_var.c
+char				*get_var_value(t_env *env_list, char *key);
+char				*get_var_name(const char *str);
+void				get_var_length(const char *str, \
+						t_env *env_list, size_t *i, size_t *expanded_len);
+void				expand_var(const char *str, \
+						t_env *env_list, size_t *i, char *expanded);
+
+//token_expansion_quotes.c
+void				init_expansion_params(size_t *i, size_t *j, \
+						int *in_squote, int *in_dquote);
+void				process_quote(char quote_char, int *in_squote, \
+						int *in_dquote, size_t *i);
+size_t				process_quotes_status(char c, int *in_dquote, \
+						int *in_squote, size_t i);
 
 //ENV
 //init_env.c

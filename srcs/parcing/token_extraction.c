@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 14:54:55 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/29 18:14:26 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/29 18:39:17 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,10 @@ static char	*extract_delimiter_token(const char *str, size_t *i, t_error *error)
 }
 
 //Handle the quotes
-static size_t handle_quoted_content(char *args, size_t *i, t_quote_info *quotes)
+static size_t	handle_quoted_content(char *args, size_t *i, \
+				t_quote_info *quotes)
 {
-	size_t len;
+	size_t	len;
 
 	len = 1;
 	(*i)++;
@@ -59,7 +60,7 @@ static size_t handle_quoted_content(char *args, size_t *i, t_quote_info *quotes)
 			quotes->num_outer_quote = 2;
 			(*i)++;
 			len++;
-			break;
+			break ;
 		}
 		(*i)++;
 		len++;

@@ -9,7 +9,7 @@ LIBFT_PATH = ../libft
 
 # Source files
 SRC = 	$(SRCS_DIR)/parcing/token_creation.c \
-		$(SRCS_DIR)/parcing/token_utils.c \
+		$(SRCS_DIR)/parcing/token_extraction_utils.c \
 		$(SRCS_DIR)/parcing/token_extraction.c \
 		$(SRCS_DIR)/parcing/token_expansion.c \
 		$(SRCS_DIR)/env/init_env.c \

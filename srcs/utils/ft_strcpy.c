@@ -6,15 +6,15 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:26:49 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/28 18:27:06 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/29 18:36:44 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char *ft_strcpy(char *dest, const char *src)
+char	*ft_strcpy(char *dest, const char *src)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	while (src[i])
