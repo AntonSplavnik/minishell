@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 14:54:55 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/28 16:09:51 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/29 17:16:38 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ static size_t	handle_quoted_content(char *args, size_t *i, \
 	{
 		if (!quotes->in_inner_quote && args[*i] == quotes->outer_quote)
 		{
+			quotes->num_outer_quote = 2;
 			(*i)++;
 			len++;
 			break ;
@@ -87,9 +88,10 @@ static char	*extract_quoted_token(char *args, size_t *i, t_error *error)
 	start = *i;
 	quotes.in_inner_quote = 0;
 	quotes.inner_quote = 0;
+	quotes.num_outer_quote = 1;
 	len = handle_quoted_content(args, i, &quotes);
 	if (len == 1 || (args[*i - 1] != quotes.outer_quote \
-		&& !quotes.in_inner_quote))
+		&& !quotes.in_inner_quote) || quotes.num_outer_quote != 2)
 	{
 		*error = ERR_PARCING;
 		return (NULL);

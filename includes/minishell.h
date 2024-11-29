@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:03:20 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/28 18:27:58 by abillote         ###   ########.fr       */
+/*   Updated: 2024/11/29 17:15:08 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ typedef struct s_quote_info
 	int		in_inner_quote;
 	char	inner_quote;
 	char	outer_quote;
+	int		num_outer_quote;
 }			t_quote_info;
 
 //Main Shell structure, to enhanced and figure out how to use it
