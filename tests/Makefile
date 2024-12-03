@@ -25,7 +25,7 @@ SRC = 	$(SRCS_DIR)/parcing/token_creation.c \
 
 # Compiler and flags
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -I$(INC_PATH)
+CFLAGS = -Wall -Wextra -Werror -fPIE -I$(INC_PATH)
 
 # Library flags
 LIBS = -L$(LIBFT_PATH) -lft
