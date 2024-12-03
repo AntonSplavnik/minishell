@@ -12,6 +12,8 @@ SRC = 	$(SRCS_DIR)/parcing/token_creation.c \
 		$(SRCS_DIR)/parcing/token_extraction_utils.c \
 		$(SRCS_DIR)/parcing/token_extraction.c \
 		$(SRCS_DIR)/parcing/token_expansion.c \
+		$(SRCS_DIR)/parcing/token_expansion_quotes.c \
+		$(SRCS_DIR)/parcing/token_expansion_var.c \
 		$(SRCS_DIR)/env/init_env.c \
 		$(SRCS_DIR)/utils/ft_strndup.c \
 		$(SRCS_DIR)/utils/ft_strcmp.c \
