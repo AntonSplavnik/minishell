@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:43:49 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/29 18:50:22 by abillote         ###   ########.fr       */
+/*   Updated: 2024/12/05 18:35:57 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ size_t	calculate_length_loop(t_token *token, \
 		if ((token->content[i] == '\'' && !in_dquote)
 			|| (token->content[i] == '"' && !in_squote))
 		{
-			process_quote(token->content[i], &in_squote, &in_dquote, &i);
+			process_quote(token->content[i], &in_squote, &in_dquote);
+			i++;
 			continue ;
 		}
 		else if (token->content[i] == '$' && \
@@ -60,14 +61,17 @@ void	fill_token_content_after_expansion(t_token *token, \
 	int		in_squote;
 	int		in_dquote;
 
-	in_squote = 0;
-	in_dquote = 0;
-	i = 0;
-	j = 0;
+	init_expansion_params(&i, &j, &in_squote, &in_dquote);
 	expanded[j] = '\0';
 	while (token->content[i])
 	{
-		i = process_quotes_status(token->content[i], &in_dquote, &in_squote, i);
+		if ((token->content[i] == '\'' && !in_dquote) ||
+			(token->content[i] == '"' && !in_squote))
+		{
+			process_quote(token->content[i], &in_squote, &in_dquote);
+			i++;
+			continue;
+		}
 		if (token->content[i] == '$' && !in_squote && token->content[i + 1])
 		{
 			expanded[j] = '\0';

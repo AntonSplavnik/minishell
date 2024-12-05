@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:03:20 by abillote          #+#    #+#             */
-/*   Updated: 2024/12/05 17:36:51 by abillote         ###   ########.fr       */
+/*   Updated: 2024/12/05 18:40:11 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,9 +127,7 @@ void				expand_var(const char *str, \
 void				init_expansion_params(size_t *i, size_t *j, \
 						int *in_squote, int *in_dquote);
 void				process_quote(char quote_char, int *in_squote, \
-						int *in_dquote, size_t *i);
-size_t				process_quotes_status(char c, int *in_dquote, \
-						int *in_squote, size_t i);
+						int *in_dquote);
 
 //ENV
 //init_env.c
