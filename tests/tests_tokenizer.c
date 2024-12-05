@@ -70,6 +70,7 @@ t_test tests_tokenizer[] = {
 	{"Complex heredoc 5", "cat << DELIM | grep 'pattern' > output.txt", {TYPE_COMMAND, TYPE_HEREDOC_OP, TYPE_HEREDOC_DELIM, TYPE_PIPE, TYPE_COMMAND, TYPE_ARG, TYPE_REDIROUT, TYPE_ARG}, {"cat", "<<", "DELIM", "|", "grep", "'pattern'", ">", "output.txt"}, 8, 0}
 };
 
+//function to verify if the token content and type match the expectations
 int	verify_token(t_token *token_list, char *expected_content, \
 					t_token_type expected_type)
 {
@@ -82,12 +83,16 @@ int	verify_token(t_token *token_list, char *expected_content, \
 		return (0);
 }
 
+//function to print out the expected vs current content in case of failure
 void print_token_debug(t_token *token, char *expected_content, t_token_type expected_type)
 {
 	printf("  Expected: [%s] && type=%s\n  Got:      [%s] && type=%s\n",expected_content, g_token_type_str[expected_type], \
 	token ? token->content : "NULL", token ?  g_token_type_str[token->type] : "UNDEFINED");
 }
 
+//run a test - split & expand input into token
+//print test name and wether it fails or successes
+//if it fails, print the expected vs current token content and type
 int run_test(t_test test, t_env *env_list) {
 	t_token *token_list = NULL;
 	int success = 1;
@@ -131,14 +136,11 @@ int run_test(t_test test, t_env *env_list) {
 
 	printf(success ? GREEN "  ✓ Passed\n" RESET : RED "  ✗ Failed\n" RESET);
 	printf("\n");
-	//print_token(&token_list);
 	free_token_list(&token_list);
 	return success;
 }
 
-//Running a test - if you want to check what is inside the tokens:
-//1. In the t_test test_tokenizer, comment out all the tests you are not interested in
-//2. In run_test function, uncomment the print_token(&token_list) line
+//Go through each test from the test array, run them and print the summary
 int main(int argc, char **argv, char **env)
 {
 	(void)argv;
