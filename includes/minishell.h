@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:03:20 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/29 18:50:47 by abillote         ###   ########.fr       */
+/*   Updated: 2024/12/05 17:36:51 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,9 @@ typedef enum e_token_type
 	TYPE_REDIRIN, //< (input redirection)
 	TYPE_REDIROUT, // > (output redirection)
 	TYPE_REDIRAPPEND, // >> (append output redirection)
-	TYPE_HEREDOC, // << (here document)
+	TYPE_HEREDOC_OP, // << (here document)
+	TYPE_HEREDOC_DELIM, // heredoc delimiter
+	TYPE_HEREDOC_CONTENT, // heredoc content in between delimiters
 	TOKEN_EMPTY,
 }			t_token_type;
 
