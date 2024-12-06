@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:43:49 by abillote          #+#    #+#             */
-/*   Updated: 2024/12/05 18:54:19 by abillote         ###   ########.fr       */
+/*   Updated: 2024/12/06 14:38:39 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,12 @@ void	fill_token_content_after_expansion(t_token *token, \
 	expanded[j] = '\0';
 	while (token->content[i])
 	{
-		if ((token->content[i] == '\'' && !in_dquote) ||
+		if ((token->content[i] == '\'' && !in_dquote) || \
 			(token->content[i] == '"' && !in_squote))
 		{
 			process_quote(token->content[i], &in_squote, &in_dquote);
 			i++;
-			continue;
+			continue ;
 		}
 		if (token->content[i] == '$' && !in_squote && token->content[i + 1])
 		{

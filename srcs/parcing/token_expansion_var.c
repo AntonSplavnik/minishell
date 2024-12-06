@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 18:28:37 by abillote          #+#    #+#             */
-/*   Updated: 2024/12/05 18:53:56 by abillote         ###   ########.fr       */
+/*   Updated: 2024/12/06 14:40:46 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ void	expand_var(const char *str, t_env *env_list, \
 	while (expanded[len] && len < ft_strlen(expanded))
 		len++;
 	ft_strcpy(expanded + len, var_value);
-	printf("expanded: %s\n", expanded);
 	*i += ft_strlen(var_name) + 1;
 	free(var_name);
 }
