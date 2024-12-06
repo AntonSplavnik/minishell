@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 11:21:21 by abillote          #+#    #+#             */
-/*   Updated: 2024/12/06 15:08:03 by abillote         ###   ########.fr       */
+/*   Updated: 2024/12/06 16:30:13 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,19 @@ int	is_command(t_token **token_list)
 /*Return the type of the token according to its content*/
 t_token_type	get_token_type(char *input, t_token **token_list)
 {
+	static int expect_heredoc_delim = 0;
+
+    if (expect_heredoc_delim)
+    {
+        expect_heredoc_delim = 0;
+        return (TYPE_HEREDOC_DELIM);
+    }
+
+    if (ft_strcmp(input, "<<") == 0)
+    {
+        expect_heredoc_delim = 1;
+        return (TYPE_HEREDOC_OP);
+    }
 	if (is_command(token_list) == 1)
 		return (TYPE_COMMAND);
 	if (ft_strcmp(input, "\"") == 0)
@@ -96,27 +109,63 @@ t_error	add_token(t_token **token_list, char *input, t_token_type type)
 /*Takes the input from readline, split it
 and store each part into tokens in a token list.
 Return an error status*/
-t_error	input_to_token(t_token **token_list, char *args)
-{
-	size_t	i;
-	t_error	error;
-	char	*token;
+// t_error	input_to_token(t_token **token_list, char *args)
+// {
+// 	size_t	i;
+// 	t_error	error;
+// 	char	*token;
 
-	i = 0;
-	while (args[i])
-	{
-		error = ft_split_token(token_list, args, &i, &token);
-		if (error != SUCCESS)
-			return (error);
-		if (!token)
-			return (SUCCESS);
-		error = add_token(token_list, token, get_token_type(token, token_list));
-		if (error != SUCCESS)
-		{
-			free(token);
-			return (handle_error_free_tokens(error, token_list, NULL));
-		}
-		free(token);
-	}
-	return (SUCCESS);
+// 	i = 0;
+// 	while (args[i])
+// 	{
+// 		error = ft_split_token(token_list, args, &i, &token);
+// 		if (error != SUCCESS)
+// 			return (error);
+// 		if (!token)
+// 			return (SUCCESS);
+// 		error = add_token(token_list, token, get_token_type(token, token_list));
+// 		if (error != SUCCESS)
+// 		{
+// 			free(token);
+// 			return (handle_error_free_tokens(error, token_list, NULL));
+// 		}
+// 		free(token);
+// 	}
+// 	return (SUCCESS);
+// }
+
+t_error input_to_token(t_token **token_list, char *args)
+{
+    size_t  i;
+    t_error error;
+    char    *token;
+    t_token *last;
+
+    i = 0;
+    while (args[i])
+    {
+        error = ft_split_token(token_list, args, &i, &token);
+        if (error != SUCCESS)
+            return (error);
+        if (!token)
+            return (SUCCESS);
+
+        error = add_token(token_list, token, get_token_type(token, token_list));
+        if (error != SUCCESS)
+        {
+            free(token);
+            return (handle_error_free_tokens(error, token_list, NULL));
+        }
+
+        last = get_last_token(*token_list);
+        if (last && last->type == TYPE_HEREDOC_DELIM)
+        {
+            error = handle_heredoc(token_list, last->content);
+            if (error != SUCCESS)
+                return (handle_error_free_tokens(error, token_list, NULL));
+        }
+
+        free(token);
+    }
+    return (SUCCESS);
 }

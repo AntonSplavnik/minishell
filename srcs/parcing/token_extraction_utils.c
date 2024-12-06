@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token_utils.c                                      :+:      :+:    :+:   */
+/*   token_extraction_utils.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 15:06:52 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/29 18:27:57 by abillote         ###   ########.fr       */
+/*   Updated: 2024/12/06 16:31:02 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,4 +33,13 @@ int	get_delimiter_len(const char *str)
 	if (is_delimiter(*str))
 		return (1);
 	return (0);
+}
+
+t_token *get_last_token(t_token *token_list)
+{
+    if (!token_list)
+        return (NULL);
+    while (token_list->next)
+        token_list = token_list->next;
+    return (token_list);
 }

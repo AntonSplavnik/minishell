@@ -14,6 +14,7 @@ SRC = 	$(SRCS_DIR)/parcing/token_creation.c \
 		$(SRCS_DIR)/parcing/token_expansion.c \
 		$(SRCS_DIR)/parcing/token_expansion_quotes.c \
 		$(SRCS_DIR)/parcing/token_expansion_var.c \
+		$(SRCS_DIR)/parcing/token_extraction_heredoc.c \
 		$(SRCS_DIR)/env/init_env.c \
 		$(SRCS_DIR)/utils/ft_strndup.c \
 		$(SRCS_DIR)/utils/ft_strcmp.c \
@@ -28,7 +29,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror -fPIE -I$(INC_PATH)
 
 # Library flags
-LIBS = -L$(LIBFT_PATH) -lft
+LIBS = -L$(LIBFT_PATH) -lft -lreadline
 
 all: $(NAME)
 	@./$(NAME)
