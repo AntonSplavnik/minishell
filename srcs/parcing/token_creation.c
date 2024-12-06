@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 11:21:21 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/19 18:08:08 by abillote         ###   ########.fr       */
+/*   Updated: 2024/12/05 17:37:02 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ t_token_type	get_token_type(char *input, t_token **token_list)
 	if (ft_strcmp(input, ">>") == 0)
 		return (TYPE_REDIRAPPEND);
 	if (ft_strcmp(input, "<<") == 0)
-		return (TYPE_HEREDOC);
+		return (TYPE_HEREDOC_OP);
 	if (ft_strcmp(input, "") == 0)
 		return (TOKEN_EMPTY);
 	else

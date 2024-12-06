@@ -8,12 +8,16 @@ INC_PATH = ../includes
 LIBFT_PATH = ../libft
 
 # Source files
-SRC = 	$(SRCS_DIR)/parcing/input_to_token.c \
-		$(SRCS_DIR)/parcing/token_utils.c \
-		$(SRCS_DIR)/parcing/ft_split_token.c \
+SRC = 	$(SRCS_DIR)/parcing/token_creation.c \
+		$(SRCS_DIR)/parcing/token_extraction_utils.c \
+		$(SRCS_DIR)/parcing/token_extraction.c \
+		$(SRCS_DIR)/parcing/token_expansion.c \
+		$(SRCS_DIR)/parcing/token_expansion_quotes.c \
+		$(SRCS_DIR)/parcing/token_expansion_var.c \
 		$(SRCS_DIR)/env/init_env.c \
 		$(SRCS_DIR)/utils/ft_strndup.c \
 		$(SRCS_DIR)/utils/ft_strcmp.c \
+		$(SRCS_DIR)/utils/ft_strcpy.c \
 		$(SRCS_DIR)/free.c \
 		$(SRCS_DIR)/errors.c \
 		$(SRCS_DIR)/utils_to_print.c \
@@ -21,7 +25,7 @@ SRC = 	$(SRCS_DIR)/parcing/input_to_token.c \
 
 # Compiler and flags
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -I$(INC_PATH)
+CFLAGS = -Wall -Wextra -Werror -fPIE -I$(INC_PATH)
 
 # Library flags
 LIBS = -L$(LIBFT_PATH) -lft

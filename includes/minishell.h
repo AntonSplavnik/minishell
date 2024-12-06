@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:03:20 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/19 21:39:41 by abillote         ###   ########.fr       */
+/*   Updated: 2024/12/05 18:54:07 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,9 @@ typedef enum e_token_type
 	TYPE_REDIRIN, //< (input redirection)
 	TYPE_REDIROUT, // > (output redirection)
 	TYPE_REDIRAPPEND, // >> (append output redirection)
-	TYPE_HEREDOC, // << (here document)
+	TYPE_HEREDOC_OP, // << (here document)
+	TYPE_HEREDOC_DELIM, // heredoc delimiter
+	TYPE_HEREDOC_CONTENT, // heredoc content in between delimiters
 	TOKEN_EMPTY,
 }			t_token_type;
 
@@ -75,13 +77,22 @@ typedef struct s_token
 	struct s_token	*next;
 }			t_token;
 
-//Used to store quote information and pass it to different functions
+//Used during token extraction to store
+//quote information and pass it to different functions
 typedef struct s_quote_info
 {
 	int		in_inner_quote;
 	char	inner_quote;
 	char	outer_quote;
+	int		num_outer_quote;
 }			t_quote_info;
+
+//Main Shell structure, to enhanced and figure out how to use it
+typedef struct s_shell
+{
+	t_env	*env_list;
+	int		exit_status;
+}	t_shell;
 
 //PARCING
 //token_creation.c
@@ -96,10 +107,27 @@ int					is_command(t_token **token_list);
 t_error				ft_split_token(t_token **token_list, \
 						char *args, size_t *i, char **token);
 
-//token_utils.c
+//token_expansion.c
+t_error				expand_tokens(t_token **token_list, t_env *env_list);
+
+//token_extraction_utils.c
 int					is_space(char c);
 int					is_delimiter(char c);
 int					get_delimiter_len(const char *str);
+
+//token_expansion_var.c
+char				*get_var_value(t_env *env_list, char *key);
+char				*get_var_name(const char *str);
+void				get_var_length(const char *str, \
+						t_env *env_list, size_t *i, size_t *expanded_len);
+void				expand_var(const char *str, \
+						t_env *env_list, size_t *i, char *expanded);
+
+//token_expansion_quotes.c
+void				init_expansion_params(size_t *i, size_t *j, \
+						int *in_squote, int *in_dquote);
+void				process_quote(char quote_char, int *in_squote, \
+						int *in_dquote);
 
 //ENV
 //init_env.c
@@ -110,6 +138,7 @@ t_env				*create_envvar(char *env);
 //utils
 char				*ft_strndup(const char *s, size_t n);
 int					ft_strcmp(const char *s1, const char *s2);
+char				*ft_strcpy(char *dest, const char *src);
 
 //free.c
 void				free_token_list(t_token **token_list);

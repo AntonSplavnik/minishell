@@ -1,35 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strndup.c                                       :+:      :+:    :+:   */
+/*   token_expansion_quotes.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/15 16:45:44 by abillote          #+#    #+#             */
-/*   Updated: 2024/12/05 17:40:26 by abillote         ###   ########.fr       */
+/*   Created: 2024/11/29 18:45:01 by abillote          #+#    #+#             */
+/*   Updated: 2024/12/05 18:35:52 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char	*ft_strndup(const char *s, size_t n)
+void	init_expansion_params(size_t *i, size_t *j, \
+					int *in_squote, int *in_dquote)
 {
-	size_t	len;
-	size_t	i;
-	char	*sdup;
+	*i = 0;
+	*j = 0;
+	*in_squote = 0;
+	*in_dquote = 0;
+}
 
-	len = ft_strlen(s);
-	if (n < len)
-		len = n;
-	i = 0;
-	sdup = (char *)malloc((len + 1) * sizeof(char));
-	if (!sdup)
-		return (NULL);
-	while (i < len && s[i] != '\0')
-	{
-		sdup[i] = s[i];
-		i++;
-	}
-	sdup[i] = '\0';
-	return (sdup);
+void	process_quote(char quote_char, int *in_squote, \
+						int *in_dquote)
+{
+	if (quote_char == '\'')
+		*in_squote = !*in_squote;
+	else
+		*in_dquote = !*in_dquote;
 }
