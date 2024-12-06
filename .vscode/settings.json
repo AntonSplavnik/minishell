@@ -5,6 +5,7 @@
 		"fcntl.h": "c",
 		"types.h": "c",
 		"stat.h": "c",
-		"stdlib.h": "c"
+		"stdlib.h": "c",
+		"readline.h": "c"
 	}
 }
