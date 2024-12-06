@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:02:10 by abillote          #+#    #+#             */
-/*   Updated: 2024/12/05 17:48:57 by abillote         ###   ########.fr       */
+/*   Updated: 2024/12/06 15:09:22 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,32 @@
 
 int	main(int argc, char **argv, char **env)
 {
-	t_token	*token_list;
+	t_shell	*s;
 	char	*args;
 	t_error	error;
-	t_env	*env_list;
 
 	(void) argv;
-	token_list = NULL;
-	env_list = NULL;
+	s = NULL;
 	if (argc != 1)
 	{
 		print_error(ERR_LAUNCH);
 		return (0);
 	}
+
+	//initialise t_shell struct
+	s = malloc(sizeof(t_shell));
+	if (!s)
+		return 1;
+	s->token_list = NULL;
+	s->env_list = NULL;
+
 	//store env
-		error = init_env(&env_list, env);
-		if (error != SUCCESS)
-			return (1);
+	error = init_env(&s->env_list, env);
+	if (error != SUCCESS)
+	{
+		free(s);
+		return (1);
+	}
 	while (1)
 	{
 		//store input with readline
@@ -42,29 +51,32 @@ int	main(int argc, char **argv, char **env)
 		{
 			add_history(args);
 		}
-		error = input_to_token(&token_list, args);
+		//split input into tokens
+		error = input_to_token(&s->token_list, args);
 		if (error != SUCCESS)
 		{
 			free(args);
 			continue ;
 		}
+		//expand tokens (env var expansion & quotes cleaning)
 		if (error == SUCCESS)
-			error = expand_tokens(&token_list, env_list);
+			error = expand_tokens(&s->token_list, s->env_list);
 		if (error != SUCCESS)
 		{
-			handle_error_free_tokens(error, &token_list, args);
+			handle_error_free_tokens(error, &s->token_list, args);
 			continue ;
 		}
 
 		//print env variable to check our code
-		// print_env(env_list);
+		// print_env(&s->env_list);
 		//print token to check our code
-		print_token(token_list);
+		print_token(s->token_list);
 
 		//free functions
-		free_token_list(&token_list);
+		free_token_list(&s->token_list);
 		free(args);
 	}
-	free_env_list(&env_list);
+	free_env_list(&s->env_list);
+	free(s);
 	return (0);
 }
