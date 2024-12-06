@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:03:20 by abillote          #+#    #+#             */
-/*   Updated: 2024/12/05 18:54:07 by abillote         ###   ########.fr       */
+/*   Updated: 2024/12/06 14:51:12 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ typedef struct s_quote_info
 typedef struct s_shell
 {
 	t_env	*env_list;
+	t_token	*token_list;
 	int		exit_status;
 }	t_shell;
 
