@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:43:49 by abillote          #+#    #+#             */
-/*   Updated: 2024/12/06 15:07:49 by abillote         ###   ########.fr       */
+/*   Updated: 2024/12/06 15:46:48 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,37 +53,42 @@ size_t	calculate_expanded_length(t_token *token, t_env *env_list)
 	return (calculate_length_loop(token, env_list, &expanded_len));
 }
 
-void	fill_token_content_after_expansion(t_token *token, \
-					char *expanded, t_env *env_list)
+static void	process_variable_expansion(char *expanded, const char *content, \
+			t_env *env_list, t_parse_params *params)
 {
-	size_t	i;
-	size_t	j;
-	int		in_squote;
-	int		in_dquote;
+	expanded[params->j] = '\0';
+	expand_var(content + params->i + 1, env_list, &params->i, expanded);
+	params->j = ft_strlen(expanded);
+}
 
-	init_expansion_params(&i, &j, &in_squote, &in_dquote);
-	expanded[j] = '\0';
-	while (token->content[i])
+void	fill_token_content_after_expansion(t_token *token, char *exp, \
+						t_env *env_list)
+{
+	t_parse_params	params;
+
+	params = (t_parse_params){0, 0, 0, 0};
+	exp[0] = '\0';
+	while (token->content[params.i])
 	{
-		if ((token->content[i] == '\'' && !in_dquote) || \
-			(token->content[i] == '"' && !in_squote))
+		if ((token->content[params.i] == '\'' && !params.in_dquote) || \
+			(token->content[params.i] == '"' && !params.in_squote))
 		{
-			process_quote(token->content[i], &in_squote, &in_dquote);
-			i++;
+			process_quote(token->content[params.i], &params.in_squote, \
+						&params.in_dquote);
+			params.i++;
 			continue ;
 		}
-		if (token->content[i] == '$' && !in_squote && token->content[i + 1])
-		{
-			expanded[j] = '\0';
-			expand_var(token->content + i + 1, env_list, &i, expanded);
-			j = ft_strlen(expanded);
-		}
+		if (token->content[params.i] == '$' && !params.in_squote
+			&& token->content[params.i + 1])
+			process_variable_expansion(exp, token->content, env_list, &params);
 		else
-			expanded[j++] = token->content[i++];
+		{
+			exp[params.j++] = token->content[params.i++];
+			exp[params.j] = '\0';
+		}
 	}
-	expanded[j] = '\0';
 	free(token->content);
-	token->content = expanded;
+	token->content = exp;
 }
 
 /*This function is used to go through the token list and:
