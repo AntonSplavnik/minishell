@@ -1,5 +1,5 @@
 /* ************************************************************************** */
-/*                                                                            */
+/*	                                                                        */
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
@@ -86,6 +86,14 @@ typedef struct s_quote_info
 	char	outer_quote;
 	int		num_outer_quote;
 }			t_quote_info;
+
+//Used during token expansion to pass more than 4 args
+typedef struct s_parse_params {
+	size_t	i;
+	size_t	j;
+	int		in_squote;
+	int		in_dquote;
+}	t_parse_params;
 
 //Main Shell structure, to enhanced and figure out how to use it
 typedef struct s_shell
