@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 11:21:21 by abillote          #+#    #+#             */
-/*   Updated: 2024/12/06 16:30:13 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/01 14:01:23 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,11 +156,13 @@ t_error input_to_token(t_token **token_list, char *args)
             free(token);
             return (handle_error_free_tokens(error, token_list, NULL));
         }
+		print_token(*token_list);
 
         last = get_last_token(*token_list);
+		//issue here
         if (last && last->type == TYPE_HEREDOC_DELIM)
         {
-            error = handle_heredoc(token_list, last->content);
+            error = handle_heredoc(token_list, last->content, &i, args);
             if (error != SUCCESS)
                 return (handle_error_free_tokens(error, token_list, NULL));
         }
