@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 11:21:21 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/01 14:01:23 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/01 14:21:36 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,38 +136,29 @@ Return an error status*/
 
 t_error input_to_token(t_token **token_list, char *args)
 {
-    size_t  i;
-    t_error error;
-    char    *token;
-    t_token *last;
+	size_t	i;
+	t_error	error;
+	char	*token;
+	t_token	*last;
 
-    i = 0;
-    while (args[i])
-    {
-        error = ft_split_token(token_list, args, &i, &token);
-        if (error != SUCCESS)
-            return (error);
-        if (!token)
-            return (SUCCESS);
-
-        error = add_token(token_list, token, get_token_type(token, token_list));
-        if (error != SUCCESS)
-        {
-            free(token);
-            return (handle_error_free_tokens(error, token_list, NULL));
-        }
-		print_token(*token_list);
-
-        last = get_last_token(*token_list);
-		//issue here
-        if (last && last->type == TYPE_HEREDOC_DELIM)
-        {
-            error = handle_heredoc(token_list, last->content, &i, args);
-            if (error != SUCCESS)
-                return (handle_error_free_tokens(error, token_list, NULL));
-        }
-
-        free(token);
-    }
-    return (SUCCESS);
+	i = 0;
+	while (args[i])
+	{
+		error = ft_split_token(token_list, args, &i, &token);
+		if (error != SUCCESS)
+			return (error);
+		if (!token)
+			return (SUCCESS);
+		error = add_token(token_list, token, get_token_type(token, token_list));
+		if (error == SUCCESS)
+		{
+			last = get_last_token(*token_list);
+			if (last && last->type == TYPE_HEREDOC_DELIM)
+				error = handle_heredoc(token_list, last->content, &i, args);
+		}
+		if (error != SUCCESS)
+				return (handle_error_free_tokens(error, token_list, NULL));
+		free(token);
+	}
+	return (SUCCESS);
 }

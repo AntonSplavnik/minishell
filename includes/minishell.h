@@ -49,6 +49,8 @@ t_env				*create_envvar(char *env);
 char				*ft_strndup(const char *s, size_t n);
 int					ft_strcmp(const char *s1, const char *s2);
 char				*ft_strcpy(char *dest, const char *src);
+int					ft_strstr(const char *big, const char *little);
+
 
 //free.c
 void				free_token_list(t_token **token_list);
