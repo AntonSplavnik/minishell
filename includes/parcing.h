@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 15:58:40 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/01 14:11:40 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/02 19:17:02 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,9 @@ t_error				expand_tokens(t_token **token_list, t_env *env_list);
 int					is_space(char c);
 int					is_delimiter(char c);
 int					get_delimiter_len(const char *str);
-t_token *get_last_token(t_token *token_list);
+t_token 			*get_last_token(t_token *token_list);
+t_token_type		get_other_types(char *input);
+
 
 //token_expansion_var.c
 char				*get_var_value(t_env *env_list, char *key);

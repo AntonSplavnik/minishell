@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 11:21:21 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/01 14:21:36 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/02 19:20:46 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,42 +27,27 @@ int	is_command(t_token **token_list)
 	return (0);
 }
 
-/*Return the type of the token according to its content*/
+/*Return the type of the token according to its content
+First check if there is previous token is a heredoc DELIM.
+If yes, then current token is heredoc CONTENT.
+Then check for other types.*/
 t_token_type	get_token_type(char *input, t_token **token_list)
 {
-	static int expect_heredoc_delim = 0;
+	static int	expect_heredoc_delim = 0;
 
-    if (expect_heredoc_delim)
-    {
-        expect_heredoc_delim = 0;
-        return (TYPE_HEREDOC_DELIM);
-    }
-
-    if (ft_strcmp(input, "<<") == 0)
-    {
-        expect_heredoc_delim = 1;
-        return (TYPE_HEREDOC_OP);
-    }
+	if (expect_heredoc_delim)
+	{
+		expect_heredoc_delim = 0;
+		return (TYPE_HEREDOC_DELIM);
+	}
+	if (ft_strcmp(input, "<<") == 0)
+	{
+		expect_heredoc_delim = 1;
+		return (TYPE_HEREDOC_OP);
+	}
 	if (is_command(token_list) == 1)
 		return (TYPE_COMMAND);
-	if (ft_strcmp(input, "\"") == 0)
-		return (TYPE_DQUOTE);
-	if (ft_strcmp(input, "'") == 0)
-		return (TYPE_SQUOTE);
-	if (ft_strcmp(input, "|") == 0)
-		return (TYPE_PIPE);
-	if (ft_strcmp(input, "<") == 0)
-		return (TYPE_REDIRIN);
-	if (ft_strcmp(input, ">") == 0)
-		return (TYPE_REDIROUT);
-	if (ft_strcmp(input, ">>") == 0)
-		return (TYPE_REDIRAPPEND);
-	if (ft_strcmp(input, "<<") == 0)
-		return (TYPE_HEREDOC_OP);
-	if (ft_strcmp(input, "") == 0)
-		return (TOKEN_EMPTY);
-	else
-		return (TYPE_ARG);
+	return (get_other_types(input));
 }
 
 /*Create and return a token node with its type and content*/
@@ -109,32 +94,8 @@ t_error	add_token(t_token **token_list, char *input, t_token_type type)
 /*Takes the input from readline, split it
 and store each part into tokens in a token list.
 Return an error status*/
-// t_error	input_to_token(t_token **token_list, char *args)
-// {
-// 	size_t	i;
-// 	t_error	error;
-// 	char	*token;
 
-// 	i = 0;
-// 	while (args[i])
-// 	{
-// 		error = ft_split_token(token_list, args, &i, &token);
-// 		if (error != SUCCESS)
-// 			return (error);
-// 		if (!token)
-// 			return (SUCCESS);
-// 		error = add_token(token_list, token, get_token_type(token, token_list));
-// 		if (error != SUCCESS)
-// 		{
-// 			free(token);
-// 			return (handle_error_free_tokens(error, token_list, NULL));
-// 		}
-// 		free(token);
-// 	}
-// 	return (SUCCESS);
-// }
-
-t_error input_to_token(t_token **token_list, char *args)
+t_error	input_to_token(t_token **token_list, char *args)
 {
 	size_t	i;
 	t_error	error;
@@ -157,7 +118,7 @@ t_error input_to_token(t_token **token_list, char *args)
 				error = handle_heredoc(token_list, last->content, &i, args);
 		}
 		if (error != SUCCESS)
-				return (handle_error_free_tokens(error, token_list, NULL));
+			return (handle_error_free_tokens(error, token_list, NULL));
 		free(token);
 	}
 	return (SUCCESS);

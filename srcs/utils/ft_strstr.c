@@ -6,13 +6,13 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 14:38:21 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/01 14:40:18 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/02 17:46:21 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int		ft_strstr(const char *big, const char *little)
+int	ft_strstr(const char *big, const char *little)
 {
 	size_t	i;
 	size_t	j;
