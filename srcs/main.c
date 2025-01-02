@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:02:10 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/01 13:17:07 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/02 21:45:28 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,16 +58,15 @@ int	main(int argc, char **argv, char **env)
 			free(args);
 			continue ;
 		}
-		printf("after extraction ok\n");
 
 		//expand tokens (env var expansion & quotes cleaning)
-		//if (error == SUCCESS)
-		//	error = expand_tokens(&s->token_list, s->env_list);
-		//if (error != SUCCESS)
-		//{
-		//	handle_error_free_tokens(error, &s->token_list, args);
-		//	continue ;
-		//}
+		if (error == SUCCESS)
+			error = expand_tokens(&s->token_list, s->env_list);
+		if (error != SUCCESS)
+		{
+			handle_error_free_tokens(error, &s->token_list, args);
+			continue ;
+		}
 
 		//print env variable to check our code
 		// print_env(&s->env_list);

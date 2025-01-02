@@ -64,7 +64,7 @@ t_test tests_tokenizer[] = {
 	//{"Environment variable multiple quotes 1", "echo \"'$HOME'\"", {TYPE_COMMAND, TYPE_ARG}, {"echo", "var name"}, 2, 0},
 	//{"Environment variable multiple quotes 2", "echo '\"$HOME\"'", {TYPE_COMMAND, TYPE_ARG}, {"echo", "\"$HOME\""}, 2, 0},
 	//{"Complex command", "cat < input.txt | grep 'pattern' > output.txt", {TYPE_COMMAND, TYPE_REDIRIN, TYPE_ARG, TYPE_PIPE, TYPE_COMMAND, TYPE_ARG, TYPE_REDIROUT, TYPE_ARG}, {"cat", "<", "input.txt", "|", "grep", "pattern", ">", "output.txt"}, 8, 0},
-	{"Basic heredoc", "cat << EOF", {TYPE_COMMAND, TYPE_HEREDOC_OP, TYPE_HEREDOC_DELIM}, {"cat", "<<", "EOF"}, 3, 0},
+	{"Basic heredoc", "cat << EOF hello EOF", {TYPE_COMMAND, TYPE_HEREDOC_OP, TYPE_HEREDOC_DELIM, TYPE_HEREDOC_CONTENT}, {"cat", "<<", "EOF", "hello"}, 4, 0},
 	//{"Complex heredoc 1", "cat<<1\nhi", {TYPE_COMMAND, TYPE_HEREDOC_OP, TYPE_HEREDOC_DELIM, TYPE_HEREDOC_CONTENT}, {"cat", "<<", "1", "\nhi"}, 4, 0},
 	//{"Complex heredoc 2", "cat<<1\nhi\n", {TYPE_COMMAND, TYPE_HEREDOC_OP, TYPE_HEREDOC_DELIM, TYPE_HEREDOC_CONTENT}, {"cat", "<<", "1", "\nhi\n"}, 4, 0},
 	//{"Complex heredoc 3", "cat<<1\nhi\n1", {TYPE_COMMAND, TYPE_HEREDOC_OP, TYPE_HEREDOC_DELIM, TYPE_HEREDOC_CONTENT, TYPE_HEREDOC_DELIM}, {"cat", "<<", "1", "\nhi\n", "1"}, 5, 0},

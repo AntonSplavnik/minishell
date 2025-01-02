@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 16:27:25 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/02 21:34:47 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/02 21:52:49 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,7 @@ t_error	handle_heredoc(t_token **token_list, char *delimiter, \
 
 	start = *i;
 	len = 0;
-	while (args[*i] && ft_strncmp(args + *i, delimiter, \
-				ft_strlen(delimiter)) != 0)
+	while (args[*i])
 	{
 		(*i)++;
 		len++;
@@ -71,8 +70,7 @@ t_error	handle_heredoc(t_token **token_list, char *delimiter, \
 	content = ft_substr(args, start, len);
 	if (!content)
 		return (ERR_MALLOC);
-	if (ft_strstr(args + start, delimiter) == 0)
-		content = collect_heredoc_content(delimiter, content);
+	content = collect_heredoc_content(delimiter, content);
 	heredoc_token = create_token(content, TYPE_HEREDOC_CONTENT);
 	free(content);
 	if (!heredoc_token)
