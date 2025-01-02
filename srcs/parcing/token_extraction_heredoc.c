@@ -6,13 +6,21 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 16:27:25 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/02 19:22:22 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/02 21:34:47 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 #include <readline/readline.h>
 
+/*
+Processes heredoc input by collecting lines until delimiter is found:
+- Takes delimiter and initial content as parameters
+- Uses readline to get input line by line
+- Appends newline after each line
+- Stops when delimiter is encountered or EOF (Ctrl+D)
+Returns: Complete heredoc content as a single string with newlines
+*/
 static char	*collect_heredoc_content(char *delimiter, char *content)
 {
 	char	*line;
@@ -36,6 +44,14 @@ static char	*collect_heredoc_content(char *delimiter, char *content)
 	return (content);
 }
 
+/*
+Handles the extraction and creation of heredoc tokens:
+- Searches for delimiter in the input string
+- If delimiter not found in args, prompts for input using collect_heredoc_content
+- Creates a new token with the heredoc content
+- Updates index to skip over the processed content
+Returns: SUCCESS or ERR_MALLOC if memory allocation fails
+*/
 t_error	handle_heredoc(t_token **token_list, char *delimiter, \
 						size_t *i, char *args)
 {
@@ -65,6 +81,13 @@ t_error	handle_heredoc(t_token **token_list, char *delimiter, \
 	return (add_token(token_list, heredoc_token->content, heredoc_token->type));
 }
 
+/*
+Checks if current token is part of a heredoc operation:
+- Uses static variable to track heredoc state
+- Returns TYPE_HEREDOC_DELIM if expecting delimiter
+- Returns TYPE_HEREDOC_OP for '<<' operator
+- Returns 0 for non-heredoc tokens
+*/
 int	check_if_heredoc(char *input)
 {
 	static int	expect_heredoc_delim = 0;

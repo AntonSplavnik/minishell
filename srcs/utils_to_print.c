@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 12:54:58 by abillote          #+#    #+#             */
-/*   Updated: 2024/12/06 16:37:55 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/02 21:39:43 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,10 @@
 
 #include "../includes/minishell.h"
 
-//this needs to be updated with all the types we define
+/*
+Global array mapping token types to their string representations
+Used for debugging to print human-readable token types
+*/
 const char	*g_token_type_str[] = {
 [TYPE_ARG] = "TYPE_ARG",
 [TYPE_COMMAND] = "TYPE_COMMAND",
@@ -31,7 +34,12 @@ const char	*g_token_type_str[] = {
 [TOKEN_EMPTY] = "TOKEN_EMPTY"
 };
 
-//Print token listen
+/*
+Debug function to print token list contents:
+- Prints each token's content and type
+- Uses g_token_type_str for readable type names
+- Shows total number of tokens
+*/
 void	print_token(t_token *token_list)
 {
 	t_token	*current;
@@ -49,6 +57,11 @@ void	print_token(t_token *token_list)
 	ft_printf("Total nodes: %d\n", node_count);
 }
 
+/*
+Debug function to print environment list contents:
+- Prints each variable's key and value
+- Shows total number of environment variables
+*/
 void	print_env(t_env *env_list)
 {
 	t_env	*current;

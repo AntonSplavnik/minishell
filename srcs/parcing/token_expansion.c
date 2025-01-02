@@ -6,12 +6,19 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:43:49 by abillote          #+#    #+#             */
-/*   Updated: 2024/12/06 15:46:48 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/02 21:34:45 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+/*
+Calculates the required length for a token after expansion by:
+- Processing quotes (single and double)
+- Calculating expanded environment variable lengths
+- Counting regular characters
+Returns the total length needed for the expanded string
+*/
 size_t	calculate_length_loop(t_token *token, \
 			t_env *env_list, size_t *expanded_len)
 {
@@ -41,6 +48,10 @@ size_t	calculate_length_loop(t_token *token, \
 	return (*expanded_len);
 }
 
+/*
+Wrapper function that initializes parameters and calls calculate_length_loop
+Returns the total length needed for the expanded token content
+*/
 size_t	calculate_expanded_length(t_token *token, t_env *env_list)
 {
 	size_t	expanded_len;
@@ -53,6 +64,11 @@ size_t	calculate_expanded_length(t_token *token, t_env *env_list)
 	return (calculate_length_loop(token, env_list, &expanded_len));
 }
 
+/*
+Handles the expansion of a single environment variable within a token
+Updates the expanded string and position indices accordingly
+*/
+
 static void	process_variable_expansion(char *expanded, const char *content, \
 			t_env *env_list, t_parse_params *params)
 {
@@ -61,6 +77,13 @@ static void	process_variable_expansion(char *expanded, const char *content, \
 	params->j = ft_strlen(expanded);
 }
 
+/*
+Performs the actual content expansion for a token:
+- Handles quoted sections (preserving content in single quotes)
+- Expands environment variables (except within single quotes)
+- Removes unnecessary quotes
+- Updates the token's content with the expanded version
+*/
 void	fill_token_content_after_expansion(t_token *token, char *exp, \
 						t_env *env_list)
 {
@@ -91,9 +114,14 @@ void	fill_token_content_after_expansion(t_token *token, char *exp, \
 	token->content = exp;
 }
 
-/*This function is used to go through the token list and:
-- Expand env variable with their real value
-- Remove unecessary quotes
+/*
+Main token expansion function that:
+1. Iterates through all tokens
+2. Calculates required space for expanded content
+3. Allocates memory for expansion
+4. Expands environment variables
+5. Removes unnecessary quotes
+Returns SUCCESS or ERR_MALLOC if memory allocation fails
 */
 t_error	expand_tokens(t_token **token_list, t_env *env_list)
 {
