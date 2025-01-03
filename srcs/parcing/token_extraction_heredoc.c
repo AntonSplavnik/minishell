@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 16:27:25 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/02 21:52:49 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/03 22:38:51 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,30 +52,38 @@ Handles the extraction and creation of heredoc tokens:
 - Updates index to skip over the processed content
 Returns: SUCCESS or ERR_MALLOC if memory allocation fails
 */
-t_error	handle_heredoc(t_token **token_list, char *delimiter, \
+t_error	handle_heredoc(t_token **token_list, char *delim, \
 						size_t *i, char *args)
 {
 	t_token	*heredoc_token;
 	char	*content;
 	size_t	start;
 	size_t	len;
+	char	*nl;
 
 	start = *i;
 	len = 0;
 	while (args[*i])
 	{
+		if (args[*i] == '\n' && !ft_strncmp(&args[*i + 1], delim, ft_strlen(delim)))
+		{
+			(*i)++;
+			break;
+		}
 		(*i)++;
 		len++;
 	}
 	content = ft_substr(args, start, len);
 	if (!content)
 		return (ERR_MALLOC);
-	content = collect_heredoc_content(delimiter, content);
+	nl = ft_strchr(args + start, '\n');
+	if (!(nl && ft_strncmp(nl + 1, delim, ft_strlen(delim)) == 0))
+		content = collect_heredoc_content(delim, content);
 	heredoc_token = create_token(content, TYPE_HEREDOC_CONTENT);
 	free(content);
 	if (!heredoc_token)
 		return (ERR_MALLOC);
-	(*i) += ft_strlen(delimiter);
+	(*i) += ft_strlen(delim);
 	return (add_token(token_list, heredoc_token->content, heredoc_token->type));
 }
 
