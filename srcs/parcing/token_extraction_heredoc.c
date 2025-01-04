@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 16:27:25 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/03 22:38:51 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/04 12:23:39 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,38 @@ static char	*collect_heredoc_content(char *delimiter, char *content)
 }
 
 /*
+Extracts initial heredoc content from input string until delimiter:
+- Iterates through args starting from index i
+- Keeps track of content length while searching
+- If newline followed by delimiter is found, stops before delimiter
+- Creates substring from start position with calculated length
+Returns: Substring containing heredoc content, or NULL if allocation fails
+Note: Updates i to point after the newline if delimiter is found
+*/
+
+static char	*get_first_heredoc_content(char *args, size_t *i, \
+					char *delim, size_t start)
+{
+	char	*content;
+	size_t	len;
+
+	len = 0;
+	while (args[*i])
+	{
+		if (args[*i] == '\n' && !ft_strncmp(&args[*i + 1], \
+				delim, ft_strlen(delim)))
+		{
+			(*i)++;
+			break ;
+		}
+		(*i)++;
+		len++;
+	}
+	content = ft_substr(args, start, len);
+	return (content);
+}
+
+/*
 Handles the extraction and creation of heredoc tokens:
 - Searches for delimiter in the input string
 - If delimiter not found in args, prompts for input using collect_heredoc_content
@@ -52,38 +84,27 @@ Handles the extraction and creation of heredoc tokens:
 - Updates index to skip over the processed content
 Returns: SUCCESS or ERR_MALLOC if memory allocation fails
 */
-t_error	handle_heredoc(t_token **token_list, char *delim, \
-						size_t *i, char *args)
+
+t_error	handle_heredoc(t_token **token_list, char *delim, size_t *i, char *args)
 {
 	t_token	*heredoc_token;
 	char	*content;
 	size_t	start;
-	size_t	len;
-	char	*nl;
+	char	*newline_pos;
 
 	start = *i;
-	len = 0;
-	while (args[*i])
-	{
-		if (args[*i] == '\n' && !ft_strncmp(&args[*i + 1], delim, ft_strlen(delim)))
-		{
-			(*i)++;
-			break;
-		}
-		(*i)++;
-		len++;
-	}
-	content = ft_substr(args, start, len);
+	content = get_first_heredoc_content(args, i, delim, start);
 	if (!content)
 		return (ERR_MALLOC);
-	nl = ft_strchr(args + start, '\n');
-	if (!(nl && ft_strncmp(nl + 1, delim, ft_strlen(delim)) == 0))
+	newline_pos = ft_strchr(args + start, '\n');
+	if (!(newline_pos && ft_strncmp(newline_pos + 1, \
+			delim, ft_strlen(delim)) == 0))
 		content = collect_heredoc_content(delim, content);
 	heredoc_token = create_token(content, TYPE_HEREDOC_CONTENT);
 	free(content);
 	if (!heredoc_token)
 		return (ERR_MALLOC);
-	(*i) += ft_strlen(delim);
+	*i += ft_strlen(delim);
 	return (add_token(token_list, heredoc_token->content, heredoc_token->type));
 }
 
