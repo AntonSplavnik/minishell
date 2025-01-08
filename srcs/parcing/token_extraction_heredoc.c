@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 16:27:25 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/04 12:23:39 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/08 13:19:17 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,20 +55,19 @@ Note: Updates i to point after the newline if delimiter is found
 */
 
 static char	*get_first_heredoc_content(char *args, size_t *i, \
-					char *delim, size_t start)
+											char *delim, size_t start)
 {
 	char	*content;
 	size_t	len;
 
 	len = 0;
+	if (args[start] == ' ')
+		start++;
 	while (args[*i])
 	{
-		if (args[*i] == '\n' && !ft_strncmp(&args[*i + 1], \
-				delim, ft_strlen(delim)))
-		{
-			(*i)++;
+		if (args[*i] == '\n' && ft_strncmp(&args[*i + 1], \
+				delim, ft_strlen(delim)) == 0)
 			break ;
-		}
 		(*i)++;
 		len++;
 	}
@@ -96,15 +95,17 @@ t_error	handle_heredoc(t_token **token_list, char *delim, size_t *i, char *args)
 	content = get_first_heredoc_content(args, i, delim, start);
 	if (!content)
 		return (ERR_MALLOC);
-	newline_pos = ft_strchr(args + start, '\n');
+	newline_pos = ft_strchr(args + *i, '\n');
 	if (!(newline_pos && ft_strncmp(newline_pos + 1, \
 			delim, ft_strlen(delim)) == 0))
+	{
 		content = collect_heredoc_content(delim, content);
+	}
 	heredoc_token = create_token(content, TYPE_HEREDOC_CONTENT);
 	free(content);
 	if (!heredoc_token)
 		return (ERR_MALLOC);
-	*i += ft_strlen(delim);
+	*i += ft_strlen(delim) + 1;
 	return (add_token(token_list, heredoc_token->content, heredoc_token->type));
 }
 

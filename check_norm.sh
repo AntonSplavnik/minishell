@@ -1,2 +1,2 @@
 #!/bin/bash
-norminette srcs/ includes/ libft/
+norminette srcs/ includes/

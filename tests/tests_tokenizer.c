@@ -33,42 +33,43 @@ typedef struct s_test {
 
 //tests array to store all the tests for tokenizer - you can add a new test at the bottom
 t_test tests_tokenizer[] = {
-	//{"Basic pwd", "pwd", {TYPE_COMMAND}, {"pwd"}, 1, 0},
-	//{"Basic ls", "ls -la", {TYPE_COMMAND, TYPE_ARG}, {"ls", "-la"}, 2, 0},
-	//{"Basic echo", "echo hi", {TYPE_COMMAND, TYPE_ARG}, {"echo", "hi"}, 2, 0},
-	//{"Basic echo + newline", "echo hi\n", {TYPE_COMMAND, TYPE_ARG, TYPE_ARG}, {"echo", "hi", "\n"}, 3, 0},
-	//{"Basic echo + flag", "echo -n hi", {TYPE_COMMAND, TYPE_ARG, TYPE_ARG}, {"echo", "-n", "hi"}, 3, 0},
-	//{"Basic double quotes", "echo \"hello\"", {TYPE_COMMAND, TYPE_ARG}, {"echo", "hello"}, 2, 0},
-	//{"Basic single quotes", "echo 'hello'", {TYPE_COMMAND, TYPE_ARG}, {"echo", "hello"}, 2, 0},
-	//{"Missing last single quote", "echo 'hello", {}, {}, 0, 1},
-	//{"Missing first single quote", "echo hello'", {}, {}, 0, 1},
-	//{"Missing last double quote", "echo \"hello", {}, {}, 0, 1},
-	//{"Missing first double quote", "echo hello\"", {}, {}, 0, 1},
-	//{"Complex quotes 1", "echo \"hello\"\'\'", {TYPE_COMMAND, TYPE_ARG, TYPE_ARG}, {"echo", "hello", ""}, 3, 0},
-	//{"Complex quotes 2", "echo '\"hello\"'", {TYPE_COMMAND, TYPE_ARG, TYPE_ARG}, {"echo", "\"hello\""}, 2, 0},
-	//{"Complex quotes 3", "echo \"'hello'\"", {TYPE_COMMAND, TYPE_ARG, TYPE_ARG}, {"echo", "'hello'"}, 2, 0},
-	//{"Basic input redirection", "cat < input.txt", {TYPE_COMMAND, TYPE_REDIRIN, TYPE_ARG}, {"cat", "<", "input.txt"}, 3, 0},
-	//{"Input redirection without spaces", "cat<input.txt", {TYPE_COMMAND, TYPE_REDIRIN, TYPE_ARG}, {"cat", "<", "input.txt"}, 3, 0},
-	//{"Input redirection double quotes", "echo \"< input.txt\"", {TYPE_COMMAND, TYPE_ARG}, {"echo", "< input.txt"}, 2, 0},
-	//{"Input redirection single quotes", "echo \'< input.txt\'", {TYPE_COMMAND, TYPE_ARG}, {"echo", "< input.txt"}, 2, 0},
-	//{"Basic output redirection", "echo hello > output.txt", {TYPE_COMMAND, TYPE_ARG, TYPE_REDIROUT, TYPE_ARG}, {"echo", "hello", ">", "output.txt"}, 4, 0},
-	//{"Output redirection without spaces", "echo hello>output.txt", {TYPE_COMMAND, TYPE_ARG, TYPE_REDIROUT, TYPE_ARG}, {"echo", "hello", ">", "output.txt"}, 4, 0},
-	//{"Output redirection double quotes", "echo \"hello>output.txt\"", {TYPE_COMMAND, TYPE_ARG}, {"echo", "hello>output.txt"}, 2, 0},
-	//{"Output redirection double quotes 2", "echo hello>\"output.txt\"", {TYPE_COMMAND, TYPE_ARG, TYPE_REDIROUT, TYPE_ARG}, {"echo", "hello", ">", "output.txt"}, 4, 0},
-	//{"Output redirection single quotes", "echo \'hello>output.txt\'", {TYPE_COMMAND, TYPE_ARG}, {"echo", "hello>output.txt"}, 2, 0},
-	//{"Output redirection single quotes 2", "echo hello>\'output.txt\'", {TYPE_COMMAND, TYPE_ARG, TYPE_REDIROUT, TYPE_ARG}, {"echo", "hello", ">", "output.txt"}, 4, 0},
-	//{"Simple pipe", "ls | wc -l", {TYPE_COMMAND, TYPE_PIPE, TYPE_COMMAND, TYPE_ARG}, {"ls", "|", "wc", "-l"}, 4, 0},
-	//{"Environment variable", "echo $HOME", {TYPE_COMMAND, TYPE_ARG}, {"echo", "var name"}, 2, 0},
-	//{"Environment variable double quotes", "echo \"$HOME\"", {TYPE_COMMAND, TYPE_ARG}, {"echo", "var name"}, 2, 0},
-	//{"Environment variable single quotes", "echo \'$HOME\'", {TYPE_COMMAND, TYPE_ARG}, {"echo", "$HOME"}, 2, 0},
-	//{"Environment variable multiple quotes 1", "echo \"'$HOME'\"", {TYPE_COMMAND, TYPE_ARG}, {"echo", "var name"}, 2, 0},
-	//{"Environment variable multiple quotes 2", "echo '\"$HOME\"'", {TYPE_COMMAND, TYPE_ARG}, {"echo", "\"$HOME\""}, 2, 0},
-	//{"Complex command", "cat < input.txt | grep 'pattern' > output.txt", {TYPE_COMMAND, TYPE_REDIRIN, TYPE_ARG, TYPE_PIPE, TYPE_COMMAND, TYPE_ARG, TYPE_REDIROUT, TYPE_ARG}, {"cat", "<", "input.txt", "|", "grep", "pattern", ">", "output.txt"}, 8, 0},
-	{"Basic heredoc", "cat << EOF hello EOF", {TYPE_COMMAND, TYPE_HEREDOC_OP, TYPE_HEREDOC_DELIM, TYPE_HEREDOC_CONTENT}, {"cat", "<<", "EOF", "hello"}, 4, 0},
-	//{"Complex heredoc 1", "cat<<1\nhi", {TYPE_COMMAND, TYPE_HEREDOC_OP, TYPE_HEREDOC_DELIM, TYPE_HEREDOC_CONTENT}, {"cat", "<<", "1", "\nhi"}, 4, 0},
-	//{"Complex heredoc 2", "cat<<1\nhi\n", {TYPE_COMMAND, TYPE_HEREDOC_OP, TYPE_HEREDOC_DELIM, TYPE_HEREDOC_CONTENT}, {"cat", "<<", "1", "\nhi\n"}, 4, 0},
-	//{"Complex heredoc 3", "cat<<1\nhi\n1", {TYPE_COMMAND, TYPE_HEREDOC_OP, TYPE_HEREDOC_DELIM, TYPE_HEREDOC_CONTENT, TYPE_HEREDOC_DELIM}, {"cat", "<<", "1", "\nhi\n", "1"}, 5, 0},
-	//{"Complex heredoc 4", "cat<<1\necho hi\n1", {TYPE_COMMAND, TYPE_HEREDOC_OP, TYPE_HEREDOC_DELIM, TYPE_HEREDOC_CONTENT, TYPE_HEREDOC_DELIM}, {"cat", "<<", "1", "\necho hi\n", "1"}, 5, 0},
+	{"Basic pwd", "pwd", {TYPE_COMMAND}, {"pwd"}, 1, 0},
+	{"Basic ls", "ls -la", {TYPE_COMMAND, TYPE_ARG}, {"ls", "-la"}, 2, 0},
+	{"Basic echo", "echo hi", {TYPE_COMMAND, TYPE_ARG}, {"echo", "hi"}, 2, 0},
+	{"Basic echo + newline", "echo hi\n", {TYPE_COMMAND, TYPE_ARG, TYPE_ARG}, {"echo", "hi", "\n"}, 3, 0},
+	{"Basic echo + flag", "echo -n hi", {TYPE_COMMAND, TYPE_ARG, TYPE_ARG}, {"echo", "-n", "hi"}, 3, 0},
+	{"Basic double quotes", "echo \"hello\"", {TYPE_COMMAND, TYPE_ARG}, {"echo", "hello"}, 2, 0},
+	{"Basic single quotes", "echo 'hello'", {TYPE_COMMAND, TYPE_ARG}, {"echo", "hello"}, 2, 0},
+	{"Missing last single quote", "echo 'hello", {}, {}, 0, 1},
+	{"Missing first single quote", "echo hello'", {}, {}, 0, 1},
+	{"Missing last double quote", "echo \"hello", {}, {}, 0, 1},
+	{"Missing first double quote", "echo hello\"", {}, {}, 0, 1},
+	{"Complex quotes 1", "echo \"hello\"\'\'", {TYPE_COMMAND, TYPE_ARG, TYPE_ARG}, {"echo", "hello", ""}, 3, 0},
+	{"Complex quotes 2", "echo '\"hello\"'", {TYPE_COMMAND, TYPE_ARG, TYPE_ARG}, {"echo", "\"hello\""}, 2, 0},
+	{"Complex quotes 3", "echo \"'hello'\"", {TYPE_COMMAND, TYPE_ARG, TYPE_ARG}, {"echo", "'hello'"}, 2, 0},
+	{"Basic input redirection", "cat < input.txt", {TYPE_COMMAND, TYPE_REDIRIN, TYPE_ARG}, {"cat", "<", "input.txt"}, 3, 0},
+	{"Input redirection without spaces", "cat<input.txt", {TYPE_COMMAND, TYPE_REDIRIN, TYPE_ARG}, {"cat", "<", "input.txt"}, 3, 0},
+	{"Input redirection double quotes", "echo \"< input.txt\"", {TYPE_COMMAND, TYPE_ARG}, {"echo", "< input.txt"}, 2, 0},
+	{"Input redirection single quotes", "echo \'< input.txt\'", {TYPE_COMMAND, TYPE_ARG}, {"echo", "< input.txt"}, 2, 0},
+	{"Basic output redirection", "echo hello > output.txt", {TYPE_COMMAND, TYPE_ARG, TYPE_REDIROUT, TYPE_ARG}, {"echo", "hello", ">", "output.txt"}, 4, 0},
+	{"Output redirection without spaces", "echo hello>output.txt", {TYPE_COMMAND, TYPE_ARG, TYPE_REDIROUT, TYPE_ARG}, {"echo", "hello", ">", "output.txt"}, 4, 0},
+	{"Output redirection double quotes", "echo \"hello>output.txt\"", {TYPE_COMMAND, TYPE_ARG}, {"echo", "hello>output.txt"}, 2, 0},
+	{"Output redirection double quotes 2", "echo hello>\"output.txt\"", {TYPE_COMMAND, TYPE_ARG, TYPE_REDIROUT, TYPE_ARG}, {"echo", "hello", ">", "output.txt"}, 4, 0},
+	{"Output redirection single quotes", "echo \'hello>output.txt\'", {TYPE_COMMAND, TYPE_ARG}, {"echo", "hello>output.txt"}, 2, 0},
+	{"Output redirection single quotes 2", "echo hello>\'output.txt\'", {TYPE_COMMAND, TYPE_ARG, TYPE_REDIROUT, TYPE_ARG}, {"echo", "hello", ">", "output.txt"}, 4, 0},
+	{"Simple pipe", "ls | wc -l", {TYPE_COMMAND, TYPE_PIPE, TYPE_COMMAND, TYPE_ARG}, {"ls", "|", "wc", "-l"}, 4, 0},
+	{"Environment variable", "echo $HOME", {TYPE_COMMAND, TYPE_ARG}, {"echo", "var name"}, 2, 0},
+	{"Environment variable double quotes", "echo \"$HOME\"", {TYPE_COMMAND, TYPE_ARG}, {"echo", "var name"}, 2, 0},
+	{"Environment variable single quotes", "echo \'$HOME\'", {TYPE_COMMAND, TYPE_ARG}, {"echo", "$HOME"}, 2, 0},
+	{"Environment variable multiple quotes 1", "echo \"'$HOME'\"", {TYPE_COMMAND, TYPE_ARG}, {"echo", "var name"}, 2, 0},
+	{"Environment variable multiple quotes 2", "echo '\"$HOME\"'", {TYPE_COMMAND, TYPE_ARG}, {"echo", "\"$HOME\""}, 2, 0},
+	{"Complex command", "cat < input.txt | grep 'pattern' > output.txt", {TYPE_COMMAND, TYPE_REDIRIN, TYPE_ARG, TYPE_PIPE, TYPE_COMMAND, TYPE_ARG, TYPE_REDIROUT, TYPE_ARG}, {"cat", "<", "input.txt", "|", "grep", "pattern", ">", "output.txt"}, 8, 0},
+	{"Basic heredoc", "cat << EOF hello EOF", {TYPE_COMMAND, TYPE_HEREDOC_OP, TYPE_HEREDOC_DELIM, TYPE_HEREDOC_CONTENT}, {"cat", "<<", "EOF", "hello EOF"}, 4, 0},
+	{"Complex heredoc 1", "cat<<1\nhi", {TYPE_COMMAND, TYPE_HEREDOC_OP, TYPE_HEREDOC_DELIM, TYPE_HEREDOC_CONTENT}, {"cat", "<<", "1", "\nhi"}, 4, 0},
+	{"Complex heredoc 2", "cat<<1\nhi\n", {TYPE_COMMAND, TYPE_HEREDOC_OP, TYPE_HEREDOC_DELIM, TYPE_HEREDOC_CONTENT}, {"cat", "<<", "1", "\nhi\n"}, 4, 0},
+	{"Complex heredoc 3", "cat<<1\nhi\n1", {TYPE_COMMAND, TYPE_HEREDOC_OP, TYPE_HEREDOC_DELIM, TYPE_HEREDOC_CONTENT}, {"cat", "<<", "1", "\nhi"}, 4, 0},
+	{"Complex heredoc 4", "cat<<1\necho hi\n1", {TYPE_COMMAND, TYPE_HEREDOC_OP, TYPE_HEREDOC_DELIM, TYPE_HEREDOC_CONTENT}, {"cat", "<<", "1", "\necho hi"}, 4, 0},
+	//find what to do with this - maybe later when we deal with pipes?
 	//{"Complex heredoc 5", "cat << DELIM | grep 'pattern' > output.txt", {TYPE_COMMAND, TYPE_HEREDOC_OP, TYPE_HEREDOC_DELIM, TYPE_PIPE, TYPE_COMMAND, TYPE_ARG, TYPE_REDIROUT, TYPE_ARG}, {"cat", "<<", "DELIM", "|", "grep", "'pattern'", ">", "output.txt"}, 8, 0}
 };
 
@@ -131,7 +132,6 @@ int run_test(t_test test, t_env *env_list) {
 		}
 			current = current->next;
 	}
-	print_token(token_list);
 
 	if (success && current)
 	{
@@ -141,7 +141,7 @@ int run_test(t_test test, t_env *env_list) {
 
 	printf(success ? GREEN "  ✓ Passed\n" RESET : RED "  ✗ Failed\n" RESET);
 	printf("\n");
-	print_token(token_list);
+	//print_token(token_list);
 	free_token_list(&token_list);
 	return success;
 }
