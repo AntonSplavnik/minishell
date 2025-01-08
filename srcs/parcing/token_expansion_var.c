@@ -6,12 +6,17 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 18:28:37 by abillote          #+#    #+#             */
-/*   Updated: 2024/12/06 14:40:46 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/02 21:34:42 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+/*
+Searches for an environment variable by key in the env_list
+Returns the value if found, empty string if not found
+Special case: if key is "?", returns the last exit status (TODO)
+*/
 char	*get_var_value(t_env *env_list, char *key)
 {
 	//if (ft_strcmp(var_name, "?") == 0)
@@ -25,6 +30,13 @@ char	*get_var_value(t_env *env_list, char *key)
 	return ("");
 }
 
+/* Extracts the environment variable name from a string starting after '$'
+Returns:
+- "?" for $? (exit status)
+- The variable name for valid identifiers (alphanumeric + underscore)
+- Empty string for invalid identifiers
+- NULL if memory allocation fails
+*/
 char	*get_var_name(const char *str)
 {
 	size_t	name_len;
@@ -43,6 +55,12 @@ char	*get_var_name(const char *str)
 	return (var_name);
 }
 
+/* Calculates the length needed for the expanded variable:
+- Extracts variable name from the string
+- Gets the variable's value from env_list
+- Updates expanded_len with the value's length
+- Updates index i to skip over the variable name
+*/
 void	get_var_length(const char *str, t_env *env_list, \
 					size_t *i, size_t *expanded_len)
 {
@@ -56,9 +74,13 @@ void	get_var_length(const char *str, t_env *env_list, \
 	free(var_name);
 }
 
-/*Get the env var value. For $?, need to figure out how to
-store it in the shell struct to return it
-If no var existing, return an empty string*/
+/*Performs the actual expansion of an environment variable:
+- Extracts the variable name from the input string
+- Gets its value from the environment
+- Copies the value to the expanded string
+- Updates index i to skip over $VARNAME
+Note: For $?, should return the last exit status (TODO)
+*/
 void	expand_var(const char *str, t_env *env_list, \
 				size_t *i, char *expanded)
 {

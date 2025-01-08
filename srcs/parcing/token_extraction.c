@@ -6,13 +6,18 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 14:54:55 by abillote          #+#    #+#             */
-/*   Updated: 2024/12/06 15:09:44 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/02 21:34:51 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-//extract regular string
+/*
+Extracts unquoted string until next delimiter or whitespace:
+- Tracks position with index i
+- Returns substring from start position
+- Sets error to ERR_MALLOC if memory allocation fails
+*/
 static char	*extract_unquoted_token(const char *str, size_t *i, t_error *error)
 {
 	size_t	start;
@@ -31,7 +36,13 @@ static char	*extract_unquoted_token(const char *str, size_t *i, t_error *error)
 	return (ft_substr(str, start, len));
 }
 
-//handle the delimiter (<, >, <<, >>, |)
+/*
+Extracts special shell delimiters (<, >, |, <<, >>):
+- Gets delimiter length (1 or 2 characters)
+- Creates substring containing delimiter
+- Updates index to skip processed characters
+Returns: Extracted delimiter or NULL on memory error
+*/
 static char	*extract_delimiter_token(const char *str, size_t *i, t_error *error)
 {
 	size_t	len;
@@ -45,7 +56,13 @@ static char	*extract_delimiter_token(const char *str, size_t *i, t_error *error)
 	return (token);
 }
 
-//Handle the quotes
+/*
+Processes quoted content to handle nested quotes:
+- Tracks position with index i
+- Counts length including both quote characters
+- Updates quote status in quote_info structure
+Returns: Length of quoted content including quotes
+*/
 static size_t	handle_quoted_content(char *args, size_t *i, \
 				t_quote_info *quotes)
 {
@@ -68,7 +85,14 @@ static size_t	handle_quoted_content(char *args, size_t *i, \
 	return (len);
 }
 
-//Extract the quoted token
+/*
+Creates a token from quoted content:
+- Handles both single and double quotes
+- Validates matching closing quotes
+- Returns NULL if quotes are unmatched
+- Sets error to ERR_PARCING for quote errors
+Returns: Token string including quotes or NULL on error
+*/
 static char	*extract_quoted_token(char *args, size_t *i, t_error *error)
 {
 	t_quote_info	quotes;
@@ -94,7 +118,14 @@ static char	*extract_quoted_token(char *args, size_t *i, t_error *error)
 	return (ft_substr(args, start, len));
 }
 
-//Split the next token by checking spaces, quotes and delimiters and store it
+/*
+Main token extraction function:
+- Skips leading whitespace
+- Identifies token type (quoted, delimiter, or unquoted)
+- Calls appropriate extraction function
+- Updates index to track position in input string
+Returns: SUCCESS or error status if extraction fails
+*/
 t_error	ft_split_token(t_token **token_list, char *args, \
 						size_t *i, char **token)
 {

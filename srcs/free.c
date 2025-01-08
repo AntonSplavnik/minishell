@@ -6,12 +6,18 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 12:43:11 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/15 17:17:40 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/02 21:37:33 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+/*
+Frees entire token linked list:
+- Iterates through list freeing each node
+- Frees both node content and node itself
+- Sets list pointer to NULL after freeing
+*/
 void	free_token_list(t_token **token_list)
 {
 	t_token	*temp;
@@ -26,6 +32,12 @@ void	free_token_list(t_token **token_list)
 	*token_list = NULL;
 }
 
+/*
+Frees entire environment variable linked list:
+- Iterates through list freeing each node
+- Frees key, value, and node itself
+- Sets list pointer to NULL after freeing
+*/
 void	free_env_list(t_env **env_list)
 {
 	t_env	*temp;

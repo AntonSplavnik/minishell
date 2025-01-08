@@ -6,13 +6,20 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:08:53 by abillote          #+#    #+#             */
-/*   Updated: 2024/11/29 17:18:13 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/02 21:38:16 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-//print error message in stderr
+/*
+Prints appropriate error message to stderr based on error code:
+- SUCCESS: Operation completed successfully
+- ERR_LAUNCH: Incorrect program usage
+- ERR_MALLOC: Memory allocation failure
+- ERR_PARCING: Syntax error in input
+- ERR_ENV: Environment initialization error
+*/
 void	print_error(t_error error_code)
 {
 	if (error_code == 0)
@@ -27,7 +34,12 @@ void	print_error(t_error error_code)
 		ft_putendl_fd("Environment could not be set", 2);
 }
 
-//free a pointer and print error message
+/*
+Handles error with single pointer cleanup:
+- Frees provided pointer if not NULL
+- Prints error message
+Returns: The error code passed in
+*/
 t_error	handle_error(t_error error_code, void *ptr_to_free)
 {
 	if (ptr_to_free)

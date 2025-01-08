@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:02:10 by abillote          #+#    #+#             */
-/*   Updated: 2024/12/06 15:09:22 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/02 21:45:28 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ int	main(int argc, char **argv, char **env)
 			free(args);
 			continue ;
 		}
+
 		//expand tokens (env var expansion & quotes cleaning)
 		if (error == SUCCESS)
 			error = expand_tokens(&s->token_list, s->env_list);

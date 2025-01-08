@@ -6,13 +6,19 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 11:21:21 by abillote          #+#    #+#             */
-/*   Updated: 2024/12/06 15:08:03 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/02 21:44:25 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-//Each first word and each word after a pipe is a command
+/*
+Determines if next token should be treated as a command:
+- First token in the list is always a command
+- First token after a pipe is a command
+- Checks for NULL list and traverses to find last token
+Returns: 1 if next token should be command, 0 otherwise
+*/
 int	is_command(t_token **token_list)
 {
 	t_token	*current;
@@ -27,32 +33,41 @@ int	is_command(t_token **token_list)
 	return (0);
 }
 
-/*Return the type of the token according to its content*/
+/*
+Determines the type of token based on its content and context:
+- Uses static variable to track heredoc delimiter state
+- Special handling for heredoc operator (<<) and its delimiter
+- Identifies commands using is_command()
+- Falls back to get_other_types() for standard tokens
+Returns: Appropriate token type from t_token_type enum
+*/
 t_token_type	get_token_type(char *input, t_token **token_list)
 {
+	static int	expect_heredoc_delim = 0;
+
+	if (expect_heredoc_delim)
+	{
+		expect_heredoc_delim = 0;
+		return (TYPE_HEREDOC_DELIM);
+	}
+	if (ft_strcmp(input, "<<") == 0)
+	{
+		expect_heredoc_delim = 1;
+		return (TYPE_HEREDOC_OP);
+	}
 	if (is_command(token_list) == 1)
 		return (TYPE_COMMAND);
-	if (ft_strcmp(input, "\"") == 0)
-		return (TYPE_DQUOTE);
-	if (ft_strcmp(input, "'") == 0)
-		return (TYPE_SQUOTE);
-	if (ft_strcmp(input, "|") == 0)
-		return (TYPE_PIPE);
-	if (ft_strcmp(input, "<") == 0)
-		return (TYPE_REDIRIN);
-	if (ft_strcmp(input, ">") == 0)
-		return (TYPE_REDIROUT);
-	if (ft_strcmp(input, ">>") == 0)
-		return (TYPE_REDIRAPPEND);
-	if (ft_strcmp(input, "<<") == 0)
-		return (TYPE_HEREDOC_OP);
-	if (ft_strcmp(input, "") == 0)
-		return (TOKEN_EMPTY);
-	else
-		return (TYPE_ARG);
+	return (get_other_types(input));
 }
 
-/*Create and return a token node with its type and content*/
+/*
+Creates a new token node:
+- Allocates memory for token structure
+- Duplicates input string for token content
+- Initializes type and next pointer
+- Handles memory allocation failures
+Returns: New token node or NULL if allocation fails
+*/
 t_token	*create_token(char *input, t_token_type type)
 {
 	t_token	*new_token;
@@ -71,8 +86,14 @@ t_token	*create_token(char *input, t_token_type type)
 	return (new_token);
 }
 
-/*Add a new token to the list of tokens
-Return an error status*/
+/*
+Adds a new token to the end of token list:
+- Creates new token using create_token()
+- Handles empty list case
+- Traverses to find last node for non-empty list
+- Links new token into list
+Returns: SUCCESS or ERR_MALLOC if creation fails
+*/
 t_error	add_token(t_token **token_list, char *input, t_token_type type)
 {
 	t_token	*new_token;
@@ -93,14 +114,22 @@ t_error	add_token(t_token **token_list, char *input, t_token_type type)
 	return (SUCCESS);
 }
 
-/*Takes the input from readline, split it
-and store each part into tokens in a token list.
-Return an error status*/
+/*
+Main tokenization function that processes input string:
+- Iterates through input character by character
+- Extracts tokens using ft_split_token()
+- Determines token type and adds to list
+- Special handling for heredoc content
+- Frees temporary strings and handles errors
+Returns: SUCCESS or appropriate error code
+*/
+
 t_error	input_to_token(t_token **token_list, char *args)
 {
 	size_t	i;
 	t_error	error;
 	char	*token;
+	t_token	*last;
 
 	i = 0;
 	while (args[i])
@@ -111,11 +140,14 @@ t_error	input_to_token(t_token **token_list, char *args)
 		if (!token)
 			return (SUCCESS);
 		error = add_token(token_list, token, get_token_type(token, token_list));
-		if (error != SUCCESS)
+		if (error == SUCCESS)
 		{
-			free(token);
-			return (handle_error_free_tokens(error, token_list, NULL));
+			last = get_last_token(*token_list);
+			if (last && last->type == TYPE_HEREDOC_DELIM)
+				error = handle_heredoc(token_list, last->content, &i, args);
 		}
+		if (error != SUCCESS)
+			return (handle_error_free_tokens(error, token_list, NULL));
 		free(token);
 	}
 	return (SUCCESS);
