@@ -34,7 +34,7 @@ SRCS = $(SRCS_DIR)/main.c \
 		$(SRCS_DIR)/utils/ft_strstr.c \
 		$(SRCS_DIR)/free.c \
 		$(SRCS_DIR)/errors.c \
-		$(SRCS_DIR)/utils_to_print.c \
+		$(SRCS_DIR)/utils_to_print.c
 
 #Object files
 OBJS = $(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)
@@ -46,11 +46,11 @@ LIBFT = $(LIBFT_DIR)/libft.a
 
 #Create obj directories
 $(OBJS_DIR):
-	@mkdir -p $(dir $(OBJS))
+	@mkdir -p $(sort $(dir $(OBJS)))
 
 # Compile objects
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c $(HEADERS) | $(OBJS_DIR)
-	@$(CC) $(CFLAGS) -I$(INCS_DIR)  -c $< -o $@
+	$(CC) $(CFLAGS) -I$(INCS_DIR)  -c $< -o $@
 
 # Make libft
 $(LIBFT):
