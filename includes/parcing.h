@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 15:58:40 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/04 12:22:28 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/10 17:40:02 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ t_error				ft_split_token(t_token **token_list, \
 						char *args, size_t *i, char **token);
 
 //token_expansion.c
-t_error				expand_tokens(t_token **token_list, t_env *env_list);
+t_error				expand_tokens(t_shell *s);
 
 //token_extraction_utils.c
 int					is_space(char c);
@@ -57,12 +57,12 @@ t_token				*get_last_token(t_token *token_list);
 t_token_type		get_other_types(char *input);
 
 //token_expansion_var.c
-char				*get_var_value(t_env *env_list, char *key);
+char				*get_var_value(t_env *env_list, char *key, int status);
 char				*get_var_name(const char *str);
-void				get_var_length(const char *str, \
-						t_env *env_list, size_t *i, size_t *expanded_len);
-void				expand_var(const char *str, \
-						t_env *env_list, size_t *i, char *expanded);
+void				get_var_length(const char *str, t_shell *s, \
+						size_t *i, size_t *expanded_len);
+void				expand_var(const char *str, t_shell *s, \
+						size_t *i, char *expanded);
 
 //token_expansion_quotes.c
 void				init_expansion_params(size_t *i, size_t *j, \

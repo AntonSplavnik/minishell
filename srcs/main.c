@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:02:10 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/02 21:45:28 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/10 17:40:22 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,14 @@ int	main(int argc, char **argv, char **env)
 		return 1;
 	s->token_list = NULL;
 	s->env_list = NULL;
+	s->exit_status = 0;
 
 	//store env
 	error = init_env(&s->env_list, env);
 	if (error != SUCCESS)
 	{
 		free(s);
+		s->exit_status = 2;
 		return (1);
 	}
 	while (1)
@@ -45,7 +47,10 @@ int	main(int argc, char **argv, char **env)
 		//store input with readline
 		args = readline("minishell$ ");
 		if (!args)
+		{
+			s->exit_status = 2;
 			break ;
+		}
 		//add raw_input to history if it's not empty
 		if (args[0] != '\0')
 		{
@@ -56,15 +61,17 @@ int	main(int argc, char **argv, char **env)
 		if (error != SUCCESS)
 		{
 			free(args);
+			s->exit_status = 2;
 			continue ;
 		}
 
 		//expand tokens (env var expansion & quotes cleaning)
 		if (error == SUCCESS)
-			error = expand_tokens(&s->token_list, s->env_list);
+			error = expand_tokens(s);
 		if (error != SUCCESS)
 		{
 			handle_error_free_tokens(error, &s->token_list, args);
+			s->exit_status = 2;
 			continue ;
 		}
 

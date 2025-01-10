@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:43:49 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/02 21:34:45 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/10 17:39:40 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ Calculates the required length for a token after expansion by:
 Returns the total length needed for the expanded string
 */
 size_t	calculate_length_loop(t_token *token, \
-			t_env *env_list, size_t *expanded_len)
+			t_shell *s, size_t *expanded_len)
 {
 	size_t	i;
 	int		in_squote;
@@ -38,7 +38,7 @@ size_t	calculate_length_loop(t_token *token, \
 		}
 		else if (token->content[i] == '$' && \
 					!in_squote && token->content[i + 1])
-			get_var_length(token->content + i + 1, env_list, &i, expanded_len);
+			get_var_length(token->content + i + 1, s, &i, expanded_len);
 		else
 		{
 			(*expanded_len)++;
@@ -52,7 +52,7 @@ size_t	calculate_length_loop(t_token *token, \
 Wrapper function that initializes parameters and calls calculate_length_loop
 Returns the total length needed for the expanded token content
 */
-size_t	calculate_expanded_length(t_token *token, t_env *env_list)
+size_t	calculate_expanded_length(t_token *token, t_shell *s)
 {
 	size_t	expanded_len;
 	size_t	i;
@@ -61,7 +61,7 @@ size_t	calculate_expanded_length(t_token *token, t_env *env_list)
 
 	expanded_len = 0;
 	init_expansion_params(&i, &expanded_len, &in_squote, &in_dquote);
-	return (calculate_length_loop(token, env_list, &expanded_len));
+	return (calculate_length_loop(token, s, &expanded_len));
 }
 
 /*
@@ -70,10 +70,10 @@ Updates the expanded string and position indices accordingly
 */
 
 static void	process_variable_expansion(char *expanded, const char *content, \
-			t_env *env_list, t_parse_params *params)
+			t_shell *s, t_parse_params *params)
 {
 	expanded[params->j] = '\0';
-	expand_var(content + params->i + 1, env_list, &params->i, expanded);
+	expand_var(content + params->i + 1, s, &params->i, expanded);
 	params->j = ft_strlen(expanded);
 }
 
@@ -85,7 +85,7 @@ Performs the actual content expansion for a token:
 - Updates the token's content with the expanded version
 */
 void	fill_token_content_after_expansion(t_token *token, char *exp, \
-						t_env *env_list)
+						t_shell *s)
 {
 	t_parse_params	params;
 
@@ -103,7 +103,7 @@ void	fill_token_content_after_expansion(t_token *token, char *exp, \
 		}
 		if (token->content[params.i] == '$' && !params.in_squote
 			&& token->content[params.i + 1])
-			process_variable_expansion(exp, token->content, env_list, &params);
+			process_variable_expansion(exp, token->content, s, &params);
 		else
 		{
 			exp[params.j++] = token->content[params.i++];
@@ -123,20 +123,20 @@ Main token expansion function that:
 5. Removes unnecessary quotes
 Returns SUCCESS or ERR_MALLOC if memory allocation fails
 */
-t_error	expand_tokens(t_token **token_list, t_env *env_list)
+t_error	expand_tokens(t_shell *s)
 {
 	t_token	*current;
 	char	*expanded;
 	size_t	expanded_len;
 
-	current = *token_list;
+	current = s->token_list;
 	while (current)
 	{
-		expanded_len = calculate_expanded_length(current, env_list);
+		expanded_len = calculate_expanded_length(current, s);
 		expanded = malloc(sizeof(char) * (expanded_len + 1));
 		if (!expanded)
 			return (ERR_MALLOC);
-		fill_token_content_after_expansion(current, expanded, env_list);
+		fill_token_content_after_expansion(current, expanded, s);
 		current = current->next;
 	}
 	return (SUCCESS);
