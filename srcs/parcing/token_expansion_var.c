@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 18:28:37 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/10 17:39:12 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/10 17:46:12 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /*
 Searches for an environment variable by key in the env_list
 Returns the value if found, empty string if not found
-Special case: if key is "?", returns the last exit status (TODO)
+Special case: if key is "?", returns the last exit status
 */
 char	*get_var_value(t_env *env_list, char *key, int status)
 {
@@ -79,7 +79,7 @@ void	get_var_length(const char *str, t_shell *s, \
 - Gets its value from the environment
 - Copies the value to the expanded string
 - Updates index i to skip over $VARNAME
-Note: For $?, should return the last exit status (TODO)
+- For $?, returns the last exit status
 */
 void	expand_var(const char *str, t_shell *s, \
 				size_t *i, char *expanded)
