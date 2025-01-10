@@ -39,6 +39,9 @@
 # include "parcing.h"
 # include "types.h"
 
+//Store last exit status
+extern int			g_last_exit_status;
+
 //ENV
 //init_env.c
 t_error				init_env(t_env **env_list, char **env);
