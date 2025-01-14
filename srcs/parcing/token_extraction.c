@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 14:54:55 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/10 18:16:06 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/13 17:50:39 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,20 @@ static char	*extract_delimiter_token(const char *str, size_t *i, t_error *error)
 	len = get_delimiter_len(str + *i);
 	token = ft_substr(str, *i, len);
 	if (!token)
+	{
 		*error = ERR_MALLOC;
+		return (NULL);
+	}
 	*i += len;
 	j = *i;
 	while (is_space(str[j]))
 		j++;
 	if (str[j] == '<' || str[j] == '>' || str[j] == '|')
+	{
 		*error = ERR_PARCING;
+		free(token);
+		return (NULL);
+	}
 	return (token);
 }
 
