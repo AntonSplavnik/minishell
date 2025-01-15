@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 11:21:21 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/14 12:20:04 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/15 12:11:45 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,7 @@ t_error	input_to_token(t_token **token_list, char *args)
 		if (!token)
 			return (SUCCESS);
 		error = add_token(token_list, token, get_token_type(token, token_list));
+		free(token);
 		if (error == SUCCESS)
 		{
 			last = get_last_token(*token_list);
@@ -149,7 +150,6 @@ t_error	input_to_token(t_token **token_list, char *args)
 		}
 		if (error != SUCCESS)
 			return (handle_error_free_tokens(error, token_list, NULL));
-		free(token);
 	}
 	return (SUCCESS);
 }

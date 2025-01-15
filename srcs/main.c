@@ -6,12 +6,19 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:02:10 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/15 11:47:28 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/15 16:06:35 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+/*
+Gets user input from readline:
+- Displays shell prompt
+- Handles EOF (Ctrl+D) by setting exit status
+- Adds non-empty inputs to command history
+Returns: Input string or NULL on EOF/error
+*/
 static char	*get_input(t_shell *s)
 {
 	char	*args;
@@ -27,6 +34,14 @@ static char	*get_input(t_shell *s)
 	return (args);
 }
 
+/*
+Processes user input through the shell pipeline:
+- Converts input to tokens
+- Validates last token type
+- Expands variables and special characters
+- Handles errors and memory cleanup
+Returns: SUCCESS or appropriate error code
+*/
 static t_error	process_input(t_shell *s, char *args)
 {
 	t_error	error;
@@ -50,6 +65,14 @@ static t_error	process_input(t_shell *s, char *args)
 	return (error);
 }
 
+/*
+Manages a single iteration of the shell loop:
+- Gets user input
+- Processes the input through the shell
+- Handles errors and memory cleanup
+- Maintains shell state
+Returns: 1 to continue loop, 0 to exit
+*/
 static int	handle_loop_iteration(t_shell *s)
 {
 	char	*args;

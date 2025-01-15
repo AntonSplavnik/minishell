@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 15:58:40 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/14 12:20:31 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/15 15:58:54 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,8 @@ t_token				*get_last_token(t_token *token_list);
 t_token_type		get_other_types(char *input);
 
 //token_expansion_var.c
-char				*get_var_value(t_env *env_list, char *key, int status);
+char				*get_var_value(t_env *env_list, char *key, \
+						int status, int *need_free);
 char				*get_var_name(const char *str);
 void				get_var_length(const char *str, t_shell *s, \
 						size_t *i, size_t *expanded_len);
