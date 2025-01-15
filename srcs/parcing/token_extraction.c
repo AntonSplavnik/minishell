@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 14:54:55 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/13 17:50:39 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/15 12:16:31 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ static char	*extract_unquoted_token(const char *str, size_t *i, t_error *error)
 {
 	size_t	start;
 	size_t	len;
+	char	*token;
 
 	start = *i;
 	len = 0;
@@ -31,9 +32,10 @@ static char	*extract_unquoted_token(const char *str, size_t *i, t_error *error)
 		(*i)++;
 		len++;
 	}
-	if (!ft_substr(str, start, len))
+	token = ft_substr(str, start, len);
+	if (!token)
 		*error = ERR_MALLOC;
-	return (ft_substr(str, start, len));
+	return (token);
 }
 
 /*
@@ -111,6 +113,7 @@ static char	*extract_quoted_token(char *args, size_t *i, t_error *error)
 	t_quote_info	quotes;
 	size_t			start;
 	size_t			len;
+	char			*token;
 
 	quotes.outer_quote = args[*i];
 	start = *i;
@@ -123,12 +126,13 @@ static char	*extract_quoted_token(char *args, size_t *i, t_error *error)
 		*error = ERR_PARCING;
 		return (NULL);
 	}
-	if (!ft_substr(args, start, len))
+	token = ft_substr(args, start, len);
+	if (!token)
 	{
 		*error = ERR_MALLOC;
 		return (NULL);
 	}
-	return (ft_substr(args, start, len));
+	return (token);
 }
 
 /*

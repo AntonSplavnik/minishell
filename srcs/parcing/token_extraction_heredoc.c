@@ -6,12 +6,38 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 16:27:25 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/14 12:20:18 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/15 16:05:33 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 #include <readline/readline.h>
+
+/*
+Processes a single line of heredoc input:
+- Takes current content and new line as input
+- Joins content with newline character
+- Appends new line to the result
+- Handles memory management for intermediate strings
+Returns: Updated content string or NULL if allocation fails
+*/
+static char	*handle_line_input(char *content, char *line)
+{
+	char	*temp;
+	char	*new_content;
+
+	temp = ft_strjoin(content, "\n");
+	free(content);
+	if (!temp)
+	{
+		free(line);
+		return (NULL);
+	}
+	new_content = ft_strjoin(temp, line);
+	free(temp);
+	free(line);
+	return (new_content);
+}
 
 /*
 Processes heredoc input by collecting lines until delimiter is found:
@@ -24,24 +50,21 @@ Returns: Complete heredoc content as a single string with newlines
 static char	*collect_heredoc_content(char *delimiter, char *content)
 {
 	char	*line;
-	char	*temp;
-	char	*new_line;
+	char	*new_content;
 
 	while (1)
 	{
-		new_line = "\n";
 		line = readline("> ");
 		if (!line || ft_strcmp(line, delimiter) == 0)
 		{
 			free(line);
-			break ;
+			return (content);
 		}
-		temp = ft_strjoin(content, new_line);
-		content = ft_strjoin(temp, line);
-		free(temp);
-		free(line);
+		new_content = handle_line_input(content, line);
+		if (!new_content)
+			return (NULL);
+		content = new_content;
 	}
-	return (content);
 }
 
 /*
@@ -57,7 +80,6 @@ Note: Updates i to point after the newline if delimiter is found
 static char	*get_first_heredoc_content(char *args, size_t *i, \
 											char *delim, size_t start)
 {
-	char	*content;
 	size_t	len;
 
 	len = 0;
@@ -71,8 +93,7 @@ static char	*get_first_heredoc_content(char *args, size_t *i, \
 		(*i)++;
 		len++;
 	}
-	content = ft_substr(args, start, len);
-	return (content);
+	return (ft_substr(args, start, len));
 }
 
 /*
@@ -86,10 +107,10 @@ Returns: SUCCESS or ERR_MALLOC if memory allocation fails
 
 t_error	handle_heredoc(t_token **token_list, char *delim, size_t *i, char *args)
 {
-	t_token	*heredoc_token;
 	char	*content;
 	size_t	start;
 	char	*newline_pos;
+	t_error	result;
 
 	start = *i;
 	content = get_first_heredoc_content(args, i, delim, start);
@@ -101,10 +122,9 @@ t_error	handle_heredoc(t_token **token_list, char *delim, size_t *i, char *args)
 	{
 		content = collect_heredoc_content(delim, content);
 	}
-	heredoc_token = create_token(content, TYPE_HEREDOC_CONTENT);
+	result = add_token(token_list, content, TYPE_HEREDOC_CONTENT);
 	free(content);
-	if (!heredoc_token)
-		return (ERR_MALLOC);
-	*i += ft_strlen(delim) + 1;
-	return (add_token(token_list, heredoc_token->content, heredoc_token->type));
+	if (newline_pos)
+		*i += ft_strlen(delim) + 1;
+	return (result);
 }

@@ -6,12 +6,20 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 10:47:25 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/15 11:04:33 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/15 16:07:07 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+/*
+Initializes the shell structure:
+- Allocates memory for shell structure
+- Initializes internal state variables
+- Sets up environment variable list
+- Handles initialization errors
+Returns: SUCCESS or ERR_MALLOC if allocation fails
+*/
 t_error	initialize_shell(t_shell **s, char **env)
 {
 	t_error	error;
