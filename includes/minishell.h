@@ -39,12 +39,6 @@
 # include "parcing.h"
 # include "types.h"
 
-//ENV
-//init_env.c
-t_error				init_env(t_env **env_list, char **env);
-t_error				add_envvar(t_env **env_list, char *env);
-t_env				*create_envvar(char *env);
-
 //utils
 char				*ft_strndup(const char *s, size_t n);
 int					ft_strcmp(const char *s1, const char *s2);
@@ -62,6 +56,15 @@ t_error				handle_error_free_tokens(t_error error_code, \
 t_error				handle_error(t_error error_code, void *ptr_to_free);
 t_error				handle_error_free_env(t_error error_code, \
 								t_env **env_list);
+
+//INIT
+//init_data.c
+t_error				initialize_shell(t_shell **s, char **env);
+
+//init_env.c
+t_error				init_env(t_env **env_list, char **env);
+t_error				add_envvar(t_env **env_list, char *env);
+t_env				*create_envvar(char *env);
 
 //TO DELETE BEFORE SUB
 //utils_to_print
