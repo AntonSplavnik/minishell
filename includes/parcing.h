@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 15:58:40 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/10 17:40:02 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/14 12:20:31 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,5 +73,9 @@ void				process_quote(char quote_char, int *in_squote, \
 //token_extraction_heredoc
 t_error				handle_heredoc(t_token **token_list, \
 						char *delimiter, size_t *i, char *args);
+
+//token_extraction_heredoc_utils
+int					*get_heredoc_state_ptr(void);
+void				reset_heredoc_state(void);
 
 #endif

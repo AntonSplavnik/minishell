@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:08:53 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/02 21:38:16 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/14 12:11:20 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,13 @@ t_error	handle_error(t_error error_code, void *ptr_to_free)
 	return (error_code);
 }
 
-//free the token list and print error message
+/*
+Handles error with token list cleanup:
+- Frees entire token list
+- Frees additional args string if provided
+- Prints error message
+Returns: The error code passed in
+*/
 t_error	handle_error_free_tokens(t_error error_code, \
 								t_token **token_list, char *args)
 {
@@ -56,6 +62,7 @@ t_error	handle_error_free_tokens(t_error error_code, \
 		free_token_list(token_list);
 	if (args)
 		free(args);
+	reset_heredoc_state();
 	print_error(error_code);
 	return (error_code);
 }

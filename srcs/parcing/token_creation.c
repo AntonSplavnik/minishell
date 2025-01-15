@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 11:21:21 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/10 15:55:00 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/14 12:20:04 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	is_command(t_token **token_list)
 
 /*
 Determines the type of token based on its content and context:
-- Uses static variable to track heredoc delimiter state
+- Uses get_heredoc_state_ptr to access heredoc state
 - Special handling for heredoc operator (<<) and its delimiter
 - Identifies commands using is_command()
 - Falls back to get_other_types() for standard tokens
@@ -43,16 +43,17 @@ Returns: Appropriate token type from t_token_type enum
 */
 t_token_type	get_token_type(char *input, t_token **token_list)
 {
-	static int	expect_heredoc_delim = 0;
+	int	*expect_heredoc_delim;
 
-	if (expect_heredoc_delim)
+	expect_heredoc_delim = get_heredoc_state_ptr();
+	if (*expect_heredoc_delim)
 	{
-		expect_heredoc_delim = 0;
+		*expect_heredoc_delim = 0;
 		return (TYPE_HEREDOC_DELIM);
 	}
 	if (ft_strcmp(input, "<<") == 0)
 	{
-		expect_heredoc_delim = 1;
+		*expect_heredoc_delim = 1;
 		return (TYPE_HEREDOC_OP);
 	}
 	if (is_command(token_list) == 1)

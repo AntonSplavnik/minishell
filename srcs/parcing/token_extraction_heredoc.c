@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 16:27:25 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/08 13:19:17 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/14 12:20:18 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,28 +107,4 @@ t_error	handle_heredoc(t_token **token_list, char *delim, size_t *i, char *args)
 		return (ERR_MALLOC);
 	*i += ft_strlen(delim) + 1;
 	return (add_token(token_list, heredoc_token->content, heredoc_token->type));
-}
-
-/*
-Checks if current token is part of a heredoc operation:
-- Uses static variable to track heredoc state
-- Returns TYPE_HEREDOC_DELIM if expecting delimiter
-- Returns TYPE_HEREDOC_OP for '<<' operator
-- Returns 0 for non-heredoc tokens
-*/
-int	check_if_heredoc(char *input)
-{
-	static int	expect_heredoc_delim = 0;
-
-	if (expect_heredoc_delim)
-	{
-		expect_heredoc_delim = 0;
-		return (TYPE_HEREDOC_DELIM);
-	}
-	if (ft_strcmp(input, "<<") == 0)
-	{
-		expect_heredoc_delim = 1;
-		return (TYPE_HEREDOC_OP);
-	}
-	return (0);
 }
