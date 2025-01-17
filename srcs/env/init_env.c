@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:12:37 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/17 17:19:36 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/17 18:09:26 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ size_t	count_env_var(char **env)
 	size_t	count;
 
 	count = 0;
-	while(env[count])
+	while (env[count])
 		count++;
 	return (count);
 }

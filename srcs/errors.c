@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:08:53 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/17 15:59:39 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/17 18:10:26 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ void	print_error(t_error error_code)
 	if (error_code == 0)
 		ft_putendl_fd("SUCCESS", 2);
 	else if (error_code == 1)
-		ft_putendl_fd("Error: Please enter ./minishell without any arguments", 2);
+		ft_putendl_fd("Error: Please enter \
+		./minishell without any arguments", 2);
 	else if (error_code == 2)
 		ft_putendl_fd("Error: Memory allocation failed", 2);
 	else if (error_code == 3)

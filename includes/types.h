@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 16:08:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/17 16:46:26 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/17 18:01:46 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ typedef struct s_env
 //Main Shell structure, to enhanced and figure out how to use it
 typedef struct s_shell
 {
-	char 	**envp;
+	char	**envp;
 	t_env	*env_list;
 	t_token	*token_list;
 	int		exit_status;
