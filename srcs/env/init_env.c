@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:12:37 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/02 21:36:59 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/17 18:09:26 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ t_env	*create_envvar(char *env)
 	new_envvar = malloc(sizeof(t_env));
 	if (!new_envvar)
 		return (NULL);
+	new_envvar->content = ft_strdup(env);
 	equal_sign = ft_strchr(env, '=');
 	if (equal_sign)
 	{
@@ -63,21 +64,67 @@ t_error	add_envvar(t_env **env_list, char *env)
 	return (SUCCESS);
 }
 
+/*count number of env variables for array allocation*/
+size_t	count_env_var(char **env)
+{
+	size_t	count;
+
+	count = 0;
+	while (env[count])
+		count++;
+	return (count);
+}
+
+/*
+Create a duplicate of the environment array
+Return : New array or NULL if allocation fails
+*/
+char	**duplicate_env_array(char **env)
+{
+	char	**new_env;
+	size_t	count;
+	size_t	i;
+
+	count = count_env_var(env);
+	new_env = malloc(sizeof(char *) * (count + 1));
+	if (!new_env)
+		return (NULL);
+	i = 0;
+	while (i < count)
+	{
+		new_env[i] = ft_strdup(env[i]);
+		if (!new_env[i])
+		{
+			free_array(new_env);
+			return (NULL);
+		}
+		i++;
+	}
+	new_env[count] = NULL;
+	return (new_env);
+}
+
 /*
 Initializes environment list from main's env:
 - Processes each environment string
 - Creates and adds env nodes to the list
 Returns: SUCCESS or ERR_ENV if initialization fails
 */
-t_error	init_env(t_env **env_list, char **env)
+t_error	init_env(t_shell *s, t_env **env_list, char **env)
 {
 	int		i;
 
 	i = 0;
+	s->envp = duplicate_env_array(env);
+	if (!s->envp)
+		return (ERR_ENV);
 	while (env[i])
 	{
 		if (add_envvar(env_list, env[i]) != SUCCESS)
+		{
+			free_array(s->envp);
 			return (handle_error_free_env(ERR_ENV, env_list));
+		}
 		i++;
 	}
 	return (SUCCESS);
