@@ -38,6 +38,7 @@
 /*Include other headers*/
 # include "parcing.h"
 # include "types.h"
+# include "execution.h"
 
 //utils
 char				*ft_strndup(const char *s, size_t n);
@@ -48,6 +49,7 @@ int					ft_strstr(const char *big, const char *little);
 //free.c
 void				free_token_list(t_token **token_list);
 void				free_env_list(t_env **env_list);
+void				free_array(char **array);
 
 //error.c
 void				print_error(t_error error_code);
@@ -61,10 +63,12 @@ t_error				handle_error_free_env(t_error error_code, \
 //init_data.c
 t_error				initialize_shell(t_shell **s, char **env);
 
+//ENV
 //init_env.c
-t_error				init_env(t_env **env_list, char **env);
+t_error	init_env	(t_shell *s, t_env **env_list, char **env);
 t_error				add_envvar(t_env **env_list, char *env);
 t_env				*create_envvar(char *env);
+
 
 //TO DELETE BEFORE SUB
 //utils_to_print

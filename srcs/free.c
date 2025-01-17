@@ -6,11 +6,26 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 12:43:11 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/02 21:37:33 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/17 15:38:50 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+/*Free an array of string*/
+
+void	free_array(char **array)
+{
+	int	i;
+
+	i = 0;
+	while(array[i])
+	{
+		free(array[i]);
+		i++;
+	}
+	free(array);
+}
 
 /*
 Frees entire token linked list:

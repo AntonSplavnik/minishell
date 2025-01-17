@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 16:08:54 by abillote          #+#    #+#             */
-/*   Updated: 2024/12/06 16:11:43 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/17 16:46:26 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,15 @@ typedef enum e_error
 	ERR_MALLOC = 2,
 	ERR_PARCING = 3,
 	ERR_ENV = 4,
+	ERR_CMD_NOT_FOUND = 5,
+	ERR_EXEC = 6,
 	//..add any other relevant error
 	//do not forget to add them in print_error function in errors.c
 }	t_error;
 
 typedef struct s_env
 {
+	char			*content;
 	char			*key;
 	char			*value;
 	struct s_env	*next;
@@ -58,6 +61,7 @@ typedef struct s_env
 //Main Shell structure, to enhanced and figure out how to use it
 typedef struct s_shell
 {
+	char 	**envp;
 	t_env	*env_list;
 	t_token	*token_list;
 	int		exit_status;

@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:08:53 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/14 12:11:20 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/17 15:59:39 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,19 +19,25 @@ Prints appropriate error message to stderr based on error code:
 - ERR_MALLOC: Memory allocation failure
 - ERR_PARCING: Syntax error in input
 - ERR_ENV: Environment initialization error
+- ERR_CMD_NOT_FOUND: Error in the command name
+- ERR_EXEC: Error during the command execution
 */
 void	print_error(t_error error_code)
 {
 	if (error_code == 0)
 		ft_putendl_fd("SUCCESS", 2);
 	else if (error_code == 1)
-		ft_putendl_fd("Please enter ./minishell without any arguments", 2);
+		ft_putendl_fd("Error: Please enter ./minishell without any arguments", 2);
 	else if (error_code == 2)
-		ft_putendl_fd("Memory allocation failed", 2);
+		ft_putendl_fd("Error: Memory allocation failed", 2);
 	else if (error_code == 3)
-		ft_putendl_fd("Syntax error", 2);
+		ft_putendl_fd("Error: Syntax error", 2);
 	else if (error_code == 4)
-		ft_putendl_fd("Environment could not be set", 2);
+		ft_putendl_fd("Error: Environment could not be set", 2);
+	else if (error_code == 5)
+		ft_putendl_fd("Error: Command could not be found", 2);
+	else if (error_code == 6)
+		ft_putendl_fd("Error: Command could not be executed", 2);
 }
 
 /*
