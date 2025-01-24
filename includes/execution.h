@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 12:46:41 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/24 15:34:40 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/24 16:38:32 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,8 @@ char	*find_command_path(char *cmd, t_shell *s);
 //execute_built_in.c
 t_error	execute_built_in(t_token *cmd_token, char **args, t_shell *s);
 int		is_built_in(char *cmd);
+
+//echo.c
+t_error	execute_echo(char **args);
 
 #endif

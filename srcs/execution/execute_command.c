@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 12:44:50 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/24 16:03:06 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/24 16:26:41 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,6 @@ go to the function execute_built-in
 - Else, find the command path with the first token of the list
 RETURNS: appropriate error code
 To add:
-- handling built-in (filter before going to execve)
 - handling pipes
 */
 t_error	execute_command(t_token *cmd_token, t_shell *s)
