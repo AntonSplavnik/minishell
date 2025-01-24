@@ -6,12 +6,18 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 14:59:38 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/24 16:02:53 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/24 16:08:13 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+/*
+Checks if a command is one of the shell's built-in commands:
+- Compares command name against list of built-ins
+- Built-ins are: echo, cd, pwd, export, unset, env, exit
+Returns: 1 if command is built-in, 0 otherwise
+*/
 int	is_built_in(char *cmd)
 {
 	if (ft_strcmp(cmd, "echo") == 0)
@@ -31,9 +37,15 @@ int	is_built_in(char *cmd)
 	return (0);
 }
 
+/*Executes built-in shell commands:
+- Currently placeholder implementation
+- Will handle: echo, cd, pwd, export, unset, env, exit
+Returns: SUCCESS or appropriate error code
+*/
 t_error	execute_built_in(t_token *cmd_token, char **args, t_shell *s)
 {
-	printf("The command '%s' is a built-in and still needs to be implemented\n", cmd_token->content);
+	printf("The command '%s' is a built-in \
+		and still needs to be implemented\n", cmd_token->content);
 	(void)args;
 	(void)s;
 	return (SUCCESS);

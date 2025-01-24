@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 17:57:49 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/24 16:02:52 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/24 16:08:06 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,14 @@ char	*try_path_dir(char *dir, char *cmd)
 	return (NULL);
 }
 
-static char *search_in_paths(char **path_dirs, char *cmd)
+/*
+Searches for executable in PATH directories:
+- Iterates through each directory in PATH
+- Attempts to find executable using try_path_dir
+- Handles memory cleanup of path_dirs array
+Returns: Full path to executable if found, NULL otherwise
+*/
+static char	*search_in_paths(char **path_dirs, char *cmd)
 {
 	int		i;
 	char	*full_path;
@@ -57,17 +64,14 @@ static char *search_in_paths(char **path_dirs, char *cmd)
 	free_array(path_dirs);
 	return (NULL);
 }
+
 /*
-if command contains a "/", it's treated
-as a direct path and just duplicate it.
-Otherwise:
-- Searches for the path env var with get var value function,
-usually something like "/usr/local/bin:/usr/bin:/bin"
-- Splits the path is sub-directory:
-	- would be path_dirs[0] = /usr/local/bin ||
-path_dirs[1] = /usr/bin || path_dirs[2] = /bin
-- Searches for executable in each PATH directories.
-- Returns full path if found, NULL if not found
+Locates full path for a command:
+- Handles direct paths (containing '/')
+- Gets PATH variable from environment
+- Splits PATH into directory list
+- Searches directories for executable
+Returns: Full path to command if found, NULL if not found or error
 */
 char	*find_command_path(char *cmd, t_shell *s)
 {
