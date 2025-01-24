@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 12:46:41 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/24 16:38:32 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/24 17:32:15 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,8 @@ int		is_built_in(char *cmd);
 
 //echo.c
 t_error	execute_echo(char **args);
+
+//pwd.c
+t_error	execute_pwd(char **args);
 
 #endif
