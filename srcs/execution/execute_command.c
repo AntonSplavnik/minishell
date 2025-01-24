@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 12:44:50 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/17 18:07:26 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/24 16:03:06 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,8 +111,10 @@ t_error	execute_child_process(char *cmd_path, char **args, t_shell *s)
 
 /*
 Executes a single command with its arguments
-Find the command path with the first token of the list
 Find the args by going through the token list
+- If the first token of the list is a built-in,
+go to the function execute_built-in
+- Else, find the command path with the first token of the list
 RETURNS: appropriate error code
 To add:
 - handling built-in (filter before going to execve)
@@ -123,15 +125,19 @@ t_error	execute_command(t_token *cmd_token, t_shell *s)
 	char	*cmd_path;
 	char	**args;
 
-	cmd_path = find_command_path(cmd_token->content, s);
-	if (!cmd_path)
-		return (ERR_CMD_NOT_FOUND);
 	args = prepare_command_args(cmd_token);
 	if (!args)
 	{
-		free(cmd_path);
 		s->exit_status = 12;
 		return (ERR_MALLOC);
+	}
+	if (is_built_in(cmd_token->content))
+		return (execute_built_in(cmd_token, args, s));
+	cmd_path = find_command_path(cmd_token->content, s);
+	if (!cmd_path)
+	{
+		free_array(args);
+		return (ERR_CMD_NOT_FOUND);
 	}
 	return (execute_child_process(cmd_path, args, s));
 }
