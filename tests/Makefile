@@ -9,6 +9,7 @@ LIBFT_PATH = ../libft
 
 # Source files
 SRC = 	$(SRCS_DIR)/parcing/token_creation.c \
+		$(SRCS_DIR)/parcing/token_creation.c \
 		$(SRCS_DIR)/parcing/token_extraction_utils.c \
 		$(SRCS_DIR)/parcing/token_extraction.c \
 		$(SRCS_DIR)/parcing/token_expansion.c \
@@ -17,10 +18,13 @@ SRC = 	$(SRCS_DIR)/parcing/token_creation.c \
 		$(SRCS_DIR)/parcing/token_extraction_heredoc.c \
 		$(SRCS_DIR)/parcing/token_extraction_heredoc_utils.c \
 		$(SRCS_DIR)/execution/execute_command.c \
+		$(SRCS_DIR)/execution/command_path.c \
 		$(SRCS_DIR)/execution/execute_built_in.c \
 		$(SRCS_DIR)/built-in/echo.c \
 		$(SRCS_DIR)/built-in/pwd.c \
+		$(SRCS_DIR)/built-in/cd.c \
 		$(SRCS_DIR)/env/init_env.c \
+		$(SRCS_DIR)/env/manipulate_env.c \
 		$(SRCS_DIR)/init/init_data.c \
 		$(SRCS_DIR)/utils/ft_strndup.c \
 		$(SRCS_DIR)/utils/ft_strcmp.c \
@@ -28,7 +32,7 @@ SRC = 	$(SRCS_DIR)/parcing/token_creation.c \
 		$(SRCS_DIR)/utils/ft_strstr.c \
 		$(SRCS_DIR)/free.c \
 		$(SRCS_DIR)/errors.c \
-		$(SRCS_DIR)/utils_to_print.c \
+		$(SRCS_DIR)/utils_to_print.c
 		tests_tokenizer.c \
 
 # Compiler and flags
