@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:08:53 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/17 18:10:26 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/24 17:28:14 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ Prints appropriate error message to stderr based on error code:
 - ERR_ENV: Environment initialization error
 - ERR_CMD_NOT_FOUND: Error in the command name
 - ERR_EXEC: Error during the command execution
+- ERR_PWD: Too many args for pwd
 */
 void	print_error(t_error error_code)
 {
@@ -39,6 +40,8 @@ void	print_error(t_error error_code)
 		ft_putendl_fd("Error: Command could not be found", 2);
 	else if (error_code == 6)
 		ft_putendl_fd("Error: Command could not be executed", 2);
+	else if (error_code == 7)
+		ft_putendl_fd("Error pwd: too many arguments", 2);
 }
 
 /*
