@@ -31,6 +31,7 @@ SRCS = $(SRCS_DIR)/main.c \
 		$(SRCS_DIR)/execution/execute_command.c \
 		$(SRCS_DIR)/execution/command_path.c \
 		$(SRCS_DIR)/execution/execute_built_in.c \
+		$(SRCS_DIR)/built-in/echo.c \
 		$(SRCS_DIR)/env/init_env.c \
 		$(SRCS_DIR)/init/init_data.c \
 		$(SRCS_DIR)/utils/ft_strndup.c \
