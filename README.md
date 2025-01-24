@@ -9,6 +9,7 @@ Update on 24.01.2025
 - Environment variable handling
 - Basic command execution with execve (no built-in)
 - Error handling
+- Memory leaks OKAY - except for signals (CTRL + C && CTRL + D)
 - Test suite for token processing (but not for command exec)
 
 <h2>Token Processing Pipeline</h2>
