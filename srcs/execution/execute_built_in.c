@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 14:59:38 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/25 21:17:38 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/25 21:39:38 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,9 @@ Returns: SUCCESS or appropriate error code
 t_error	execute_built_in(t_token *cmd_token, char **args, t_shell *s)
 {
 	if (ft_strcmp(cmd_token->content, "echo") == 0)
-		return (execute_echo(args));
+		return (execute_echo(args, s));
 	if (ft_strcmp(cmd_token->content, "pwd") == 0)
-		return (execute_pwd(args));
+		return (execute_pwd(s));
 	if (ft_strcmp(cmd_token->content, "cd") == 0)
 		return (execute_cd(cmd_token, s));
 	if (ft_strcmp(cmd_token->content, "env") == 0)

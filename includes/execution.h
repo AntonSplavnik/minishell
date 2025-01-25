@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 12:46:41 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/25 21:19:57 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/25 21:39:28 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@ t_error	execute_built_in(t_token *cmd_token, char **args, t_shell *s);
 int		is_built_in(char *cmd);
 
 //echo.c
-t_error	execute_echo(char **args);
+t_error	execute_echo(char **args, t_shell *s);
 
 //pwd.c
-t_error	execute_pwd(char **args);
+t_error	execute_pwd(t_shell *s);
 
 //cd.c
 t_error	execute_cd(t_token *cmd_token, t_shell *s);
