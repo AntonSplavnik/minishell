@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 22:26:37 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/24 23:05:44 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/25 16:11:29 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ t_error	update_path_vars(char *old_path, t_env *env_list)
 	char	*current_path;
 	t_env	*pwd_var;
 	t_env	*oldpwd_var;
-
 
 	current_path = getcwd(NULL, 0);
 	if (!current_path)
