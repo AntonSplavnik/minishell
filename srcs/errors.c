@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:08:53 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/24 17:28:14 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/25 21:15:33 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ void	print_error(t_error error_code)
 		ft_putendl_fd("Error: Command could not be executed", 2);
 	else if (error_code == 7)
 		ft_putendl_fd("Error pwd: too many arguments", 2);
+	else if (error_code == 8)
+		ft_putendl_fd("Error env: too many arguments", 2);
 }
 
 /*

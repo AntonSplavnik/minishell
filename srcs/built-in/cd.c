@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 22:26:37 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/25 16:11:29 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/25 21:21:24 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ Returns: SUCCESS or error code
 */
 t_error	execute_cd(t_token *cmd_token, t_shell *s)
 {
-	char 	*path;
-	char 	*old_path;
+	char	*path;
+	char	*old_path;
 	t_error	error;
 
 	old_path = getcwd(NULL, 0);
