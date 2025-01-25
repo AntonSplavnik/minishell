@@ -70,6 +70,9 @@ t_error				init_env(t_shell *s, t_env **env_list, char **env);
 t_error				add_envvar(t_env **env_list, char *env);
 t_env				*create_envvar(char *env);
 
+//manipulate_env.c
+t_env				*find_env_var(t_env *env_list, char *key);
+
 //TO DELETE BEFORE SUB
 //utils_to_print
 void				print_token(t_token *token_list);
