@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 14:59:38 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/24 22:28:13 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/25 21:17:38 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ t_error	execute_built_in(t_token *cmd_token, char **args, t_shell *s)
 		return (execute_pwd(args));
 	if (ft_strcmp(cmd_token->content, "cd") == 0)
 		return (execute_cd(cmd_token, s));
+	if (ft_strcmp(cmd_token->content, "env") == 0)
+		return (execute_env(args, s->env_list, s));
 	printf("The command '%s' is a built-in \
 		and still needs to be implemented\n", cmd_token->content);
 	(void)args;

@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 12:46:41 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/24 22:28:57 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/25 21:19:57 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,5 +35,7 @@ t_error	execute_pwd(char **args);
 //cd.c
 t_error	execute_cd(t_token *cmd_token, t_shell *s);
 
+//env.c
+t_error	execute_env(char **args, t_env *env_list, t_shell *s);
 
 #endif
