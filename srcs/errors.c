@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:08:53 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/25 21:42:24 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/26 17:20:18 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ void	print_error(t_error error_code)
 		ft_putendl_fd("Error env: too many arguments", 2);
 	else if (error_code == 9)
 		ft_putendl_fd("Error cd: No such file or directory", 2);
+	else if (error_code == 10)
+		ft_putendl_fd("Error exit: too many arguments", 2);
 }
 
 /*

@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 16:08:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/25 21:41:42 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/26 17:19:46 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ typedef enum e_error
 	ERR_PWD = 7,
 	ERR_ENV_EXEC = 8,
 	ERR_CD = 9,
+	ERR_EXIT = 10,
 	//..add any other relevant error
 	//do not forget to add them in print_error function in errors.c
 }	t_error;
