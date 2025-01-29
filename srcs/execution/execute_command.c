@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 12:44:50 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/24 16:26:41 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/29 12:32:28 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,9 @@ t_error	execute_command(t_token *cmd_token, t_shell *s)
 	char	*cmd_path;
 	char	**args;
 
+	//Check for pipes and handle them here
+
+	//if no pipes, execute simple command
 	args = prepare_command_args(cmd_token);
 	if (!args)
 	{
