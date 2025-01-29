@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 12:46:41 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/29 11:39:11 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/29 16:47:28 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,5 +40,8 @@ t_error	execute_env(char **args, t_env *env_list, t_shell *s);
 
 //exit
 t_error	execute_exit(char **args, t_shell *s);
+
+//unset
+t_error	execute_unset(char **args, t_shell *s);
 
 #endif
