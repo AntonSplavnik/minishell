@@ -23,7 +23,11 @@ Update on 24.01.2025
 - **Extraction**: Handles quoted strings, delimiters (<, >, |, <<, >>), and unquoted text
 - **Type Assignment**: Identifies commands, arguments, operators based on context
 - **Expansion**: Processes environment variables and removes unnecessary quotes
-=> All tokens are stored in a linked list
+=> All tokens are stored in a linked list.
+Reason for choosing a linked list over AST:
+- For the mandatory part, the pipe requirements are relatively straightforward : pipes operations are linear (cmd1 | cmd2 | cmd3), and each command's output feeds into the next command's input sequentially (the linear structure of the linked list makes it easy to traverse the commands sequentially).
+- The project doesn't require complex operations like boolean operators (&& and ||) or parentheses grouping (only needed for the bonus part).
+- AST would add complexity while not providing substantial benefits for the mandatory requirements
 
 <h3>Command Execution</h3>
 
