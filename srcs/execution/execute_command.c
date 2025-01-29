@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 12:44:50 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/24 16:26:41 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/29 15:32:04 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,7 @@ t_error	execute_child_process(char *cmd_path, char **args, t_shell *s)
 	pid = fork();
 	if (pid == -1)
 	{
-		free(cmd_path);
-		free_array(args);
+		free_command_path(cmd_path, args);
 		s->exit_status = 1;
 		return (ERR_EXEC);
 	}
@@ -97,6 +96,7 @@ t_error	execute_child_process(char *cmd_path, char **args, t_shell *s)
 	{
 		execve(cmd_path, args, s->envp);
 		s->exit_status = 127;
+		ft_putendl_fd("Command could not be executed", 2);
 		exit(127);
 	}
 	else
@@ -124,6 +124,9 @@ t_error	execute_command(t_token *cmd_token, t_shell *s)
 	char	*cmd_path;
 	char	**args;
 
+	//Check for pipes and handle them here
+
+	//if no pipes, execute simple command
 	args = prepare_command_args(cmd_token);
 	if (!args)
 	{

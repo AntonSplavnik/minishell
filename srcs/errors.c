@@ -6,13 +6,13 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:08:53 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/29 11:49:22 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/29 12:39:27 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	error_builtin(char *function, char *arg, char *message)
+void	error_exit(char *function, char *arg, char *message)
 {
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(function, 2);
@@ -37,18 +37,18 @@ void	print_error(t_error error_code)
 	if (error_code == 0)
 		ft_putendl_fd("SUCCESS", 2);
 	else if (error_code == 1)
-		ft_putendl_fd("Error: Please enter \
+		ft_putendl_fd("Please enter \
 		./minishell without any arguments", 2);
 	else if (error_code == 2)
-		ft_putendl_fd("Error: Memory allocation failed", 2);
+		ft_putendl_fd("Memory allocation failed", 2);
 	else if (error_code == 3)
-		ft_putendl_fd("Error: Syntax error", 2);
+		ft_putendl_fd("Syntax error", 2);
 	else if (error_code == 4)
-		ft_putendl_fd("Error: Environment could not be set", 2);
+		ft_putendl_fd("Environment could not be set", 2);
 	else if (error_code == 5)
-		ft_putendl_fd("Error: Command could not be found", 2);
+		ft_putendl_fd("Command not found", 2);
 	else if (error_code == 6)
-		ft_putendl_fd("Error: Command could not be executed", 2);
+		ft_putendl_fd("Command could not be executed", 2);
 	else if (error_code == 7)
 		ft_putendl_fd("minishell: env: No such file or directory", 2);
 	else if (error_code == 8)
