@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 16:08:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/25 21:41:42 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/29 11:22:27 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,9 @@ typedef enum e_error
 	ERR_ENV = 4,
 	ERR_CMD_NOT_FOUND = 5,
 	ERR_EXEC = 6,
-	ERR_PWD = 7,
-	ERR_ENV_EXEC = 8,
-	ERR_CD = 9,
+	ERR_ENV_EXEC = 7,
+	ERR_CD = 8,
+	ERR_EXIT_ARGS = 9,
 	//..add any other relevant error
 	//do not forget to add them in print_error function in errors.c
 }	t_error;
