@@ -6,17 +6,32 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 12:43:11 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/17 18:10:44 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/29 11:40:52 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+/*In case of exit: free all (including array if needed) and clear history*/
+void	free_all(t_shell *s, char **array)
+{
+	if (array)
+		free_array(array);
+	if (s->token_list)
+		free_token_list(&s->token_list);
+	if (s->env_list)
+		free_env_list(&s->env_list);
+	free (s);
+	rl_clear_history();
+}
+
 /*Free command path and args array*/
 void	free_command_path(char *cmd_path, char **args)
 {
-	free(cmd_path);
-	free_array(args);
+	if (cmd_path)
+		free(cmd_path);
+	if (args)
+		free_array(args);
 }
 
 /*Free an array of string*/

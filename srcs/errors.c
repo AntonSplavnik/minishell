@@ -6,11 +6,20 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:08:53 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/26 17:20:18 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/29 11:49:22 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+void	error_builtin(char *function, char *arg, char *message)
+{
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(function, 2);
+	ft_putstr_fd(": ", 2);
+	ft_putstr_fd(arg, 2);
+	ft_putendl_fd(message, 2);
+}
 
 /*
 Prints appropriate error message to stderr based on error code:
@@ -41,13 +50,11 @@ void	print_error(t_error error_code)
 	else if (error_code == 6)
 		ft_putendl_fd("Error: Command could not be executed", 2);
 	else if (error_code == 7)
-		ft_putendl_fd("Error pwd: too many arguments", 2);
+		ft_putendl_fd("minishell: env: No such file or directory", 2);
 	else if (error_code == 8)
-		ft_putendl_fd("Error env: too many arguments", 2);
+		ft_putendl_fd("minishell: cd: No such file or directory", 2);
 	else if (error_code == 9)
-		ft_putendl_fd("Error cd: No such file or directory", 2);
-	else if (error_code == 10)
-		ft_putendl_fd("Error exit: too many arguments", 2);
+		ft_putendl_fd("minishell: exit: too many arguments", 2);
 }
 
 /*

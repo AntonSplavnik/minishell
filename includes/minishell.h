@@ -51,6 +51,7 @@ void				free_token_list(t_token **token_list);
 void				free_env_list(t_env **env_list);
 void				free_array(char **array);
 void				free_command_path(char *cmd_path, char **args);
+void				free_all(t_shell *s, char **array);
 
 //error.c
 void				print_error(t_error error_code);
@@ -59,6 +60,7 @@ t_error				handle_error_free_tokens(t_error error_code, \
 t_error				handle_error(t_error error_code, void *ptr_to_free);
 t_error				handle_error_free_env(t_error error_code, \
 								t_env **env_list);
+void				error_builtin(char *function, char *arg, char *message);
 
 //INIT
 //init_data.c
