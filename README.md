@@ -7,9 +7,9 @@ Update on 24.01.2025
 - Command line input processing with readline
 - Token parsing and expansion
 - Environment variable handling
-- Basic command execution with execve (no built-in)
+- Basic command execution with execve
+- Standard shell builtins (cd, echo, pwd, exit, env)
 - Error handling
-- Memory leaks OKAY - except for signals (CTRL + C && CTRL + D)
 - Test suite for token processing (but not for command exec)
 
 <h2>Token Processing Pipeline</h2>
@@ -26,17 +26,17 @@ Update on 24.01.2025
 
 <h3>Command Execution</h3>
 
-- Path resolution for commands
+- If built-in, redirect towards built-in execution (echo, pwd, cd, exit implemented)
+- If not built-in, path resolution for commands
 - Arguments preparation
 - Child process creation with fork/execve
-- Exit status handling
+- Exit status handling (to double check - ticket #42)
 
 <h2>Next Steps</h2>
 
 <h3>Built-in Commands</h3>
 
-- Implement standard shell builtins (cd, echo, pwd, exit)
-- Handle environment variable management (export, unset, env)
+- Handle environment variable management (export, unset)
 
 <h3>Pipeline Implementation</h3>
 
