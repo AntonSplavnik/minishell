@@ -1,6 +1,6 @@
 #Minishell
 
-Update on 24.01.2025
+Update on 29.01.2025
 
 <h2>Current Features</h2>
 
