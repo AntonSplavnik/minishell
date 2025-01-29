@@ -45,6 +45,10 @@ Reason for choosing a linked list over AST:
 
 - Handle environment variable management (export, unset)
 
+<h3>Redirections and Heredoc</h3>
+- Handle redirections exec
+- Handle Heredoc exec
+
 <h3>Pipeline Implementation</h3>
 
 - Add pipe operator (|) support
