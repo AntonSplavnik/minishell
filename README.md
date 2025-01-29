@@ -5,7 +5,7 @@ Update on 24.01.2025
 <h2>Current Features</h2>
 
 - Command line input processing with readline
-- Token parsing and expansion
+- Token parsing and expansion (with a linked list)
 - Environment variable handling
 - Basic command execution with execve
 - Standard shell builtins (cd, echo, pwd, exit, env)
@@ -23,6 +23,7 @@ Update on 24.01.2025
 - **Extraction**: Handles quoted strings, delimiters (<, >, |, <<, >>), and unquoted text
 - **Type Assignment**: Identifies commands, arguments, operators based on context
 - **Expansion**: Processes environment variables and removes unnecessary quotes
+=> All tokens are stored in a linked list
 
 <h3>Command Execution</h3>
 
