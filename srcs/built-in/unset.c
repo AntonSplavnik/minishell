@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 16:22:48 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/29 18:04:28 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/29 18:27:23 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ void	remove_env_var(t_env **env_list, char *var_name)
 		current = current->next;
 	}
 }
-
 
 /*
 Built-in unset command implementation:

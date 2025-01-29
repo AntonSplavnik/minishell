@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 18:28:37 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/29 17:10:36 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/29 18:27:16 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,8 @@ void	get_var_length(const char *str, t_shell *s, \
 
 	need_free = 0;
 	var_name = get_var_name(str);
-	if (s->token_list && (ft_strcmp(s->token_list->content, "unset") == 0 || ft_strcmp(s->token_list->content, "export") == 0))
+	if (s->token_list && (ft_strcmp(s->token_list->content, "unset") == 0 \
+	|| ft_strcmp(s->token_list->content, "export") == 0))
 	{
 		*expanded_len += ft_strlen(var_name);
 		*i += ft_strlen(var_name);
