@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:02:10 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/29 18:03:02 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/31 16:34:11 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static t_error	process_input(t_shell *s, char *args)
 	|| last->type == TYPE_REDIRAPPEND || last->type == TYPE_REDIRIN \
 	|| last->type == TYPE_REDIROUT))
 	{
-		error = ERR_PARCING;
+		error = ERR_parsing;
 		handle_error_free_tokens(error, &s->token_list, args);
 		return (error);
 	}

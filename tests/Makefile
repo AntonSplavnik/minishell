@@ -8,15 +8,15 @@ INC_PATH = ../includes
 LIBFT_PATH = ../libft
 
 # Source files
-SRC = 	$(SRCS_DIR)/parcing/token_creation.c \
-		$(SRCS_DIR)/parcing/token_creation.c \
-		$(SRCS_DIR)/parcing/token_extraction_utils.c \
-		$(SRCS_DIR)/parcing/token_extraction.c \
-		$(SRCS_DIR)/parcing/token_expansion.c \
-		$(SRCS_DIR)/parcing/token_expansion_quotes.c \
-		$(SRCS_DIR)/parcing/token_expansion_var.c \
-		$(SRCS_DIR)/parcing/token_extraction_heredoc.c \
-		$(SRCS_DIR)/parcing/token_extraction_heredoc_utils.c \
+SRC = 	$(SRCS_DIR)/parsing/token_creation.c \
+		$(SRCS_DIR)/parsing/token_creation.c \
+		$(SRCS_DIR)/parsing/token_extraction_utils.c \
+		$(SRCS_DIR)/parsing/token_extraction.c \
+		$(SRCS_DIR)/parsing/token_expansion.c \
+		$(SRCS_DIR)/parsing/token_expansion_quotes.c \
+		$(SRCS_DIR)/parsing/token_expansion_var.c \
+		$(SRCS_DIR)/parsing/token_extraction_heredoc.c \
+		$(SRCS_DIR)/parsing/token_extraction_heredoc_utils.c \
 		$(SRCS_DIR)/execution/execute_command.c \
 		$(SRCS_DIR)/execution/command_path.c \
 		$(SRCS_DIR)/execution/execute_built_in.c \

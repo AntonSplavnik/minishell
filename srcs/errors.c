@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:08:53 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/29 12:39:27 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/31 16:34:11 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ Prints appropriate error message to stderr based on error code:
 - SUCCESS: Operation completed successfully
 - ERR_LAUNCH: Incorrect program usage
 - ERR_MALLOC: Memory allocation failure
-- ERR_PARCING: Syntax error in input
+- ERR_parsing: Syntax error in input
 - ERR_ENV: Environment initialization error
 - ERR_CMD_NOT_FOUND: Error in the command name
 - ERR_EXEC: Error during the command execution
