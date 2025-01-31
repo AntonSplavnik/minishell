@@ -36,7 +36,7 @@
 # include "../libft/libft.h"
 
 /*Include other headers*/
-# include "parcing.h"
+# include "parsing.h"
 # include "types.h"
 # include "execution.h"
 

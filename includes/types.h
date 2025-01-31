@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 16:08:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/29 11:22:27 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/31 16:34:11 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ typedef enum e_error
 	SUCCESS = 0,
 	ERR_LAUNCH = 1,
 	ERR_MALLOC = 2,
-	ERR_PARCING = 3,
+	ERR_parsing = 3,
 	ERR_ENV = 4,
 	ERR_CMD_NOT_FOUND = 5,
 	ERR_EXEC = 6,

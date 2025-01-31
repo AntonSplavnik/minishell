@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 14:54:55 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/15 12:16:31 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/31 16:34:11 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static char	*extract_delimiter_token(const char *str, size_t *i, t_error *error)
 		j++;
 	if (str[j] == '<' || str[j] == '>' || str[j] == '|')
 	{
-		*error = ERR_PARCING;
+		*error = ERR_parsing;
 		free(token);
 		return (NULL);
 	}
@@ -87,9 +87,9 @@ static size_t	handle_quoted_content(char *args, size_t *i, \
 	(*i)++;
 	while (args[*i])
 	{
-		if (args[*i] == quotes->outer_quote)
+		if (args[*i] == quotes->quote_char)
 		{
-			quotes->num_outer_quote = 2;
+			quotes->num_quote = 2;
 			(*i)++;
 			len++;
 			break ;
@@ -105,7 +105,7 @@ Creates a token from quoted content:
 - Handles both single and double quotes
 - Validates matching closing quotes
 - Returns NULL if quotes are unmatched
-- Sets error to ERR_PARCING for quote errors
+- Sets error to ERR_parsing for quote errors
 Returns: Token string including quotes or NULL on error
 */
 static char	*extract_quoted_token(char *args, size_t *i, t_error *error)
@@ -115,15 +115,13 @@ static char	*extract_quoted_token(char *args, size_t *i, t_error *error)
 	size_t			len;
 	char			*token;
 
-	quotes.outer_quote = args[*i];
+	quotes.quote_char = args[*i];
 	start = *i;
-	quotes.in_inner_quote = 0;
-	quotes.inner_quote = 0;
-	quotes.num_outer_quote = 1;
+	quotes.num_quote = 1;
 	len = handle_quoted_content(args, i, &quotes);
-	if (len == 1 || quotes.num_outer_quote != 2)
+	if (len == 1 || quotes.num_quote != 2)
 	{
-		*error = ERR_PARCING;
+		*error = ERR_parsing;
 		return (NULL);
 	}
 	token = ft_substr(args, start, len);

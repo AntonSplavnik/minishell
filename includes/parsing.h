@@ -6,12 +6,12 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 15:58:40 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/15 15:58:54 by abillote         ###   ########.fr       */
+/*   Updated: 2025/01/31 16:34:11 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARCING_H
-# define PARCING_H
+#ifndef parsing_H
+# define parsing_H
 
 # include "types.h"
 
@@ -19,10 +19,8 @@
 //quote information and pass it to different functions
 typedef struct s_quote_info
 {
-	int		in_inner_quote;
-	char	inner_quote;
-	char	outer_quote;
-	int		num_outer_quote;
+	char	quote_char;
+	int		num_quote;
 }			t_quote_info;
 
 //Used during token expansion to pass more than 4 args
@@ -33,7 +31,7 @@ typedef struct s_parse_params {
 	int		in_dquote;
 }	t_parse_params;
 
-//PARCING
+//parsing
 //token_creation.c
 t_error				input_to_token(t_token **token_list, char *args);
 t_token				*create_token(char *input, t_token_type type);
