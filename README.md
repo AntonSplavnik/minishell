@@ -4,6 +4,7 @@ Update on 29.01.2025
 
 <h2>Current Features</h2>
 
+
 - Command line input processing with readline
 - Token parsing and expansion (with a linked list)
 - Environment variable handling
@@ -14,7 +15,7 @@ Update on 29.01.2025
 
 <h2>Token Processing Pipeline</h2>
 
-![image](https://github.com/user-attachments/assets/66190664-e304-4659-8bc2-cb5deba6febd)
+Miro Board: https://miro.com/app/board/uXjVLIs9XcM=/
 
 <h2>Implementation Details</h2>
 
