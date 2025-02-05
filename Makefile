@@ -38,6 +38,7 @@ SRCS = $(SRCS_DIR)/main.c \
 		$(SRCS_DIR)/built-in/env.c \
 		$(SRCS_DIR)/built-in/exit.c \
 		$(SRCS_DIR)/built-in/unset.c \
+		$(SRCS_DIR)/built-in/export.c \
 		$(SRCS_DIR)/env/init_env.c \
 		$(SRCS_DIR)/env/manipulate_env.c \
 		$(SRCS_DIR)/init/init_data.c \

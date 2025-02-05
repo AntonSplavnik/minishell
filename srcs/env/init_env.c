@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:12:37 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/17 18:09:26 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/05 16:51:06 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ t_error	add_envvar(t_env **env_list, char *env)
 }
 
 /*count number of env variables for array allocation*/
-size_t	count_env_var(char **env)
+size_t	count_env_array(char **env)
 {
 	size_t	count;
 
@@ -85,7 +85,7 @@ char	**duplicate_env_array(char **env)
 	size_t	count;
 	size_t	i;
 
-	count = count_env_var(env);
+	count = count_env_array(env);
 	new_env = malloc(sizeof(char *) * (count + 1));
 	if (!new_env)
 		return (NULL);

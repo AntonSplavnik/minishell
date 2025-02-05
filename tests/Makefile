@@ -26,6 +26,7 @@ SRC = 	$(SRCS_DIR)/parsing/token_creation.c \
 		$(SRCS_DIR)/built-in/cd.c \
 		$(SRCS_DIR)/built-in/exit.c \
 		$(SRCS_DIR)/built-in/unset.c \
+		$(SRCS_DIR)/built-in/export.c \
 		$(SRCS_DIR)/env/init_env.c \
 		$(SRCS_DIR)/env/manipulate_env.c \
 		$(SRCS_DIR)/init/init_data.c \

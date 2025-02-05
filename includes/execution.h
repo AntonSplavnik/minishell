@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 12:46:41 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/29 16:47:28 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/05 16:27:48 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,5 +43,8 @@ t_error	execute_exit(char **args, t_shell *s);
 
 //unset
 t_error	execute_unset(char **args, t_shell *s);
+
+//export
+t_error	execute_export(char **args, t_shell *s);
 
 #endif
