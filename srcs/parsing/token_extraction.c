@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 14:54:55 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/31 17:15:25 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/05 11:47:41 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ Extracts unquoted string until next delimiter or whitespace:
 - Returns substring from start position
 - Sets error to ERR_MALLOC if memory allocation fails
 */
-static char	*extract_unquoted_token(const char *str, size_t *i, t_error *error)
+char	*extract_unquoted_token(const char *str, size_t *i, t_error *error)
 {
 	size_t	start;
 	size_t	len;
@@ -125,10 +125,7 @@ static char	*extract_quoted_token(char *args, size_t *i, t_error *error)
 		return (NULL);
 	}
 	if (len == 2 && (ft_isalnum(args[*i]) || args[*i] == '$'))
-	{
-		len = 0;
-		return (extract_unquoted_token(args, i, error));
-	}
+		return (extract_double_quotes(args, i, error, quotes.quote_char));
 	token = ft_substr(args, start, len);
 	if (!token)
 	{
