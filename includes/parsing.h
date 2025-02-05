@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parcing.h                                          :+:      :+:    :+:   */
+/*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 15:58:40 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/31 16:34:11 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/05 11:49:29 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef parsing_H
-# define parsing_H
+#ifndef PARSING_H
+# define PARSING_H
 
 # include "types.h"
 
@@ -43,6 +43,8 @@ int					is_command(t_token **token_list);
 //token_extraction.c
 t_error				ft_split_token(t_token **token_list, \
 						char *args, size_t *i, char **token);
+char				*extract_unquoted_token(const char *str, \
+						size_t *i, t_error *error);
 
 //token_expansion.c
 t_error				expand_tokens(t_shell *s);
@@ -76,5 +78,9 @@ t_error				handle_heredoc(t_token **token_list, \
 //token_extraction_heredoc_utils
 int					*get_heredoc_state_ptr(void);
 void				reset_heredoc_state(void);
+
+//token_extraction_quotes
+char				*extract_double_quotes(char *args, size_t *i, \
+						t_error *error, char quote_char);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:02:10 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/31 16:34:11 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/05 11:57:12 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static t_error	process_input(t_shell *s, char *args)
 	|| last->type == TYPE_REDIRAPPEND || last->type == TYPE_REDIRIN \
 	|| last->type == TYPE_REDIROUT))
 	{
-		error = ERR_parsing;
+		error = ERR_PARSING;
 		handle_error_free_tokens(error, &s->token_list, args);
 		return (error);
 	}
@@ -88,7 +88,7 @@ static int	handle_loop_iteration(t_shell *s)
 		s->exit_status = 2;
 		return (1);
 	}
-	//to delete before submitting
+	//Comment or uncomment the following line to debug and print token list
 	//print_token(s->token_list);
 	if (s->token_list && s->token_list->type == TYPE_COMMAND)
 		error = execute_command(s->token_list, s);
