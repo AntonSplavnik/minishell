@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:12:37 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/05 16:51:06 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/05 17:19:24 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,11 @@ t_env	*create_envvar(char *env)
 		new_envvar->key = ft_strndup(env, equal_sign - env);
 		new_envvar->value = ft_strdup(equal_sign + 1);
 		new_envvar->next = NULL;
+	}
+	else
+	{
+		new_envvar->key = ft_strdup(env);
+		new_envvar->value = ft_strdup("");
 	}
 	return (new_envvar);
 }

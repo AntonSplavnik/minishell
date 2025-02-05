@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:08:53 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/05 16:46:36 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/05 17:25:19 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ void	print_error(t_error error_code)
 		ft_putendl_fd("minishell: cd: No such file or directory", 2);
 	else if (error_code == 9)
 		ft_putendl_fd("minishell: exit: too many arguments", 2);
+	else if (error_code == 10)
+		ft_putendl_fd("minishell: export: this is not a valid variable name", 2);
 }
 
 /*

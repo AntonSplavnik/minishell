@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 16:13:03 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/05 17:07:50 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/05 18:08:06 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,14 +115,85 @@ static t_error	print_sorted_env(t_env	*env_list)
 	return (SUCCESS);
 }
 
+int	is_valid_var_name(char *arg)
+{
+	int	i;
+
+	if (!ft_isalpha(arg[0]) && arg[0] != '_')
+		return (0);
+	i = 1;
+	while (arg[i])
+	{
+		if (!ft_isalnum(arg[i]) && arg[0] != '_')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+t_error	handle_export_assignement(char *arg, t_shell *s)
+{
+	char	*equal_sign;
+	char	*key;
+	t_env	*existing;
+	t_error result;
+
+	equal_sign = ft_strchr(arg, '=');
+	if (!equal_sign)
+	{
+		if(!find_env_var(s->env_list, arg) && is_valid_var_name(arg))
+			return (add_envvar(&s->env_list, arg));
+		if (find_env_var(s->env_list, arg))
+			return (SUCCESS);
+		return (ERR_EXPORT);
+	}
+	key = ft_strndup(arg, equal_sign - arg);
+	if (!key)
+		return (ERR_MALLOC);
+	existing = find_env_var(s->env_list, key);
+	if (existing)
+	{
+		free(existing->content);
+		existing->content = ft_strdup(arg);
+		if (!existing->content)
+		{
+			free(key);
+			return (ERR_MALLOC);
+		}
+		free(existing->value);
+		existing->value = ft_strdup(equal_sign + 1);
+		if (!existing->value)
+		{
+			free(existing->content);
+			free(key);
+			return (ERR_MALLOC);
+		}
+		free(key);
+		return (SUCCESS);
+	}
+	result = add_envvar(&s->env_list, arg);
+	free(key);
+	return (result);
+}
+
 t_error	execute_export(char **args, t_shell *s)
 {
 	int	count_args;
+	int	i;
 
 	count_args = 0;
 	while (args[count_args])
 		count_args++;
 	if (count_args == 1)
+	{
+		s->exit_status = 0;
 		return (print_sorted_env(s->env_list));
+	}
+	i = 1;
+	while (args[i])
+	{
+		return(handle_export_assignement(args[i], s));
+	}
+	s->exit_status = 0;
 	return (SUCCESS);
 }
