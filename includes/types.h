@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 16:08:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/31 16:59:34 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/05 14:19:54 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ typedef enum e_token_type
 	TYPE_HEREDOC_OP, // << (here document)
 	TYPE_HEREDOC_DELIM, // heredoc delimiter
 	TYPE_HEREDOC_CONTENT, // heredoc content in between delimiters
+	TYPE_HEREDOC_CONTENT_QUOTED, // heredoc content with quote
 	TOKEN_EMPTY,
 }			t_token_type;
 
