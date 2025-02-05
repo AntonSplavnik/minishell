@@ -6,11 +6,13 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:02:10 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/05 15:10:01 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/05 15:44:59 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+#define PROMPT_COLOR "\001\033[1;36m\002"	// Cyan
+#define RESET_COLOR "\001\033[0m\002"		// Reset to default
 
 /*
 Gets user input from readline:
@@ -23,7 +25,7 @@ static char	*get_input(t_shell *s)
 {
 	char	*args;
 
-	args = readline("minishell$ ");
+	args = readline(PROMPT_COLOR "minishell$ " RESET_COLOR);
 	if (!args)
 	{
 		s->exit_status = 2;

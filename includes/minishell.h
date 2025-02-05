@@ -40,6 +40,9 @@
 # include "types.h"
 # include "execution.h"
 
+# define PROMPT_COLOR "\001\033[1;36m\002"	// Cyan
+# define RESET_COLOR "\001\033[0m\002"		// Reset to default
+
 //utils
 char				*ft_strndup(const char *s, size_t n);
 int					ft_strcmp(const char *s1, const char *s2);
