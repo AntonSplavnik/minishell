@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 16:27:25 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/15 16:05:33 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/05 14:51:21 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,27 @@ static char	*collect_heredoc_content(char *delimiter, char *content)
 }
 
 /*
+Processes heredoc content and updates position:
+- Checks for newline and delimiter in input
+- Collects additional content if needed
+- Updates index position after processing
+Returns: SUCCESS
+*/
+static t_error	process_heredoc_content(char **content, \
+					t_heredoc_info *heredoc_info, char *args, size_t *i)
+{
+	char	*newline_pos;
+
+	newline_pos = ft_strchr(args + *i, '\n');
+	if (!(newline_pos && ft_strncmp(newline_pos + 1, \
+		heredoc_info->delim, ft_strlen(heredoc_info->delim)) == 0))
+		*content = collect_heredoc_content(heredoc_info->delim, *content);
+	if (newline_pos)
+		*i += ft_strlen(heredoc_info->delim) + 1;
+	return (SUCCESS);
+}
+
+/*
 Extracts initial heredoc content from input string until delimiter:
 - Iterates through args starting from index i
 - Keeps track of content length while searching
@@ -98,8 +119,12 @@ static char	*get_first_heredoc_content(char *args, size_t *i, \
 
 /*
 Handles the extraction and creation of heredoc tokens:
-- Searches for delimiter in the input string
-- If delimiter not found in args, prompts for input using collect_heredoc_content
+- Check if delimiter is quoted or not -
+add a flag and remove the quotes if quoted
+- Searches for the unquoted delimiter in the input string (= args)
+- If delimiter not found in args, prompts for input
+ using process_heredoc_content
+- Creates appropriate token type based on quoted status
 - Creates a new token with the heredoc content
 - Updates index to skip over the processed content
 Returns: SUCCESS or ERR_MALLOC if memory allocation fails
@@ -107,24 +132,26 @@ Returns: SUCCESS or ERR_MALLOC if memory allocation fails
 
 t_error	handle_heredoc(t_token **token_list, char *delim, size_t *i, char *args)
 {
-	char	*content;
-	size_t	start;
-	char	*newline_pos;
-	t_error	result;
+	char			*content;
+	size_t			start;
+	t_error			result;
+	t_heredoc_info	*heredoc_info;
+	t_token_type	content_type;
 
 	start = *i;
-	content = get_first_heredoc_content(args, i, delim, start);
-	if (!content)
+	heredoc_info = get_heredoc_info(delim);
+	if (!heredoc_info)
 		return (ERR_MALLOC);
-	newline_pos = ft_strchr(args + *i, '\n');
-	if (!(newline_pos && ft_strncmp(newline_pos + 1, \
-			delim, ft_strlen(delim)) == 0))
-	{
-		content = collect_heredoc_content(delim, content);
-	}
-	result = add_token(token_list, content, TYPE_HEREDOC_CONTENT);
-	free(content);
-	if (newline_pos)
-		*i += ft_strlen(delim) + 1;
+	content = get_first_heredoc_content(args, i, heredoc_info->delim, start);
+	if (!content)
+		return (cleanup_heredoc(NULL, heredoc_info, ERR_MALLOC));
+	if (process_heredoc_content(&content, heredoc_info, args, i) != SUCCESS)
+		return (cleanup_heredoc(content, heredoc_info, ERR_MALLOC));
+	if (heredoc_info->is_quoted)
+		content_type = TYPE_HEREDOC_CONTENT_QUOTED;
+	else
+		content_type = TYPE_HEREDOC_CONTENT;
+	result = add_token(token_list, content, content_type);
+	cleanup_heredoc(content, heredoc_info, SUCCESS);
 	return (result);
 }

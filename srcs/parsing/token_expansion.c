@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:43:49 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/29 17:04:54 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/05 15:08:49 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,9 @@ size_t	calculate_length_loop(t_token *token, \
 	init_expansion_params(&i, expanded_len, &in_squote, &in_dquote);
 	while (token->content[i])
 	{
-		if ((token->content[i] == '\'' && !in_dquote)
-			|| (token->content[i] == '"' && !in_squote))
+		if (((token->content[i] == '\'' && !in_dquote) \
+			|| (token->content[i] == '"' && !in_squote)) && \
+				token->type != TYPE_HEREDOC_CONTENT)
 		{
 			process_quote(token->content[i], &in_squote, &in_dquote);
 			i++;
@@ -81,37 +82,37 @@ static void	process_variable_expansion(char *expanded, const char *content, \
 Performs the actual content expansion for a token:
 - Handles quoted sections (preserving content in single quotes)
 - Expands environment variables (except within single quotes)
-- Removes unnecessary quotes
+- Removes unnecessary quotes (keep them if type is heredoc quoted content)
 - Updates the token's content with the expanded version
 */
-void	fill_token_content_after_expansion(t_token *token, char *exp, \
+void	fill_token_content_after_expansion(t_token *t, char *exp, \
 						t_shell *s)
 {
-	t_parse_params	params;
+	t_parse_params	pars;
 
-	params = (t_parse_params){0, 0, 0, 0};
+	pars = (t_parse_params){0, 0, 0, 0};
 	exp[0] = '\0';
-	while (token->content[params.i])
+	while (t->content[pars.i])
 	{
-		if ((token->content[params.i] == '\'' && !params.in_dquote) || \
-			(token->content[params.i] == '"' && !params.in_squote))
+		if (((t->content[pars.i] == '\'' && !pars.in_dquote) || \
+			(t->content[pars.i] == '"' && !pars.in_squote)) \
+			&& t->type != TYPE_HEREDOC_CONTENT)
 		{
-			process_quote(token->content[params.i], &params.in_squote, \
-						&params.in_dquote);
-			params.i++;
+			process_quote(t->content[pars.i], &pars.in_squote, &pars.in_dquote);
+			pars.i++;
 			continue ;
 		}
-		if (token->content[params.i] == '$' && !params.in_squote
-			&& token->content[params.i + 1])
-			process_variable_expansion(exp, token->content, s, &params);
+		if (t->content[pars.i] == '$' && !pars.in_squote \
+			&& t->content[pars.i + 1])
+			process_variable_expansion(exp, t->content, s, &pars);
 		else
 		{
-			exp[params.j++] = token->content[params.i++];
-			exp[params.j] = '\0';
+			exp[pars.j++] = t->content[pars.i++];
+			exp[pars.j] = '\0';
 		}
 	}
-	free(token->content);
-	token->content = exp;
+	free(t->content);
+	t->content = exp;
 }
 
 /*
@@ -132,6 +133,11 @@ t_error	expand_tokens(t_shell *s)
 	current = s->token_list;
 	while (current)
 	{
+		if (current->type == TYPE_HEREDOC_CONTENT_QUOTED)
+		{
+			current = current->next;
+			continue ;
+		}
 		expanded_len = calculate_expanded_length(current, s);
 		expanded = malloc(sizeof(char) * (expanded_len + 1));
 		if (!expanded)

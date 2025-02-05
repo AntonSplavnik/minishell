@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 15:58:40 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/05 11:49:29 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/05 14:40:17 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,12 @@ typedef struct s_quote_info
 	char	quote_char;
 	int		num_quote;
 }			t_quote_info;
+
+//Used during token extraction to store heredoc info
+typedef struct s_heredoc_info {
+	char	*delim;
+	int		is_quoted;
+}	t_heredoc_info;
 
 //Used during token expansion to pass more than 4 args
 typedef struct s_parse_params {
@@ -78,6 +84,9 @@ t_error				handle_heredoc(t_token **token_list, \
 //token_extraction_heredoc_utils
 int					*get_heredoc_state_ptr(void);
 void				reset_heredoc_state(void);
+t_heredoc_info		*get_heredoc_info(char *delim);
+t_error				cleanup_heredoc(char *content, \
+						t_heredoc_info *info, t_error status);
 
 //token_extraction_quotes
 char				*extract_double_quotes(char *args, size_t *i, \

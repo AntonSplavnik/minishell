@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 12:54:58 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/02 21:39:43 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/05 14:20:27 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ const char	*g_token_type_str[] = {
 [TYPE_HEREDOC_OP] = "TYPE_HEREDOC_OP",
 [TYPE_HEREDOC_DELIM] = "TYPE_HEREDOC_DELIM",
 [TYPE_HEREDOC_CONTENT] = "TYPE_HEREDOC_CONTENT",
+[TYPE_HEREDOC_CONTENT_QUOTED] = "TYPE_HEREDOC_CONTENT_QUOTED",
 [TOKEN_EMPTY] = "TOKEN_EMPTY"
 };
 
