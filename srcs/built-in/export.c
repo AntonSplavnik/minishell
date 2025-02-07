@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 16:13:03 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/07 18:13:28 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/07 18:54:08 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,40 +64,68 @@ static void	sort_env_array(char **env_array)
 }
 
 /*
+Creates the initial part of formatted env variable
+Returns: Formatted string or NULL if allocation fails
 */
-
-int	store_env_var_in_array(t_env *current, char **env_array, int i)
+static char	*format_env_prefix(t_env *current, char **env_array)
 {
 	char	*temp1;
 	char	*temp2;
 
+	temp1 = ft_strjoin("declare -x ", current->key);
+	if (!temp1)
+	{
+		free_array(env_array);
+		return (NULL);
+	}
+	temp2 = ft_strjoin(temp1, "=\"");
+	free(temp1);
+	if (!temp2)
+	{
+		free_array(env_array);
+		return (NULL);
+	}
+	return (temp2);
+}
+
+/*
+Helper function to format environment variable with equals sign
+Returns: Formatted string or NULL if allocation fails
+*/
+static char	*format_env_with_equals(t_env *current, char **env_array)
+{
+	char	*temp1;
+	char	*temp2;
+	char	*result;
+
+	temp2 = format_env_prefix(current, env_array);
+	if (!temp2)
+		return (NULL);
+	temp1 = ft_strjoin(temp2, current->value);
+	free(temp2);
+	if (!temp1)
+	{
+		free_array(env_array);
+		return (NULL);
+	}
+	result = ft_strjoin(temp1, "\"");
+	free(temp1);
+	return (result);
+}
+
+/*
+Stores environment variable in array with proper formatting
+Returns: 1 on success, 0 on failure
+*/
+int	store_env_var_in_array(t_env *current, char **env_array, int i)
+{
 	if (ft_strchr(current->content, '='))
 	{
-		temp1 = ft_strjoin("declare -x ", current->key);
-		if (!temp1)
-		{
-			free_array(env_array);
-			return (0);
-		}
-		temp2 = ft_strjoin(temp1, "=\"");
-		free(temp1);
-		if (!temp2)
-		{
-			free_array(env_array);
-			return (0);
-		}
-		temp1 = ft_strjoin(temp2, current->value);
-		free(temp2);
-		if (!temp1)
-		{
-			free_array(env_array);
-			return (0);
-		}
-		env_array[i] = ft_strjoin(temp1, "\"");
-		free(temp1);
+		env_array[i] = format_env_with_equals(current, env_array);
 	}
 	else
 		env_array[i] = ft_strjoin("declare -x ", current->content);
+
 	if (!env_array[i])
 	{
 		free_array(env_array);
@@ -175,90 +203,107 @@ int	is_valid_var_name(char *arg)
 	return (1);
 }
 
-t_error	handle_export_assignement(char *arg, t_shell *s)
+/*
+Handles case where no equal sign is present in export argument
+Returns: Appropriate error code based on validation
+*/
+static t_error	handle_no_equal_sign(char *arg, t_shell *s)
 {
-	char	*equal_sign;
-	char	*append_sign;
+	if (!find_env_var(s->env_list, arg) && is_valid_var_name(arg))
+		return (add_envvar(&s->env_list, arg));
+	if (find_env_var(s->env_list, arg))
+		return (SUCCESS);
+	return (ERR_EXPORT);
+}
+
+/*
+Updates existing environment variable with new value
+Returns: SUCCESS or error code if memory allocation fails
+*/
+static t_error	update_existing_var(t_env *existing, char *arg, char *new_value)
+{
+	free(existing->content);
+	existing->content = ft_strdup(arg);
+	if (!existing->content)
+		return (ERR_MALLOC);
+	free(existing->value);
+	existing->value = ft_strdup(new_value);
+	if (!existing->value)
+	{
+		free(existing->content);
+		return (ERR_MALLOC);
+	}
+	return (SUCCESS);
+}
+
+/*
+Handles append operation for environment variables
+Returns: SUCCESS or appropriate error code
+*/
+static t_error	handle_append_operation(char *arg, \
+					char *append_sign, t_env *existing)
+{
+	char	*temp;
+	t_error	result;
+
+	temp = ft_strjoin(existing->value, append_sign + 2);
+	if (!temp)
+	{
+		free(existing->content);
+		return (ERR_MALLOC);
+	}
+	result = update_existing_var(existing, arg, temp);
+	free(temp);
+	return (result);
+}
+
+/*
+Handles case where variable is appended using += operator
+Returns: Appropriate error code based on operation result
+*/
+static t_error	handle_append_case(char *arg, char *append_sign, t_shell *s)
+{
 	char	*key;
 	t_env	*existing;
-	t_error result;
+	t_error	result;
 
-	equal_sign = ft_strchr(arg, '=');
-	append_sign = ft_strstr(arg, "+=");
-	if (arg[0] == '=')
-		return (ERR_EXPORT);
-	if (!equal_sign)
+	key = ft_strndup(arg, append_sign - arg);
+	if (!key)
+		return (ERR_MALLOC);
+	existing = find_env_var(s->env_list, key);
+	if (existing)
 	{
-		if(!find_env_var(s->env_list, arg) && is_valid_var_name(arg))
-			return (add_envvar(&s->env_list, arg));
-		if (find_env_var(s->env_list, arg))
-			return (SUCCESS);
-		return (ERR_EXPORT);
-	}
-	if (append_sign)
-	{
-		key = ft_strndup(arg, append_sign - arg);
-		if (!key)
-			return (ERR_MALLOC);
-		existing = find_env_var(s->env_list, key);
-		if (existing)
-		{
-			free(existing->content);
-			existing->content = ft_strdup(arg);
-			if (!existing->content)
-			{
-				free(key);
-				return (ERR_MALLOC);
-			}
-			char *temp = ft_strjoin(existing->value, ft_strdup(append_sign + 2));
-			if (!temp)
-			{
-				free(existing->content);
-				free(key);
-				return (ERR_MALLOC);
-			}
-			free(existing->value);
-			existing->value = ft_strdup(temp);
-			free(temp);
-			if (!existing->value)
-			{
-				free(existing->content);
-				free(key);
-				return (ERR_MALLOC);
-			}
-			free(key);
-			return (SUCCESS);
-		}
-		if (is_valid_var_name(key))
-			result = add_envvar(&s->env_list, arg);
-		else
-			result = ERR_EXPORT;
+		result = handle_append_operation(arg, append_sign, existing);
 		free(key);
 		return (result);
-		}
+	}
+	if (is_valid_var_name(key))
+		result = add_envvar(s->env_list, arg);
+	else
+		result = ERR_EXPORT;
+	free(key);
+	return (result);
+}
+
+/*
+Handles standard assignment with = operator
+Returns: Appropriate error code based on operation result
+*/
+static t_error	handle_equal_case(char *arg, char *equal_sign, t_shell *s)
+{
+	char	*key;
+	t_env	*existing;
+	t_error	result;
+
 	key = ft_strndup(arg, equal_sign - arg);
 	if (!key)
 		return (ERR_MALLOC);
 	existing = find_env_var(s->env_list, key);
 	if (existing)
 	{
-		free(existing->content);
-		existing->content = ft_strdup(arg);
-		if (!existing->content)
-		{
-			free(key);
-			return (ERR_MALLOC);
-		}
-		free(existing->value);
-		existing->value = ft_strdup(equal_sign + 1);
-		if (!existing->value)
-		{
-			free(existing->content);
-			free(key);
-			return (ERR_MALLOC);
-		}
+		result = update_existing_var(existing, arg, equal_sign + 1);
 		free(key);
-		return (SUCCESS);
+		return (result);
 	}
 	if (is_valid_var_name(key))
 		result = add_envvar(&s->env_list, arg);
@@ -268,44 +313,31 @@ t_error	handle_export_assignement(char *arg, t_shell *s)
 	return (result);
 }
 
-//static char *combine_quoted_tokens(char **args, int *i)
-//{
-//	// Skip empty tokens
-//	if (args[*i] && ft_strcmp(args[*i], "") == 0)
-//	{
-//		return (ft_strdup(""));
-//	}
+/*
+Main function to handle export assignment
+Delegates to appropriate helper function based on assignment type
+*/
+t_error	handle_export_assignement(char *arg, t_shell *s)
+{
+	char	*equal_sign;
+	char	*append_sign;
 
-//	// For tokens without equals sign, just return them
-//	if (!ft_strchr(args[*i], '='))
-//		return (ft_strdup(args[*i]));
-
-//	// Handle tokens with equals sign and combining what follows
-//	char	*result = ft_strdup(args[*i]);
-//	if (!result)
-//		return (NULL);
-
-//	(*i)++;
-//	while (args[*i] && !ft_strchr(args[*i], '='))
-//	{
-//		printf("arg i is %s\n", args[*i]);
-//		char *temp = result;
-//		result = ft_strjoin(temp, args[*i]);
-//		free(temp);
-//		if (!result)
-//			return (NULL);
-//		(*i)++;
-//	}
-//	(*i)--; // Step back one as the main loop will increment
-//	return (result);
-//}
+	equal_sign = ft_strchr(arg, '=');
+	append_sign = ft_strstr(arg, "+=");
+	if (arg[0] == '=')
+		return (ERR_EXPORT);
+	if (!equal_sign)
+		return (handle_no_equal_sign(arg, s));
+	if (append_sign)
+		return (handle_append_case(arg, append_sign, s));
+	return (handle_equal_case(arg, equal_sign, s));
+}
 
 t_error	execute_export(char **args, t_shell *s)
 {
 	int		count_args;
 	int		i;
 	t_error	result;
-	//char	*combined_tokens;
 
 	count_args = 0;
 	while (args[count_args])
@@ -318,20 +350,12 @@ t_error	execute_export(char **args, t_shell *s)
 	i = 1;
 	while (args[i])
 	{
-		//printf("args[i] is %s\n", args[i]);
-		//combined_tokens = combine_quoted_tokens(args, &i);
-		//if (!combined_tokens)
-		//	return (ERR_MALLOC);
-		//printf("the combined token is %s\n", combined_tokens);
-		//if (ft_strcmp(combined_tokens, "") != 0)
 		result = handle_export_assignement(args[i], s);
 		if (result != SUCCESS)
 		{
 			print_error(result);
 			s->exit_status = 1;
 		}
-		//free(combined_tokens);
-		//printf("is is %d\n", i);
 		i++;
 	}
 	s->exit_status = 0;

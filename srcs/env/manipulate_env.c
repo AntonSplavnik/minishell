@@ -6,12 +6,46 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 22:47:47 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/07 12:09:07 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/07 18:48:39 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+/*
+Helper function to set key and value in env variable:
+- Handles append operation (+=)
+- Handles standard assignment (=)
+- Handles variables without values
+Returns: SUCCESS or ERR_ENV if memory allocation fails
+*/
+t_error	set_env_key_value(t_env *new_envvar, char *env)
+{
+	char	*equal_sign;
+	char	*append_sign;
+
+	append_sign = ft_strstr(env, "+=");
+	equal_sign = ft_strchr(env, '=');
+	if (append_sign)
+	{
+		new_envvar->key = ft_strndup(env, append_sign - env);
+		new_envvar->value = ft_strdup(append_sign + 2);
+	}
+	else if (equal_sign)
+	{
+		new_envvar->key = ft_strndup(env, equal_sign - env);
+		new_envvar->value = ft_strdup(equal_sign + 1);
+	}
+	else
+	{
+		new_envvar->key = ft_strdup(env);
+		new_envvar->value = ft_strdup("");
+	}
+	if (!new_envvar->key || !new_envvar->value)
+		return (ERR_MALLOC);
+	else
+		return (SUCCESS);
+}
 
 /*
 Free one env var.
