@@ -6,11 +6,26 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 22:47:47 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/25 16:15:01 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/07 12:09:07 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+
+/*
+Free one env var.
+*/
+void	free_env_var(t_env *envvar)
+{
+	if (envvar->content)
+		free(envvar->content);
+	if (envvar->key)
+		free(envvar->key);
+	if (envvar->value)
+		free(envvar->value);
+	free(envvar);
+}
 
 /*
 Searches environment list for variable by key

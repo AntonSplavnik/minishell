@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 18:28:37 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/29 18:27:16 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/07 14:59:16 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,6 @@ char	*get_var_name(const char *str)
 - Updates index i to skip over the variable name
 - For $?, calculate length of the last exit status and free the
 var_value as ft_itoa is used (using need_free flag)
-- For command = unset or command = export, it takes the var_name length
-as we do not expand them
 */
 void	get_var_length(const char *str, t_shell *s, \
 					size_t *i, size_t *expanded_len)
@@ -78,22 +76,13 @@ void	get_var_length(const char *str, t_shell *s, \
 
 	need_free = 0;
 	var_name = get_var_name(str);
-	if (s->token_list && (ft_strcmp(s->token_list->content, "unset") == 0 \
-	|| ft_strcmp(s->token_list->content, "export") == 0))
-	{
-		*expanded_len += ft_strlen(var_name);
-		*i += ft_strlen(var_name);
-	}
-	else
-	{
-		var_value = get_var_value(s->env_list, var_name, \
-					s->exit_status, &need_free);
-		*expanded_len += ft_strlen(var_value);
-		*i += ft_strlen(var_name);
-		free(var_name);
-		if (need_free)
-			free(var_value);
-	}
+	var_value = get_var_value(s->env_list, var_name, \
+			s->exit_status, &need_free);
+	*expanded_len += ft_strlen(var_value);
+	*i += ft_strlen(var_name);
+	free(var_name);
+	if (need_free)
+	free(var_value);
 }
 
 /*Performs the actual expansion of an environment variable:
@@ -115,12 +104,8 @@ void	expand_var(const char *str, t_shell *s, \
 
 	need_free = 0;
 	var_name = get_var_name(str);
-	if (s->token_list && (!ft_strcmp(s->token_list->content, "unset") \
-	|| !ft_strcmp(s->token_list->content, "export")))
-		var_value = ft_strdup(var_name);
-	else
-		var_value = get_var_value(s->env_list, var_name, \
-					s->exit_status, &need_free);
+	var_value = get_var_value(s->env_list, var_name, \
+			s->exit_status, &need_free);
 	len = 0;
 	while (expanded[len] && len < ft_strlen(expanded))
 		len++;

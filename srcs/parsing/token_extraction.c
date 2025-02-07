@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 14:54:55 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/05 11:47:41 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/07 17:27:12 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,8 +147,10 @@ t_error	ft_split_token(t_token **token_list, char *args, \
 						size_t *i, char **token)
 {
 	t_error	error;
+	int	is_export_with_equals;
 
 	error = SUCCESS;
+	is_export_with_equals = (*token_list && ft_strcmp((*token_list)->content, "export") == 0 && ft_strchr(args + *i, '='));
 	while (args[*i] && is_space(args[*i]))
 		(*i)++;
 	if (!args[*i])
@@ -156,7 +158,36 @@ t_error	ft_split_token(t_token **token_list, char *args, \
 		*token = NULL;
 		return (SUCCESS);
 	}
-	if (args[*i] == '"' || args[*i] == '\'')
+	if (is_export_with_equals)
+	{
+		// Special handling for export with equals sign
+		size_t start = *i;
+		size_t len = 0;
+		int in_quotes = 0;
+		char quote_char = 0;
+
+		while (args[*i])
+		{
+			if ((args[*i] == '"' || args[*i] == '\'') && !in_quotes)
+			{
+				quote_char = args[*i];
+				in_quotes = 1;
+			}
+			else if (args[*i] == quote_char && in_quotes)
+			{
+				in_quotes = 0;
+			}
+			else if (is_space(args[*i]) && !in_quotes)
+				break;
+
+			len++;
+			(*i)++;
+		}
+		*token = ft_substr(args, start, len);
+		if (!*token)
+			error = ERR_MALLOC;
+	}
+	else if (args[*i] == '"' || args[*i] == '\'')
 		*token = extract_quoted_token(args, i, &error);
 	else if (is_delimiter(args[*i]))
 		*token = extract_delimiter_token(args, i, &error);

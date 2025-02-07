@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:12:37 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/05 17:19:24 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/07 18:13:49 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,28 +17,41 @@ Creates a new environment variable node:
 - Splits input string at '=' character
 - Stores key (before '=') and value (after '=')
 - Allocates memory for new node and its contents
+- Check if any memory allocation failed
 Returns: New env node or NULL if memory allocation fails
 */
 t_env	*create_envvar(char *env)
 {
 	t_env	*new_envvar;
 	char	*equal_sign;
+	char	*append_sign;
 
 	new_envvar = malloc(sizeof(t_env));
 	if (!new_envvar)
 		return (NULL);
 	new_envvar->content = ft_strdup(env);
+	append_sign = ft_strstr(env, "+=");
 	equal_sign = ft_strchr(env, '=');
-	if (equal_sign)
+	if (append_sign)
+	{
+		new_envvar->key = ft_strndup(env, append_sign - env);
+		new_envvar->value = ft_strdup(append_sign + 2);
+	}
+	else if (equal_sign)
 	{
 		new_envvar->key = ft_strndup(env, equal_sign - env);
 		new_envvar->value = ft_strdup(equal_sign + 1);
-		new_envvar->next = NULL;
 	}
 	else
 	{
 		new_envvar->key = ft_strdup(env);
 		new_envvar->value = ft_strdup("");
+	}
+	new_envvar->next = NULL;
+	if (!new_envvar->content || !new_envvar->key || !new_envvar->value)
+	{
+		free_env_var(new_envvar);
+		return (NULL);
 	}
 	return (new_envvar);
 }
