@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 14:59:38 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/29 16:42:57 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/05 16:28:14 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ t_error	execute_built_in(t_token *cmd_token, char **args, t_shell *s)
 		return (execute_exit(args, s));
 	if (ft_strcmp(cmd_token->content, "unset") == 0)
 		return (execute_unset(args, s));
-	printf("The command '%s' is a built-in \
-		and still needs to be implemented\n", cmd_token->content);
+	if (ft_strcmp(cmd_token->content, "export") == 0)
+		return (execute_export(args, s));
 	(void)args;
 	(void)s;
 	return (SUCCESS);

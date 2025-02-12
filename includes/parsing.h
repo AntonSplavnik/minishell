@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 15:58:40 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/05 14:40:17 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/12 11:17:13 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,5 +91,9 @@ t_error				cleanup_heredoc(char *content, \
 //token_extraction_quotes
 char				*extract_double_quotes(char *args, size_t *i, \
 						t_error *error, char quote_char);
+
+//token_extraction_export
+char				*extract_export_token(char *args, size_t *i, \
+						t_error *error);
 
 #endif

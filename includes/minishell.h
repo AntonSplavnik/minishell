@@ -47,7 +47,7 @@
 char				*ft_strndup(const char *s, size_t n);
 int					ft_strcmp(const char *s1, const char *s2);
 char				*ft_strcpy(char *dest, const char *src);
-int					ft_strstr(const char *big, const char *little);
+char				*ft_strstr(const char *big, const char *little);
 
 //free.c
 void				free_token_list(t_token **token_list);
@@ -77,6 +77,8 @@ t_env				*create_envvar(char *env);
 
 //manipulate_env.c
 t_env				*find_env_var(t_env *env_list, char *key);
+void				free_env_var(t_env *envvar);
+t_error				set_env_key_value(t_env *new_envvar, char *env);
 
 //TO DELETE BEFORE SUB
 //utils_to_print

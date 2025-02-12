@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:08:53 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/05 15:41:40 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/12 11:26:59 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	print_error(t_error error_code)
 	else if (error_code == 3)
 		ft_putendl_fd("minishell: Syntax error", 2);
 	else if (error_code == 4)
-		ft_putendl_fd("minishell: Environment could not be set", 2);
+		ft_putendl_fd("minishell: Environment error", 2);
 	else if (error_code == 5)
 		ft_putendl_fd("minishell: Command not found", 2);
 	else if (error_code == 6)
@@ -55,6 +55,9 @@ void	print_error(t_error error_code)
 		ft_putendl_fd("minishell: cd: No such file or directory", 2);
 	else if (error_code == 9)
 		ft_putendl_fd("minishell: exit: too many arguments", 2);
+	else if (error_code == 10)
+		ft_putendl_fd("minishell: export: this is not a \
+valid variable name", 2);
 }
 
 /*
