@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 16:13:03 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/12 10:27:01 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/12 12:27:08 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ static int	process_export_args(char **args, t_shell *s)
 		result = handle_export_assignement(args[i], s);
 		if (result != SUCCESS)
 		{
-			print_error(result);
+			print_error_builtin("export", args[i], ": not a valid identifier");
 			nb_errors += 1;
 		}
 		i++;

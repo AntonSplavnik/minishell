@@ -6,13 +6,13 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:08:53 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/12 11:26:59 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/12 12:32:52 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	error_exit(char *function, char *arg, char *message)
+void	print_error_builtin(char *function, char *arg, char *message)
 {
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(function, 2);
@@ -30,7 +30,6 @@ Prints appropriate error message to stderr based on error code:
 - ERR_ENV: Environment initialization error
 - ERR_CMD_NOT_FOUND: Error in the command name
 - ERR_EXEC: Error during the command execution
-- ERR_PWD: Too many args for pwd
 */
 void	print_error(t_error error_code)
 {
@@ -49,15 +48,8 @@ void	print_error(t_error error_code)
 		ft_putendl_fd("minishell: Command not found", 2);
 	else if (error_code == 6)
 		ft_putendl_fd("minishell: Command could not be executed", 2);
-	else if (error_code == 7)
-		ft_putendl_fd("minishell: env: No such file or directory", 2);
-	else if (error_code == 8)
-		ft_putendl_fd("minishell: cd: No such file or directory", 2);
 	else if (error_code == 9)
 		ft_putendl_fd("minishell: exit: too many arguments", 2);
-	else if (error_code == 10)
-		ft_putendl_fd("minishell: export: this is not a \
-valid variable name", 2);
 }
 
 /*
