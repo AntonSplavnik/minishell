@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 17:13:23 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/12 12:21:10 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/12 16:06:26 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,9 @@ t_error	execute_exit(char **args, t_shell *s)
 		count_args++;
 	if (count_args == 1)
 	{
+		exit_code = s->exit_status;
 		free_all(s, args);
-		exit(s->exit_status);
+		exit(exit_code);
 	}
 	if (!is_valid_exit_code(args[1]))
 	{

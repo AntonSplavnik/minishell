@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 12:44:50 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/12 15:30:31 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/12 16:13:01 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ t_error	execute_child_process(char *cmd_path, char **args, t_shell *s)
 	else
 	{
 		waitpid(pid, &status, 0);
-		free_command_path(cmd_path, args);
+		free(cmd_path);
 		if (WIFEXITED(status))
 			s->exit_status = WEXITSTATUS(status);
 	}
@@ -123,6 +123,7 @@ t_error	execute_command(t_token *cmd_token, t_shell *s)
 {
 	char	*cmd_path;
 	char	**args;
+	t_error	result;
 
 	/*Check if there is a pipe in the token list
 	If yes, return execute_pipe.
@@ -134,12 +135,16 @@ t_error	execute_command(t_token *cmd_token, t_shell *s)
 		return (ERR_MALLOC);
 	}
 	if (is_built_in(cmd_token->content))
-		return (execute_built_in(cmd_token, args, s));
-	cmd_path = find_command_path(cmd_token->content, s);
-	if (!cmd_path)
+			result = execute_built_in(cmd_token, args, s);
+	else
 	{
-		free_array(args);
-		return (ERR_CMD_NOT_FOUND);
+		cmd_path = find_command_path(cmd_token->content, s);
+		if (!cmd_path)
+			result = ERR_CMD_NOT_FOUND;
+		else
+		result = execute_child_process(cmd_path, args, s);
 	}
-	return (execute_child_process(cmd_path, args, s));
-}
+	free_array(args);
+	return (result);
+	}
+

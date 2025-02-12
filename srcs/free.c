@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 12:43:11 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/29 11:40:52 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/12 16:17:34 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ void	free_all(t_shell *s, char **array)
 		free_token_list(&s->token_list);
 	if (s->env_list)
 		free_env_list(&s->env_list);
+	if (s->envp)
+		free_array(s->envp);
 	free (s);
 	rl_clear_history();
 }
@@ -83,6 +85,7 @@ void	free_env_list(t_env **env_list)
 	{
 		temp = *env_list;
 		*env_list = (*env_list)->next;
+		free(temp->content);
 		free(temp->key);
 		free(temp->value);
 		free(temp);
