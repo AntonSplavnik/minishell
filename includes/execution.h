@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 12:46:41 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/05 16:27:48 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/12 10:48:45 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,5 +46,24 @@ t_error	execute_unset(char **args, t_shell *s);
 
 //export
 t_error	execute_export(char **args, t_shell *s);
+t_error	print_sorted_env(t_env	*env_list);
+int		is_valid_var_name(char *arg);
+
+//export_handlers
+t_error	handle_equal_case(char *arg, char *equal_sign, t_shell *s);
+t_error	handle_append_case(char *arg, char *append_sign, t_shell *s);
+t_error	handle_append_operation(char *append_sign, t_env *existing);
+t_error	update_existing_var(t_env *existing, char *new_value);
+t_error	handle_no_equal_sign(char *arg, t_shell *s);
+
+//export_array
+char	**create_env_array(t_env *env_list, int count_var);
+int		store_env_var_in_array(t_env *current, char **env_array, int i);
+void	sort_env_array(char **env_array);
+size_t	count_env_var(t_env *env_list);
+
+//export_format
+char	*format_env_with_equals(t_env *current, char **env_array);
+char	*format_env_prefix(t_env *current, char **env_array);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 18:28:37 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/07 14:59:16 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/12 10:56:12 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	get_var_length(const char *str, t_shell *s, \
 	*i += ft_strlen(var_name);
 	free(var_name);
 	if (need_free)
-	free(var_value);
+		free(var_value);
 }
 
 /*Performs the actual expansion of an environment variable:

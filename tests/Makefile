@@ -18,6 +18,7 @@ SRC = 	$(SRCS_DIR)/parsing/token_creation.c \
 		$(SRCS_DIR)/parsing/token_extraction_heredoc.c \
 		$(SRCS_DIR)/parsing/token_extraction_heredoc_utils.c \
 		$(SRCS_DIR)/parsing/token_extraction_quotes.c	\
+		$(SRCS_DIR)/parsing/token_extraction_export.c	\
 		$(SRCS_DIR)/execution/execute_command.c \
 		$(SRCS_DIR)/execution/command_path.c \
 		$(SRCS_DIR)/execution/execute_built_in.c \
@@ -27,6 +28,9 @@ SRC = 	$(SRCS_DIR)/parsing/token_creation.c \
 		$(SRCS_DIR)/built-in/exit.c \
 		$(SRCS_DIR)/built-in/unset.c \
 		$(SRCS_DIR)/built-in/export.c \
+		$(SRCS_DIR)/built-in/export_handlers.c \
+		$(SRCS_DIR)/built-in/export_array.c \
+		$(SRCS_DIR)/built-in/export_format.c \
 		$(SRCS_DIR)/env/init_env.c \
 		$(SRCS_DIR)/env/manipulate_env.c \
 		$(SRCS_DIR)/init/init_data.c \

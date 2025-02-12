@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 14:54:55 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/07 17:27:12 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/12 11:16:43 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,19 +138,20 @@ static char	*extract_quoted_token(char *args, size_t *i, t_error *error)
 /*
 Main token extraction function:
 - Skips leading whitespace
-- Identifies token type (quoted, delimiter, or unquoted)
-- Calls appropriate extraction function
+- Identifies token type and calls appropriate extracter
 - Updates index to track position in input string
 Returns: SUCCESS or error status if extraction fails
 */
 t_error	ft_split_token(t_token **token_list, char *args, \
-						size_t *i, char **token)
+							size_t *i, char **token)
 {
 	t_error	error;
-	int	is_export_with_equals;
+	int		is_export_with_equals;
 
 	error = SUCCESS;
-	is_export_with_equals = (*token_list && ft_strcmp((*token_list)->content, "export") == 0 && ft_strchr(args + *i, '='));
+	is_export_with_equals = (*token_list \
+			&& ft_strcmp((*token_list)->content, "export") == 0 \
+			&& ft_strchr(args + *i, '='));
 	while (args[*i] && is_space(args[*i]))
 		(*i)++;
 	if (!args[*i])
@@ -159,34 +160,7 @@ t_error	ft_split_token(t_token **token_list, char *args, \
 		return (SUCCESS);
 	}
 	if (is_export_with_equals)
-	{
-		// Special handling for export with equals sign
-		size_t start = *i;
-		size_t len = 0;
-		int in_quotes = 0;
-		char quote_char = 0;
-
-		while (args[*i])
-		{
-			if ((args[*i] == '"' || args[*i] == '\'') && !in_quotes)
-			{
-				quote_char = args[*i];
-				in_quotes = 1;
-			}
-			else if (args[*i] == quote_char && in_quotes)
-			{
-				in_quotes = 0;
-			}
-			else if (is_space(args[*i]) && !in_quotes)
-				break;
-
-			len++;
-			(*i)++;
-		}
-		*token = ft_substr(args, start, len);
-		if (!*token)
-			error = ERR_MALLOC;
-	}
+		*token = extract_export_token(args, i, &error);
 	else if (args[*i] == '"' || args[*i] == '\'')
 		*token = extract_quoted_token(args, i, &error);
 	else if (is_delimiter(args[*i]))
