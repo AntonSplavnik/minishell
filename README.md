@@ -32,7 +32,7 @@ Reason for choosing a linked list over AST:
 - The project doesn't require complex operations like boolean operators (&& and ||) or parentheses grouping (only needed for the bonus part).
 - AST would add complexity while not providing substantial benefits for the mandatory requirements
 
-<h3>Environment Variable Management<h3>
+<h3>Environment Variable Management</h3>
 
 - Complete environment initialization and management
 - Support for variable assignments and modifications
@@ -47,15 +47,15 @@ Reason for choosing a linked list over AST:
 - Child process creation with fork/execve
 - Error handling and Exit status for various command execution scenarios
 
-<h3>Error Handling<h3>
+<h3>Error Handling</h3>
 
-Current exit status implementation:
 
-0: Success (command executed successfully)
-1: General errors (malloc failure, execution errors)
-2: Syntax errors (parsing errors)
-126: Command found but not executable
-127: Command not found
+- Current exit status implementation:
+  - 0: Success (command executed successfully)
+  - 1: General errors (malloc failure, execution errors)
+  - 2: Syntax errors (parsing errors)
+  - 126: Command found but not executable
+  - 127: Command not found
 
 <h2>Next Steps</h2>
 
@@ -78,3 +78,5 @@ Current exit status implementation:
 - Edge case validation
 - Memory leak checks
 - Find and test edge cases
+
+- In order to test valgrind, run valgrind with the extra flag : valgrind --suppressions=suppressions.supp --leak-check=full --show-leak-kinds=all ./minishell
