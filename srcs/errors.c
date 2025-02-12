@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:08:53 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/12 11:17:30 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/12 11:26:59 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	print_error(t_error error_code)
 		ft_putendl_fd("minishell: exit: too many arguments", 2);
 	else if (error_code == 10)
 		ft_putendl_fd("minishell: export: this is not a \
-						valid variable name", 2);
+valid variable name", 2);
 }
 
 /*
