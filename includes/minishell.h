@@ -63,7 +63,8 @@ t_error				handle_error_free_tokens(t_error error_code, \
 t_error				handle_error(t_error error_code, void *ptr_to_free);
 t_error				handle_error_free_env(t_error error_code, \
 								t_env **env_list);
-void				print_error_builtin(char *function, char *arg, char *message);
+void				print_error_builtin(char *function, \
+						char *arg, char *message);
 
 //INIT
 //init_data.c

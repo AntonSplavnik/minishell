@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 12:44:50 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/31 16:44:35 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/12 15:30:31 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,8 @@ t_error	execute_child_process(char *cmd_path, char **args, t_shell *s)
 	pid = fork();
 	if (pid == -1)
 	{
-		free_command_path(cmd_path, args);
+		free(cmd_path);
+		free_array(args);
 		s->exit_status = 1;
 		return (ERR_EXEC);
 	}
@@ -96,7 +97,6 @@ t_error	execute_child_process(char *cmd_path, char **args, t_shell *s)
 	{
 		execve(cmd_path, args, s->envp);
 		s->exit_status = 127;
-		ft_putendl_fd("Command could not be executed", 2);
 		exit(127);
 	}
 	else
@@ -111,7 +111,7 @@ t_error	execute_child_process(char *cmd_path, char **args, t_shell *s)
 
 /*
 Executes a single command with its arguments
-Find the args by going through the token list
+Find the args by going through the token list (stop at the first pipe)
 - If the first token of the list is a built-in,
 go to the function execute_built-in
 - Else, find the command path with the first token of the list
@@ -124,13 +124,13 @@ t_error	execute_command(t_token *cmd_token, t_shell *s)
 	char	*cmd_path;
 	char	**args;
 
-	//Check for pipes and handle them here
-
-	//if no pipes, execute simple command
+	/*Check if there is a pipe in the token list
+	If yes, return execute_pipe.
+	When pipe failure, s->exit status should be 1 */
 	args = prepare_command_args(cmd_token);
 	if (!args)
 	{
-		s->exit_status = 12;
+		s->exit_status = 1;
 		return (ERR_MALLOC);
 	}
 	if (is_built_in(cmd_token->content))

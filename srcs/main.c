@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:02:10 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/12 11:23:02 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/12 15:35:39 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,10 @@ static int	handle_loop_iteration(t_shell *s)
 	if (error != SUCCESS)
 	{
 		s->token_list = NULL;
-		s->exit_status = 2;
+		if (error == ERR_MALLOC)
+			s->exit_status = 1;
+		else
+			s->exit_status = 2;
 		return (1);
 	}
 	//Comment or uncomment the following line to debug and print token list

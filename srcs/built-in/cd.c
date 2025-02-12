@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 22:26:37 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/12 12:21:39 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/12 15:23:47 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ Built-in cd command implementation
 - update the PWD and OLDPWD env var in the env_list.
 Returns: SUCCESS or error code
 */
-t_error	execute_cd(t_token *cmd_token, t_shell *s)
+t_error	execute_cd(t_token *cmd, t_shell *s)
 {
 	char	*path;
 	char	*old_path;
@@ -57,15 +57,15 @@ t_error	execute_cd(t_token *cmd_token, t_shell *s)
 	old_path = getcwd(NULL, 0);
 	if (!old_path)
 		return (ERR_EXEC);
-	if (!cmd_token->next || cmd_token->next->type != TYPE_ARG)
+	if (!cmd->next || cmd->next->type != TYPE_ARG)
 		path = get_var_value(s->env_list, "HOME", 0, 0);
 	else
-		path = cmd_token->next->content;
+		path = cmd->next->content;
 	if (chdir(path) != 0)
 	{
 		free(old_path);
 		s->exit_status = 1;
-		print_error_builtin("cd", cmd_token->next->content, ": No such file or directory");
+		print_error_builtin("cd", cmd->next->content, ": No such directory");
 		return (ERR_CD);
 	}
 	error = update_path_vars(old_path, s->env_list);
