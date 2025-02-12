@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 20:11:58 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/25 21:23:00 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/12 12:25:43 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ t_error	execute_env(char **args, t_env *env_list, t_shell *s)
 	if (count_args > 1)
 	{
 		s->exit_status = 1;
+		print_error_builtin("env", args[1], ": No such file or directory");
 		return (ERR_ENV_EXEC);
 	}
 	while (env_list)

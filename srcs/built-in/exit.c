@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 17:13:23 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/29 12:36:43 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/12 12:21:10 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ t_error	execute_exit(char **args, t_shell *s)
 	}
 	if (!is_valid_exit_code(args[1]))
 	{
-		error_exit("exit", args[1], ": numeric argument required");
+		print_error_builtin("exit", args[1], ": numeric argument required");
 		free_all(s, args);
 		exit (2);
 	}

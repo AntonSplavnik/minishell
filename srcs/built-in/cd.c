@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 22:26:37 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/25 21:41:17 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/12 12:21:39 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ t_error	execute_cd(t_token *cmd_token, t_shell *s)
 	{
 		free(old_path);
 		s->exit_status = 1;
+		print_error_builtin("cd", cmd_token->next->content, ": No such file or directory");
 		return (ERR_CD);
 	}
 	error = update_path_vars(old_path, s->env_list);
