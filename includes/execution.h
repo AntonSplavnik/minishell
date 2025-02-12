@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 12:46:41 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/12 10:48:45 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/12 15:13:39 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 t_error	execute_command(t_token *cmd_token, t_shell *shell);
 
 //command_path.c
-char	*try_path_dir(char *dir, char *cmd);
+char	*try_path_dir(char *dir, char *cmd, t_shell *s);
 char	*find_command_path(char *cmd, t_shell *s);
 
 //execute_built_in.c

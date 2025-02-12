@@ -69,3 +69,12 @@ Reason for choosing a linked list over AST:
 - Add comprehensive test suite for command exec
 - Edge case validation
 - Memory leak checks
+
+<h2>Exit Status<h2>
+All exit status should be checked:
+0: Success (command executed successfully)
+1: General errors (too many arguments, permission denied, etc.)
+2: Syntax errors (parser errors, invalid arguments)
+126: Command found but not executable
+127: Command not found
+128+n: Fatal error with signal n (e.g., 130 for Ctrl+C which is 128 + SIGINT(2))
