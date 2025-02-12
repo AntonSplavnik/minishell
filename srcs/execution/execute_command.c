@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 12:44:50 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/12 15:24:18 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/12 15:30:31 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ t_error	execute_command(t_token *cmd_token, t_shell *s)
 	args = prepare_command_args(cmd_token);
 	if (!args)
 	{
-		s->exit_status = 12;
+		s->exit_status = 1;
 		return (ERR_MALLOC);
 	}
 	if (is_built_in(cmd_token->content))
