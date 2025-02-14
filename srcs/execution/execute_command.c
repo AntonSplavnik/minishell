@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 12:44:50 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/14 10:10:41 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/14 16:57:23 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,13 @@ t_error	execute_child_process(char *cmd_path, char **args, t_shell *s)
 	pid_t	pid;
 	int		status;
 
+	if (set_signals_parent() != 0)
+	{
+		free(cmd_path);
+		free_array(args);
+		s->exit_status = 1;
+		return (ERR_SIGNAL);
+	}
 	pid = fork();
 	if (pid == -1)
 	{
@@ -95,6 +102,8 @@ t_error	execute_child_process(char *cmd_path, char **args, t_shell *s)
 	}
 	if (pid == 0)
 	{
+		if (set_signals_child() != 0)
+			exit (1);
 		execve(cmd_path, args, s->envp);
 		s->exit_status = 127;
 		exit(127);
@@ -103,9 +112,16 @@ t_error	execute_child_process(char *cmd_path, char **args, t_shell *s)
 	{
 		waitpid(pid, &status, 0);
 		free(cmd_path);
-		if (WIFEXITED(status))
+		if (g_sig == SIGINT || g_sig == SIGQUIT)
+		{
+			usleep(10000);
+			s->exit_status = (g_sig == SIGINT) ? 130 : 131;
+		}
+		else if (WIFEXITED(status))
 			s->exit_status = WEXITSTATUS(status);
 	}
+	if (set_signals_interactive())
+		return (ERR_SIGNAL);
 	return (SUCCESS);
 }
 
@@ -126,8 +142,8 @@ t_error	execute_command(t_token *cmd_token, t_shell *s)
 	t_error	result;
 
 	/*Check if there is a pipe in the token list
-	If yes, return execute_pipe.
-	When pipe failure, s->exit status should be 1 */
+	If yes, return execute_pipe (maybe create a command struct to store all commands in a linked list?)
+	Note: When pipe failure, s->exit status should be 1 */
 	args = prepare_command_args(cmd_token);
 	if (!args)
 	{

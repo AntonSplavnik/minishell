@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:02:10 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/14 10:09:23 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/14 15:17:56 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,11 @@
 #define PROMPT_COLOR "\001\033[1;36m\002"	// Cyan
 #define RESET_COLOR "\001\033[0m\002"		// Reset to default
 
+int	g_sig = 0;
+
+/*
+Helper function to set exit status after processing input
+*/
 void	set_exit_status(t_error error, t_shell *s)
 {
 	if (error == ERR_MALLOC)
@@ -88,6 +93,8 @@ static int	handle_loop_iteration(t_shell *s)
 	char	*args;
 	t_error	error;
 
+	if (set_signals_interactive())
+		return (0);
 	args = get_input(s);
 	if (!args)
 		return (0);
@@ -130,6 +137,7 @@ int	main(int argc, char **argv, char **env)
 	while (handle_loop_iteration(s))
 		;
 	free_env_list(&s->env_list);
+	free_array(s->envp);
 	free(s);
 	rl_clear_history();
 	return (0);

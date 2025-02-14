@@ -43,6 +43,9 @@
 # define PROMPT_COLOR "\001\033[1;36m\002"	// Cyan
 # define RESET_COLOR "\001\033[0m\002"		// Reset to default
 
+//global variable for signals
+extern int			g_sig;
+
 //utils
 char				*ft_strndup(const char *s, size_t n);
 int					ft_strcmp(const char *s1, const char *s2);
@@ -81,6 +84,13 @@ t_env				*find_env_var(t_env *env_list, char *key);
 void				free_env_var(t_env *envvar);
 t_error				set_env_key_value(t_env *new_envvar, char *env);
 t_error				set_env_content(t_env *new_envvar, char *env);
+
+//SIGNALS
+
+//signals_set_up.c
+int				set_signals_interactive(void);
+int				set_signals_child(void);
+int				set_signals_parent(void);
 
 //TO DELETE BEFORE SUB
 //utils_to_print
