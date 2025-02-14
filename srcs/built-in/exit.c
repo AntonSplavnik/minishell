@@ -6,13 +6,23 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 17:13:23 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/12 16:06:26 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/14 10:05:23 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	is_valid_exit_code(char *s)
+static int	ft_count_args(char **args)
+{
+	int	count_args;
+
+	count_args = 0;
+	while (args[count_args])
+		count_args++;
+	return (count_args);
+}
+
+static int	is_valid_exit_code(char *s)
 {
 	int	i;
 
@@ -42,9 +52,7 @@ t_error	execute_exit(char **args, t_shell *s)
 	int	count_args;
 	int	exit_code;
 
-	count_args = 0;
-	while (args[count_args])
-		count_args++;
+	count_args = ft_count_args(args);
 	if (count_args == 1)
 	{
 		exit_code = s->exit_status;

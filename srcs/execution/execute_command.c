@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 12:44:50 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/12 16:13:01 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/14 10:10:41 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,16 +135,15 @@ t_error	execute_command(t_token *cmd_token, t_shell *s)
 		return (ERR_MALLOC);
 	}
 	if (is_built_in(cmd_token->content))
-			result = execute_built_in(cmd_token, args, s);
+		result = execute_built_in(cmd_token, args, s);
 	else
 	{
 		cmd_path = find_command_path(cmd_token->content, s);
 		if (!cmd_path)
 			result = ERR_CMD_NOT_FOUND;
 		else
-		result = execute_child_process(cmd_path, args, s);
+			result = execute_child_process(cmd_path, args, s);
 	}
 	free_array(args);
 	return (result);
-	}
-
+}

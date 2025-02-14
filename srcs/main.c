@@ -6,13 +6,21 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:02:10 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/12 15:35:39 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/14 10:09:23 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 #define PROMPT_COLOR "\001\033[1;36m\002"	// Cyan
 #define RESET_COLOR "\001\033[0m\002"		// Reset to default
+
+void	set_exit_status(t_error error, t_shell *s)
+{
+	if (error == ERR_MALLOC)
+		s->exit_status = 1;
+	else
+		s->exit_status = 2;
+}
 
 /*
 Gets user input from readline:
@@ -87,10 +95,7 @@ static int	handle_loop_iteration(t_shell *s)
 	if (error != SUCCESS)
 	{
 		s->token_list = NULL;
-		if (error == ERR_MALLOC)
-			s->exit_status = 1;
-		else
-			s->exit_status = 2;
+		set_exit_status(error, s);
 		return (1);
 	}
 	//Comment or uncomment the following line to debug and print token list

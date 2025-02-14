@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:12:37 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/07 18:48:49 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/14 09:56:14 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ Creates a new environment variable node:
 - Allocates memory for new node
 - Sets content and initializes next pointer
 - Calls helper to set key and value
+- Edge case: if var created by export append (+=),
+remove the '+' from env->content
 Returns: New env node or NULL if memory allocation fails
 */
 t_env	*create_envvar(char *env)
@@ -27,19 +29,19 @@ t_env	*create_envvar(char *env)
 	new_envvar = malloc(sizeof(t_env));
 	if (!new_envvar)
 		return (NULL);
-	new_envvar->content = ft_strdup(env);
-	new_envvar->next = NULL;
-	if (!new_envvar->content)
-	{
-		free(new_envvar);
-		return (NULL);
-	}
 	error = set_env_key_value(new_envvar, env);
 	if (error != SUCCESS)
 	{
 		free_env_var(new_envvar);
 		return (NULL);
 	}
+	error = set_env_content(new_envvar, env);
+	if (error != SUCCESS)
+	{
+		free_env_var(new_envvar);
+		return (NULL);
+	}
+	new_envvar->next = NULL;
 	return (new_envvar);
 }
 
