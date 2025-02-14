@@ -80,6 +80,7 @@ t_env				*create_envvar(char *env);
 t_env				*find_env_var(t_env *env_list, char *key);
 void				free_env_var(t_env *envvar);
 t_error				set_env_key_value(t_env *new_envvar, char *env);
+t_error				set_env_content(t_env *new_envvar, char *env);
 
 //TO DELETE BEFORE SUB
 //utils_to_print
