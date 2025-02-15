@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 15:23:20 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/14 16:49:39 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/15 16:13:15 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ void	signal_handler_child(int signum)
 	}
 	else if (signum == SIGQUIT)
 	{
-		ft_putendl_fd("Quit (core dumped)", 2);
 		exit (131);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 12:44:50 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/14 16:57:23 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/15 16:15:32 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,9 @@ t_error	execute_child_process(char *cmd_path, char **args, t_shell *s)
 		free(cmd_path);
 		if (g_sig == SIGINT || g_sig == SIGQUIT)
 		{
-			usleep(10000);
+			usleep(500000);
+			rl_on_new_line();
+			rl_replace_line("", 0);
 			s->exit_status = (g_sig == SIGINT) ? 130 : 131;
 		}
 		else if (WIFEXITED(status))
@@ -143,7 +145,10 @@ t_error	execute_command(t_token *cmd_token, t_shell *s)
 
 	/*Check if there is a pipe in the token list
 	If yes, return execute_pipe (maybe create a command struct to store all commands in a linked list?)
-	Note: When pipe failure, s->exit status should be 1 */
+	Notes:
+	- When pipe failure, s->exit status should be 1
+	- Remember to also implement signals in pipe execution
+	*/
 	args = prepare_command_args(cmd_token);
 	if (!args)
 	{
