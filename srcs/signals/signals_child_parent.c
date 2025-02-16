@@ -6,51 +6,21 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 15:23:20 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/15 16:13:15 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/16 08:04:18 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 /*
-Handles signals in child processes:
-- SIGINT (Ctrl+C): Exit with 130
-- SIGQUIT (Ctrl+\): Print "Quit (core dumped)", exit with 131
-*/
-void	signal_handler_child(int signum)
-{
-	g_sig = signum;
-	if (signum == SIGINT)
-	{
-		write(2, "\n", 1);
-		exit (130);
-	}
-	else if (signum == SIGQUIT)
-	{
-		exit (131);
-	}
-}
-
-/*
 Set up signal handling for child process:
-- SIGINT (Ctrl+C): Exit with 130
-- SIGQUIT (Ctrl+\): Print "Quit (core dumped)", exit with 131
-Returns:
-  - 1 if error
-  - 0 if success
+- Setting back SIGINT and SIGQUIT to their default behavior
+- This way they do not inherited the special handling from parents
 */
 int	set_signals_child(void)
 {
-	struct sigaction	sa;
-
-	sa.sa_handler = signal_handler_child;
-	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = 0;
-	if (sigaction(SIGINT, &sa, NULL) == -1 || sigaction(SIGQUIT, &sa, NULL) == -1)
-	{
-		perror("sigaction");
-		return (1);
-	}
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	return (0);
 }
 
@@ -81,7 +51,8 @@ int	set_signals_parent(void)
 	sa.sa_handler = signal_handler_parent;
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = 0;
-	if (sigaction(SIGINT, &sa, NULL) == -1 || sigaction(SIGQUIT, &sa, NULL) == -1)
+	if (sigaction(SIGINT, &sa, NULL) == -1 || \
+	sigaction(SIGQUIT, &sa, NULL) == -1)
 	{
 		perror("sigaction");
 		return (1);

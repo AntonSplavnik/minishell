@@ -88,9 +88,9 @@ t_error				set_env_content(t_env *new_envvar, char *env);
 //SIGNALS
 
 //signals_set_up.c
-int				set_signals_interactive(void);
-int				set_signals_child(void);
-int				set_signals_parent(void);
+int					set_signals_interactive(void);
+int					set_signals_child(void);
+int					set_signals_parent(void);
 
 //TO DELETE BEFORE SUB
 //utils_to_print

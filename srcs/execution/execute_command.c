@@ -6,84 +6,112 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 12:44:50 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/15 16:15:32 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/16 08:20:28 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 /*
-Return the number of args needed for the command execution
+Handles execution in child process:
+- Sets up signal handling for child
+- Attempts to execute the command using execve
+- If execve fails, exits with code 127 (command not found)
+- Command path and arguments are freed by parent process
+Parameters:
+  - cmd_path: Full path to executable
+  - args: Array of command arguments
+  - s: Shell structure containing environment
 */
-int	count_command_args(t_token *cmd_token)
+static void	handle_child_process(char *cmd_path, char **args, t_shell *s)
 {
-	t_token	*current;
-	int		arg_count;
-
-	arg_count = 1;
-	current = cmd_token->next;
-	while (current && current->type != TYPE_PIPE)
-	{
-		if (current->type == TYPE_ARG)
-			arg_count++;
-		current = current->next;
-	}
-	return (arg_count);
+	if (set_signals_child() != 0)
+		exit(1);
+	execve(cmd_path, args, s->envp);
+	s->exit_status = 127;
+	exit(127);
 }
 
 /*
-Prepares command arguments array from token list
-Returns array of strings suitable for execve:
-- args[0] should be the file name
+Handles parent process after fork:
+- Waits for child process to complete using WUNTRACED flag
+- Continues waiting if process was stopped but not terminated
+- Handles cleanup of command resources
+- Processes exit status and signals
+Parameters:
+  - pid: Process ID of child
+  - cmd_path: Command path to free
+  - s: Shell structure for status updates
+Returns:
+  - SUCCESS or ERR_SIGNAL if signal handling fails
 */
-char	**prepare_command_args(t_token *cmd_token)
+static t_error handle_parent_process(pid_t pid, char *cmd_path, t_shell *s)
 {
-	t_token	*current;
-	char	**args;
-	int		arg_count;
-	int		i;
+	int	 status;
+	pid_t   wait_result;
+	int	 process_completed;
 
-	arg_count = count_command_args(cmd_token);
-	args = malloc(sizeof(char *) * (arg_count + 1));
-	if (!args)
-		return (NULL);
-	args[0] = ft_strdup(cmd_token->content);
-	i = 1;
-	current = cmd_token->next;
-	while (current && current->type != TYPE_PIPE)
+	process_completed = 0;
+	while (!process_completed)
 	{
-		if (current->type == TYPE_ARG)
+		wait_result = waitpid(pid, &status, WUNTRACED);
+		if (wait_result == -1)
 		{
-			args[i] = ft_strdup(current->content);
-			i++;
+			free(cmd_path);
+			s->exit_status = 1;
+			return (ERR_EXEC);
 		}
-		current = current->next;
+		if (WIFEXITED(status) || WIFSIGNALED(status))
+			process_completed = 1;
 	}
-	args[i] = NULL;
-	return (args);
+	free(cmd_path);
+
+	// Handle signal-based termination
+	if (WIFSIGNALED(status))
+	{
+		if (WTERMSIG(status) == SIGQUIT)
+		{
+			write(2, "Quit (core dumped)\n", 18);
+			usleep(500000);
+		}
+		else if (WTERMSIG(status) == SIGINT)
+		{
+			write(2, "\n", 1);
+			usleep(10000);
+		}
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		s->exit_status = 128 + WTERMSIG(status);
+	}
+	// Handle normal process termination
+	else if (WIFEXITED(status))
+		s->exit_status = WEXITSTATUS(status);
+
+	// Restore interactive signal handling
+	if (set_signals_interactive())
+		return (ERR_SIGNAL);
+
+	return (SUCCESS);
 }
 
 /*
-Use fork() to split the process into two processes:
-- Parent process gets the child's PID (>0)
-- Child process get PID 0
-- if (pid == 0) -> only runs in the child process
-- Then execve replaces current process (the child) with a new program.
-- If successful, execve NEVER returns - the process becomes the new program.
-- Exit 127 is conventionnal exit code meaning "command not found"
-In the parents process:
-- waitpid -> make parents wait for the child process to finish
-- store the child's exit info in status
-- won't continue until child process is done
-- if (WIFEXITED(status)) -> check that child process
-ended up normally (not killed by a signal)
-- WEXITSTATUS(status) : get the child exit code
-RETURNS: appropriate error code
+Main execution function that manages the fork process:
+- Sets up parent signal handling
+- Creates child process with fork
+- Routes execution to appropriate handler based on fork result
+- Handles resource cleanup on errors
+Parameters:
+  - cmd_path: Full path to executable
+  - args: Array of command arguments
+  - s: Shell structure containing environment
+Returns:
+  - SUCCESS on successful execution
+  - ERR_SIGNAL for signal handling failures
+  - ERR_EXEC for fork failures
 */
 t_error	execute_child_process(char *cmd_path, char **args, t_shell *s)
 {
 	pid_t	pid;
-	int		status;
 
 	if (set_signals_parent() != 0)
 	{
@@ -101,29 +129,9 @@ t_error	execute_child_process(char *cmd_path, char **args, t_shell *s)
 		return (ERR_EXEC);
 	}
 	if (pid == 0)
-	{
-		if (set_signals_child() != 0)
-			exit (1);
-		execve(cmd_path, args, s->envp);
-		s->exit_status = 127;
-		exit(127);
-	}
+		handle_child_process(cmd_path, args, s);
 	else
-	{
-		waitpid(pid, &status, 0);
-		free(cmd_path);
-		if (g_sig == SIGINT || g_sig == SIGQUIT)
-		{
-			usleep(500000);
-			rl_on_new_line();
-			rl_replace_line("", 0);
-			s->exit_status = (g_sig == SIGINT) ? 130 : 131;
-		}
-		else if (WIFEXITED(status))
-			s->exit_status = WEXITSTATUS(status);
-	}
-	if (set_signals_interactive())
-		return (ERR_SIGNAL);
+		return (handle_parent_process(pid, cmd_path, s));
 	return (SUCCESS);
 }
 
@@ -144,7 +152,8 @@ t_error	execute_command(t_token *cmd_token, t_shell *s)
 	t_error	result;
 
 	/*Check if there is a pipe in the token list
-	If yes, return execute_pipe (maybe create a command struct to store all commands in a linked list?)
+	If yes, return execute_pipe (maybe create a command struct
+	to store all commands in a linked list?)
 	Notes:
 	- When pipe failure, s->exit status should be 1
 	- Remember to also implement signals in pipe execution
