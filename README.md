@@ -11,6 +11,7 @@ Update on February 12, 2025
 - Comprehensive command execution with path resolution and execve
 - All required shell builtins implemented
 - Error handling with appropriate exit status code
+- Signal handling for interactive & single command mode
 
 <h2>Token Processing Pipeline</h2>
 
@@ -56,6 +57,8 @@ Reason for choosing a linked list over AST:
   - 2: Syntax errors (parsing errors)
   - 126: Command found but not executable
   - 127: Command not found
+  - 130: SIGINT (CTRL+C)
+  - 131: SIGQUIT (CTRL+\)
 
 <h2>Next Steps</h2>
 
@@ -68,9 +71,8 @@ Reason for choosing a linked list over AST:
 
 <h3>Signal Handling</h3>
 
-- Implement signal handling (CTRL+C, CTRL+D, CTRL+)
-- Implement correct exit status for signal handling
-- Ensure proper behavior in both interactive and non-interactive modes
+- Implement signal handling (CTRL+C, CTRL+D, CTRL+) for heredoc
+- Implement signal handling for piped commands
 
 <h2>Testing</h2>
 
