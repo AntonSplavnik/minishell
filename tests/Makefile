@@ -22,6 +22,7 @@ SRC = 	$(SRCS_DIR)/parsing/token_creation.c \
 		$(SRCS_DIR)/execution/execute_command.c \
 		$(SRCS_DIR)/execution/command_path.c \
 		$(SRCS_DIR)/execution/execute_built_in.c \
+		$(SRCS_DIR)/execution/execution_utils.c \
 		$(SRCS_DIR)/built-in/echo.c \
 		$(SRCS_DIR)/built-in/pwd.c \
 		$(SRCS_DIR)/built-in/cd.c \
@@ -38,6 +39,8 @@ SRC = 	$(SRCS_DIR)/parsing/token_creation.c \
 		$(SRCS_DIR)/utils/ft_strcmp.c \
 		$(SRCS_DIR)/utils/ft_strcpy.c \
 		$(SRCS_DIR)/utils/ft_strstr.c \
+		$(SRCS_DIR)/signals/signals_interactive.c \
+		$(SRCS_DIR)/signals/signals_child_parent.c \
 		$(SRCS_DIR)/free.c \
 		$(SRCS_DIR)/errors.c \
 		$(SRCS_DIR)/utils_to_print.c
