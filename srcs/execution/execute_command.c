@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 12:44:50 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/16 08:20:28 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/19 11:43:58 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,14 @@ static void	handle_child_process(char *cmd_path, char **args, t_shell *s)
 
 /*
 Handles parent process after fork:
-- Waits for child process to complete using WUNTRACED flag
-- Continues waiting if process was stopped but not terminated
+- Waits for child process to complete
 - Handles cleanup of command resources
 - Processes exit status and signals
+- Add delays to restore the prompt for signals otherwise process keeps writing
+	- WIFEXITED(status) -> check that child process
+ended up normally (not killed by a signal)
+	- WEXITSTATUS(status) : get the child exit code
+- Restores interactive signal handling
 Parameters:
   - pid: Process ID of child
   - cmd_path: Command path to free
@@ -45,52 +49,23 @@ Parameters:
 Returns:
   - SUCCESS or ERR_SIGNAL if signal handling fails
 */
-static t_error handle_parent_process(pid_t pid, char *cmd_path, t_shell *s)
+static t_error	handle_parent_process(pid_t pid, char *cmd_path, t_shell *s)
 {
-	int	 status;
-	pid_t   wait_result;
-	int	 process_completed;
+	int	status;
 
-	process_completed = 0;
-	while (!process_completed)
-	{
-		wait_result = waitpid(pid, &status, WUNTRACED);
-		if (wait_result == -1)
-		{
-			free(cmd_path);
-			s->exit_status = 1;
-			return (ERR_EXEC);
-		}
-		if (WIFEXITED(status) || WIFSIGNALED(status))
-			process_completed = 1;
-	}
+	waitpid(pid, &status, 0);
 	free(cmd_path);
-
-	// Handle signal-based termination
-	if (WIFSIGNALED(status))
+	if (g_sig == SIGINT)
+		s->exit_status = 130;
+	else if (g_sig == SIGQUIT)
 	{
-		if (WTERMSIG(status) == SIGQUIT)
-		{
-			write(2, "Quit (core dumped)\n", 18);
-			usleep(500000);
-		}
-		else if (WTERMSIG(status) == SIGINT)
-		{
-			write(2, "\n", 1);
-			usleep(10000);
-		}
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		s->exit_status = 128 + WTERMSIG(status);
+		s->exit_status = 131;
+		write(1, "\n", 1);
 	}
-	// Handle normal process termination
 	else if (WIFEXITED(status))
 		s->exit_status = WEXITSTATUS(status);
-
-	// Restore interactive signal handling
 	if (set_signals_interactive())
 		return (ERR_SIGNAL);
-
 	return (SUCCESS);
 }
 

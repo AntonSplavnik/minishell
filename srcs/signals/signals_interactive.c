@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 11:17:51 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/14 16:48:26 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/19 11:59:48 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,8 @@ void	signal_handler_interactive(int signum)
 	g_sig = signum;
 	if (signum == SIGINT)
 	{
-		write(2, "\n", 1);
-		if (rl_on_new_line() == -1)
-			exit (1);
+		write(1, "\n", 1);
+		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}
@@ -45,16 +44,12 @@ int	set_signals_interactive(void)
 
 	sa.sa_handler = signal_handler_interactive;
 	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = SA_RESTART;
+	sa.sa_flags = 0;
 	sa_quit.sa_handler = SIG_IGN;
 	sigemptyset(&sa_quit.sa_mask);
-	sa_quit.sa_flags = SA_RESTART;
-	if (sigaction(SIGINT, &sa, NULL) == -1)
-	{
-		perror("sigaction");
-		return (1);
-	}
-	if (sigaction(SIGQUIT, &sa_quit, NULL) == -1)
+	sa_quit.sa_flags = 0;
+	if (sigaction(SIGINT, &sa, NULL) == -1 || \
+	sigaction(SIGQUIT, &sa_quit, NULL) == -1)
 	{
 		perror("sigaction");
 		return (1);

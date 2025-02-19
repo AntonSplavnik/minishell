@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 15:23:20 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/16 08:04:18 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/19 12:05:21 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,17 @@ Set up signal handling for child process:
 */
 int	set_signals_child(void)
 {
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
+	struct sigaction	sa;
+
+	sa.sa_handler = SIG_DFL;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
+	if (sigaction(SIGINT, &sa, NULL) == -1 || \
+		sigaction(SIGQUIT, &sa, NULL) == -1)
+	{
+		perror("sigaction");
+		return (1);
+	}
 	return (0);
 }
 
@@ -32,6 +41,10 @@ Signal handler for parent process while child is running:
 void	signal_handler_parent(int signum)
 {
 	g_sig = signum;
+	if (signum == SIGINT)
+		write(2, "\n", 1);
+	else if (signum == SIGQUIT)
+		write(2, "Quit (core dumped)\n", 18);
 }
 
 /*
@@ -46,11 +59,9 @@ int	set_signals_parent(void)
 {
 	struct sigaction	sa;
 
-	signal(SIGINT, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
 	sa.sa_handler = signal_handler_parent;
 	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = 0;
+	sa.sa_flags = SA_RESTART;
 	if (sigaction(SIGINT, &sa, NULL) == -1 || \
 	sigaction(SIGQUIT, &sa, NULL) == -1)
 	{

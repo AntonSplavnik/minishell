@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:02:10 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/14 15:17:56 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/19 11:59:22 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,14 @@ static char	*get_input(t_shell *s)
 	char	*args;
 
 	args = readline(PROMPT_COLOR "minishell$ " RESET_COLOR);
+	if (g_sig == SIGINT)
+	{
+		s->exit_status = 130;
+		g_sig = 0;
+	}
 	if (!args)
 	{
-		s->exit_status = 2;
+		s->exit_status = 0;
 		return (NULL);
 	}
 	if (args[0] != '\0')
