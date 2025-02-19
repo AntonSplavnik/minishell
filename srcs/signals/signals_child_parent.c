@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 15:23:20 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/19 12:05:21 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/19 15:34:45 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ int	set_signals_child(void)
 /*
 Signal handler for parent process while child is running:
 - Set global signal variable
-- Let the child process handle the actual signal response
+- If child interrupted with SIGINT, print a new line
+- If child interrupted with SIGQUIT, write core dumped and a new line
 */
 void	signal_handler_parent(int signum)
 {
@@ -49,8 +50,7 @@ void	signal_handler_parent(int signum)
 
 /*
 Set up signal handling for parent process while child is running:
-- Handle SIGINT but don't take any action (let child handle it)
-- Handle SIGQUIT similarly
+- Handle SIGINT and SIGQUIT
 Returns:
   - 1 if error
   - 0 if success
