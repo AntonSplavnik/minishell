@@ -6,11 +6,11 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 16:20:39 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/25 21:54:16 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/26 15:48:01 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 /*
 Built-in echo command implementation.

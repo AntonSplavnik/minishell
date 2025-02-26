@@ -6,11 +6,11 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 12:12:24 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/05 14:51:06 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/26 15:48:01 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 /*
 Handles memory cleanup for heredoc processing:

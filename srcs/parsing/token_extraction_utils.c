@@ -6,11 +6,11 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 15:06:52 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/13 17:50:41 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/26 15:48:01 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 /*
 Checks if character is any type of whitespace

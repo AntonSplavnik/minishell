@@ -6,11 +6,11 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 18:45:01 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/02 21:34:40 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/26 15:48:01 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 /*
 ** Initializes parameters used during token expansion:
