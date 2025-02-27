@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   execute_command.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 12:44:50 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/19 11:43:58 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/27 14:30:43 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 /*
 Handles execution in child process:
@@ -110,7 +110,32 @@ t_error	execute_child_process(char *cmd_path, char **args, t_shell *s)
 	return (SUCCESS);
 }
 
+
+t_error execute_pipe_or_redirect(t_token *cmd_token, t_shell *s)
+{
+	t_token *current;
+	t_error	result;
+
+	current = s->token_list;
+	while (current)
+	{
+		if (ft_strcmp(current->content, "|") == 0)
+			result = execute_pipe();
+		if (ft_strcmp(current->content, "<") == 0)
+			result = input_redirection();
+		if (ft_strcmp(current->content, ">") == 0)
+			result = output_redirection();
+		if (ft_strcmp(current->content, "<<") == 0)
+			result = here_document();
+		if (ft_strcmp(current->content, ">>") == 0)
+			result = append_output_redirection();
+		current = current->next;
+	}
+	return (result);
+}
 /*
+Executes pipes.
+Executes redirections.
 Executes a single command with its arguments
 Find the args by going through the token list (stop at the first pipe)
 - If the first token of the list is a built-in,
@@ -139,7 +164,9 @@ t_error	execute_command(t_token *cmd_token, t_shell *s)
 		s->exit_status = 1;
 		return (ERR_MALLOC);
 	}
-	if (is_built_in(cmd_token->content))
+	if (pipe_or_redirect(cmd_token,s))
+		result = execute_pipe_or_redirect(cmd_token, s);
+	else if (is_built_in(cmd_token->content))
 		result = execute_built_in(cmd_token, args, s);
 	else
 	{

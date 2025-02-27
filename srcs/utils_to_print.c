@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   utils_to_print.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 12:54:58 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/05 14:20:27 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/27 13:14:06 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 //this file should be used for printf functions,
 //helping us to debug our code - we should delete it before submitting
 
-#include "../includes/minishell.h"
+#include "minishell.h"
 
 /*
 Global array mapping token types to their string representations

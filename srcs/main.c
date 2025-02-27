@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:02:10 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/19 11:59:22 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/27 13:14:14 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "minishell.h"
 #define PROMPT_COLOR "\001\033[1;36m\002"	// Cyan
 #define RESET_COLOR "\001\033[0m\002"		// Reset to default
 
@@ -111,7 +111,7 @@ static int	handle_loop_iteration(t_shell *s)
 		return (1);
 	}
 	//Comment or uncomment the following line to debug and print token list
-	//print_token(s->token_list);
+	print_token(s->token_list);
 	if (s->token_list && s->token_list->type == TYPE_COMMAND)
 		error = execute_command(s->token_list, s);
 	if (error != SUCCESS)

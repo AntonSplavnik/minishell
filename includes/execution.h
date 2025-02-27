@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 12:46:41 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/16 08:00:53 by abillote         ###   ########.fr       */
+/*   Updated: 2025/02/26 17:52:38 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int		is_built_in(char *cmd);
 //execute_utils.c
 char	**prepare_command_args(t_token *cmd_token);
 int		count_command_args(t_token *cmd_token);
+int		pipe_or_redirect(t_token *cmd_token, t_shell *s);
 
 //echo.c
 t_error	execute_echo(char **args, t_shell *s);
