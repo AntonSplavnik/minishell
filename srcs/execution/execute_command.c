@@ -6,7 +6,7 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 12:44:50 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/27 14:30:43 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/02/28 14:40:10 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,14 @@ Parameters:
 static void	handle_child_process(char *cmd_path, char **args, t_shell *s)
 {
 	if (set_signals_child() != 0)
+	{
+		free(cmd_path);
+		free_array(args);
 		exit(1);
+	}
 	execve(cmd_path, args, s->envp);
+	free(cmd_path);
+	free_array(args);
 	s->exit_status = 127;
 	exit(127);
 }
@@ -49,21 +55,13 @@ Parameters:
 Returns:
   - SUCCESS or ERR_SIGNAL if signal handling fails
 */
-static t_error	handle_parent_process(pid_t pid, char *cmd_path, t_shell *s)
+static t_error handle_parent_process(pid_t pid, char *cmd_path, t_shell *s)
 {
 	int	status;
 
 	waitpid(pid, &status, 0);
 	free(cmd_path);
-	if (g_sig == SIGINT)
-		s->exit_status = 130;
-	else if (g_sig == SIGQUIT)
-	{
-		s->exit_status = 131;
-		write(1, "\n", 1);
-	}
-	else if (WIFEXITED(status))
-		s->exit_status = WEXITSTATUS(status);
+	handle_exit_status(status, s);
 	if (set_signals_interactive())
 		return (ERR_SIGNAL);
 	return (SUCCESS);
@@ -84,25 +82,15 @@ Returns:
   - ERR_SIGNAL for signal handling failures
   - ERR_EXEC for fork failures
 */
-t_error	execute_child_process(char *cmd_path, char **args, t_shell *s)
+t_error execute_child_process(char *cmd_path, char **args, t_shell *s)
 {
 	pid_t	pid;
 
 	if (set_signals_parent() != 0)
-	{
-		free(cmd_path);
-		free_array(args);
-		s->exit_status = 1;
-		return (ERR_SIGNAL);
-	}
+		return (free_resources(cmd_path, s, ERR_SIGNAL));
 	pid = fork();
 	if (pid == -1)
-	{
-		free(cmd_path);
-		free_array(args);
-		s->exit_status = 1;
-		return (ERR_EXEC);
-	}
+		return (free_resources(cmd_path, s, ERR_EXEC));
 	if (pid == 0)
 		handle_child_process(cmd_path, args, s);
 	else
@@ -110,29 +98,18 @@ t_error	execute_child_process(char *cmd_path, char **args, t_shell *s)
 	return (SUCCESS);
 }
 
-
-t_error execute_pipe_or_redirect(t_token *cmd_token, t_shell *s)
+static t_error execute_external_command(t_token *cmd, char **args, t_shell *s)
 {
-	t_token *current;
-	t_error	result;
+	char *cmd_path;
+	t_error result;
 
-	current = s->token_list;
-	while (current)
-	{
-		if (ft_strcmp(current->content, "|") == 0)
-			result = execute_pipe();
-		if (ft_strcmp(current->content, "<") == 0)
-			result = input_redirection();
-		if (ft_strcmp(current->content, ">") == 0)
-			result = output_redirection();
-		if (ft_strcmp(current->content, "<<") == 0)
-			result = here_document();
-		if (ft_strcmp(current->content, ">>") == 0)
-			result = append_output_redirection();
-		current = current->next;
-	}
+	cmd_path = ind_command_path(cmd->content, s);
+	if (!cmd_path)
+		return (ERR_CMD_NOT_FOUND);
+	result = execute_child_process(cmd_path, args, s);
 	return (result);
 }
+
 /*
 Executes pipes.
 Executes redirections.
@@ -145,7 +122,7 @@ RETURNS: appropriate error code
 To add:
 - handling pipes
 */
-t_error	execute_command(t_token *cmd_token, t_shell *s)
+t_error	execute_single_command(t_token *cmd_token, t_shell *s)
 {
 	char	*cmd_path;
 	char	**args;
@@ -160,22 +137,22 @@ t_error	execute_command(t_token *cmd_token, t_shell *s)
 	*/
 	args = prepare_command_args(cmd_token);
 	if (!args)
-	{
-		s->exit_status = 1;
-		return (ERR_MALLOC);
-	}
-	if (pipe_or_redirect(cmd_token,s))
-		result = execute_pipe_or_redirect(cmd_token, s);
+		return (handle_malloc_error(s));
+	if (has_redirection(s))
+		result = execute_redirection(s);
 	else if (is_built_in(cmd_token->content))
 		result = execute_built_in(cmd_token, args, s);
 	else
-	{
-		cmd_path = find_command_path(cmd_token->content, s);
-		if (!cmd_path)
-			result = ERR_CMD_NOT_FOUND;
-		else
-			result = execute_child_process(cmd_path, args, s);
-	}
+		result = execute_external_command(cmd_token, args, s);
 	free_array(args);
 	return (result);
+}
+
+
+t_error execute_command(t_token *cmd_token, t_shell *s)
+{
+	if (has_pipe(s))
+		return (handle_pipe_operations(s));
+	else
+		return (execute_single_command(cmd_token, s));
 }

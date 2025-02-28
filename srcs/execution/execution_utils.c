@@ -6,7 +6,7 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 07:59:21 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/27 13:21:17 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/02/28 13:48:17 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,26 +61,4 @@ char	**prepare_command_args(t_token *cmd_token)
 	}
 	args[i] = NULL;
 	return (args);
-}
-
-int	pipe_or_redirect(t_shell *s)
-{
-	t_token *current;
-
-	current = s->token_list;
-	while (current)
-	{
-		if (ft_strcmp(current->content, "|") == 0)
-			return (1);
-		if (ft_strcmp(current->content, "<<") == 0)
-			return (1);
-		if	(ft_strcmp(current->content, ">>") == 0)
-			return (1);
-		if	(ft_strcmp(current->content, ">") == 0)
-			return (1);
-		if	(ft_strcmp(current->content, "<") == 0)
-		return (1);
-		current = current->next;
-	}
-	return (0);
 }
