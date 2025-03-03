@@ -3,15 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   types.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 16:08:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/14 15:44:48 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/03 17:57:24 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TYPES_H
 # define TYPES_H
+
+typedef struct s_pipe
+{
+	int		prev_pipe;
+	int		next_pipe[2];
+	pid_t	pid;
+} t_pipe;
 
 //When you add token type, add it in the utils to print file as well
 typedef enum e_token_type
