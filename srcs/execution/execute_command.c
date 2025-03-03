@@ -6,7 +6,7 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 17:39:28 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/03 18:19:24 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/03 19:39:52 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,18 @@
 	execute_external_command
 */
 
+/*
+When you process commands, especially with pipes,
+the original token list gets modified.
+If we don't copy tokens, each command in a pipeline might alter the original list,
+leading to incorrect parsing for subsequent commands.
+For example, if there's a pipe, the token list is split into segments.
+Without copying, the original list would lose parts after processing the first command,
+making it impossible to handle the next commands correctly.
+
+Original: [ls][-l][|][grep][test]
+After pipe handling: [ls][-l] (rest lost)
+*/
 t_error	execute_command(t_token *cmd, t_shell *s)
 {
 	t_token *cmd_copy;

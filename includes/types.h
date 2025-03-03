@@ -6,7 +6,7 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 16:08:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/03 17:57:24 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/03 19:42:26 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ typedef enum e_token_type
 typedef struct s_token
 {
 	t_token_type	type;
+	char			*dst;
+	char			*new;
 	char			*content;
 	struct s_token	*next;
 }			t_token;
