@@ -6,7 +6,7 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 17:40:11 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/03 18:20:00 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/05 14:54:44 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,28 @@
 	execute_pipeline
 */
 
+/*
+Purpose:
+Checks whether the current command input contains pipes (|).
+
+Functionality:
+Calls count_pipes(s->token_list) to determine the number of pipes.
+Returns 1 if there are pipes, otherwise returns 0.
+*/
 int has_pipe(t_shell *s)
 {
 	return (count_pipes(s->token_list) > 0);
 }
 
+/*
+Purpose:
+Handles execution of a single stage in a pipeline.
+
+Functionality:
+Extracts the next command from current tokens.
+Creates a pipe and forks a child process.
+Calls process_child for the child process or process_parent for the parent process.
+*/
 static t_error process_pipe_stage(t_shell *s, t_token **current,
 									int *prev_pipe, int cmd_count)
 {
@@ -41,6 +58,15 @@ static t_error process_pipe_stage(t_shell *s, t_token **current,
 	return (process_parent(prev_pipe, pipe_fd, cmd_count));
 }
 
+/*
+Purpose:
+Manages execution of commands connected via pipes.
+
+Functionality:
+Counts the number of pipes in the command input.
+If there are no pipes, returns a parsing error.
+Calls execute_pipeline(s, cmd_count) to execute the piped commands.
+*/
 t_error handle_pipe_operations(t_shell *s)
 {
 	int		pipe_count;
@@ -54,6 +80,15 @@ t_error handle_pipe_operations(t_shell *s)
 	return (execute_pipeline(s, cmd_count));
 }
 
+/*
+Purpose:
+Executes multiple commands connected by pipes.
+
+Functionality:
+Initializes prev_pipe for tracking pipe file descriptors.
+Iterates through commands, calling process_pipe_stage(s, &current, &prev_pipe, cmd_count) for each stage.
+Waits for all child processes to finish execution before returning.
+*/
 static t_error execute_pipeline(t_shell *s, int cmd_count)
 {
 	int		prev_pipe;
