@@ -6,7 +6,7 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 16:56:54 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/05 18:02:53 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/06 17:24:05 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,15 +38,18 @@ t_error	execute_single_command(t_token *cmd, t_shell *s)
 	args = prepare_command_args(cmd);
 	if (!args)
 		return (handle_malloc_error(s));
-	if (has_redirection(cmd))
-		res = handle_redirections(cmd, s);
+	// if (has_redirection(s))
+	// 	res = handle_redirections(s);
 	if (res == SUCCESS)
 	{
-		if (is_builtin(cmd->content))
-			res = execute_builtin(cmd, args, s);
+		if (is_built_in(cmd->content))
+			res = execute_built_in(cmd, args, s);
 		else
+		{
 			res = execute_external_command(cmd, args, s);
 		}
+	}
+
 	free_array(args);
 	return (res);
 }

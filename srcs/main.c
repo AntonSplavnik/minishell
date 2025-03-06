@@ -6,7 +6,7 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:02:10 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/27 13:14:14 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/06 14:36:22 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ static int	handle_loop_iteration(t_shell *s)
 	//Comment or uncomment the following line to debug and print token list
 	print_token(s->token_list);
 	if (s->token_list && s->token_list->type == TYPE_COMMAND)
-		error = execute_command(s->token_list, s);
+		error = execute_command(s);
 	if (error != SUCCESS)
 	{
 		handle_error_free_tokens(error, &s->token_list, args);

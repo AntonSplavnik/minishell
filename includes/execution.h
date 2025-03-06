@@ -6,7 +6,7 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 12:46:41 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/26 17:52:38 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/06 17:03:13 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,66 @@
 
 # include "types.h"
 
+//execute_child.c
+void	handle_child_process(char *cmd_path, char **args, t_shell *s);
+t_error	handle_parent_process(pid_t pid, char *cmd_path, t_shell *s);
+t_error	execute_child_process(char *cmd_path, char **args, t_shell *s);
+
+
 //execute_command.c
-t_error	execute_command(t_token *cmd_token, t_shell *shell);
+t_error	execute_command(t_shell *s);
+
+//execute_prepare_cmd_args.c
+char	**prepare_command_args(t_token *cmd_token);
+int		count_command_args(t_token *cmd_token);
+
+
+//execute_single.c
+t_error	execute_single_command(t_token *cmd, t_shell *s);
+t_error	execute_external_command(t_token *cmd, char **args, t_shell *s);
+
+
+//execute_utils.c
+t_error	free_resources(char *cmd_path, t_shell *s, t_error result);
+t_error	handle_malloc_error(t_shell *s);
+int		is_builtin(char *cmd);
+void	handle_exit_status(int status, t_shell *s);
+
+//pipes_exec.c
+t_error	create_pipe_and_fork(int cmd_count, int pipe_fd[2], pid_t *pid);
+t_error	process_child(t_token *cmd, int prev_pipe, int cmd_count,
+										int pipe_fd[2], t_shell *s);
+void	set_output_fd(int cmd_count, int pipe_fd[2], int *out_fd);
+
+//pipes_utils.c
+t_error	process_parent(int *prev_pipe, int pipe_fd[2], int cmd_count);
+t_error	process_pipe_stage(t_shell *s, t_token **current,
+									int *prev_pipe, int cmd_count);
+int		count_pipes(t_token *tokens);
+t_token	*get_next_cmd(t_token **tokens);
+
+
+//pipes.c
+int		has_pipe(t_shell *s);
+t_error	handle_pipe_operations(t_shell *s);
+t_error	execute_pipeline(t_shell *s, int cmd_count);
+
+
+//redirections.c
+t_error	handle_redirections(t_shell *s);
+// int	has_redirection(t_shell *s);
+
+//signal_utils.c
+void	handle_child_process_io(int in_fd, int out_fd);
+void	handle_child_signal(int status, t_shell *s);
+
+
+//token_utils.c
+t_token	*copy_tokens(t_token *src);
+void	token_clear(t_token **tokens);
+t_token	*token_new(char *content, int type);
+void	token_add_back(t_token **lst, t_token *new);
+
 
 //command_path.c
 char	*try_path_dir(char *dir, char *cmd, t_shell *s);
@@ -25,11 +83,6 @@ char	*find_command_path(char *cmd, t_shell *s);
 //execute_built_in.c
 t_error	execute_built_in(t_token *cmd_token, char **args, t_shell *s);
 int		is_built_in(char *cmd);
-
-//execute_utils.c
-char	**prepare_command_args(t_token *cmd_token);
-int		count_command_args(t_token *cmd_token);
-int		pipe_or_redirect(t_token *cmd_token, t_shell *s);
 
 //echo.c
 t_error	execute_echo(char **args, t_shell *s);

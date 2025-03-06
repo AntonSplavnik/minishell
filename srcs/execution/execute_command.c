@@ -6,7 +6,7 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 17:39:28 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/05 16:57:40 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/06 14:46:31 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 /*
 	execute_command
 */
+
 
 /*
 When you process commands, especially with pipes, the original token list gets modified.
@@ -67,18 +68,19 @@ If it does, handle_pipe_operations(s) is called to process the pipeline.
 Otherwise, the command is executed as a single command using execute_single_command(cmd_copy, s).
 Frees the copied token list before returning the result.
 */
-t_error	execute_command(t_token *cmd, t_shell *s)
+t_error	execute_command(t_shell *s)
 {
 	t_token *cmd_copy;
 	t_error res;
 
-	cmd_copy = copy_tokens(cmd);
+	cmd_copy = copy_tokens(s->token_list);
 	if (!cmd_copy)
 		return (ERR_MALLOC);
-	if (has_pipe(cmd))
+	if (has_pipe(s))
 		res = handle_pipe_operations(s);
 	else
 		res = execute_single_command(cmd_copy, s);
 	token_clear(&cmd_copy);
 	return (res);
 }
+
