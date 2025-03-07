@@ -1,16 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execution_utils.c                                  :+:      :+:    :+:   */
+/*   execute_prepare_cmd_args.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/16 07:59:21 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/16 07:59:35 by abillote         ###   ########.fr       */
+/*   Created: 2025/03/06 14:45:59 by asplavni          #+#    #+#             */
+/*   Updated: 2025/03/06 17:24:10 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
+
+/*
+	count_command_args
+	prepare_command_args
+*/
 
 /*
 Return the number of args needed for the command execution

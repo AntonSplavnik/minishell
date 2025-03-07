@@ -10,7 +10,7 @@
 // /*                                                                            */
 // /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "minishell.h"
 
 // /*This file is used to test our Tokenizer (Files starting with "token").
 

@@ -31,10 +31,19 @@ SRCS = $(SRCS_DIR)/main.c \
 		$(SRCS_DIR)/parsing/token_extraction_heredoc_utils.c \
 		$(SRCS_DIR)/parsing/token_extraction_quotes.c	\
 		$(SRCS_DIR)/parsing/token_extraction_export.c	\
-		$(SRCS_DIR)/execution/execute_command.c \
 		$(SRCS_DIR)/execution/command_path.c \
 		$(SRCS_DIR)/execution/execute_built_in.c \
-		$(SRCS_DIR)/execution/execution_utils.c \
+		$(SRCS_DIR)/execution/execute_child.c \
+		$(SRCS_DIR)/execution/execute_command.c \
+		$(SRCS_DIR)/execution/execute_prepare_cmd_args.c\
+		$(SRCS_DIR)/execution/execute_single.c \
+		$(SRCS_DIR)/execution/execute_utils.c \
+		$(SRCS_DIR)/execution/pipes_exec.c \
+		$(SRCS_DIR)/execution/pipes_utils.c \
+		$(SRCS_DIR)/execution/pipes.c \
+		$(SRCS_DIR)/execution/redirections.c \
+		$(SRCS_DIR)/execution/signal_utils.c \
+		$(SRCS_DIR)/execution/token_utils.c \
 		$(SRCS_DIR)/built-in/echo.c \
 		$(SRCS_DIR)/built-in/pwd.c \
 		$(SRCS_DIR)/built-in/cd.c \

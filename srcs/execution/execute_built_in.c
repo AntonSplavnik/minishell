@@ -3,14 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   execute_built_in.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 14:59:38 by abillote          #+#    #+#             */
 /*   Updated: 2025/03/07 12:35:31 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
+
+
+/*
+	is_built_in
+	execute_built_in
+*/
 
 /*
 Checks if a command is one of the shell's built-in commands:
