@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 14:54:55 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/12 11:16:43 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/07 10:45:28 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,7 @@ char	*extract_unquoted_token(const char *str, size_t *i, t_error *error)
 
 	start = *i;
 	len = 0;
-	while (str[*i] && !isspace(str[*i]) && !is_delimiter(str[*i]) && \
-		str[*i] != '"' && str[*i] != '\'')
+	while (str[*i] && !isspace(str[*i]) && !is_delimiter(str[*i]))
 	{
 		(*i)++;
 		len++;
@@ -161,7 +160,7 @@ t_error	ft_split_token(t_token **token_list, char *args, \
 	}
 	if (is_export_with_equals)
 		*token = extract_export_token(args, i, &error);
-	else if (args[*i] == '"' || args[*i] == '\'')
+	else if ((args[*i] == '"' || args[*i] == '\'') && is_space(args[*i - 1]))
 		*token = extract_quoted_token(args, i, &error);
 	else if (is_delimiter(args[*i]))
 		*token = extract_delimiter_token(args, i, &error);

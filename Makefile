@@ -26,6 +26,7 @@ SRCS = $(SRCS_DIR)/main.c \
 		$(SRCS_DIR)/parsing/token_expansion.c \
 		$(SRCS_DIR)/parsing/token_expansion_quotes.c \
 		$(SRCS_DIR)/parsing/token_expansion_var.c \
+		$(SRCS_DIR)/parsing/token_expansion_utils.c \
 		$(SRCS_DIR)/parsing/token_extraction_heredoc.c \
 		$(SRCS_DIR)/parsing/token_extraction_heredoc_utils.c \
 		$(SRCS_DIR)/parsing/token_extraction_quotes.c	\

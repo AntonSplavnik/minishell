@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 18:28:37 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/12 10:56:12 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/07 11:32:44 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,10 @@ char	*get_var_value(t_env *env_list, char *key, int status, int *need_free)
 		*need_free = 1;
 		return (ft_itoa(status));
 	}
+	if (ft_strcmp(key, "$") == 0)
+	{
+		return ("$");
+	}
 	while (env_list)
 	{
 		if (ft_strcmp(env_list->key, key) == 0)
@@ -37,6 +41,7 @@ char	*get_var_value(t_env *env_list, char *key, int status, int *need_free)
 /* Extracts the environment variable name from a string starting after '$'
 Returns:
 - "?" for $? (exit status)
+- "$" for "$" (dollar sign in between quotes)
 - The variable name for valid identifiers (alphanumeric + underscore)
 - Empty string for invalid identifiers
 - NULL if memory allocation fails
@@ -48,6 +53,8 @@ char	*get_var_name(const char *str)
 
 	if (str[0] == '?')
 		return (ft_strdup("?"));
+	if (str[0] == '"')
+		return (ft_strdup("$"));
 	name_len = 0;
 	while (str[name_len] && (ft_isalnum(str[name_len]) || str[name_len] == '_'))
 		name_len++;
