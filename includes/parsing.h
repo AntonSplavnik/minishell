@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 15:58:40 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/12 11:17:13 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/07 12:03:48 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,5 +95,11 @@ char				*extract_double_quotes(char *args, size_t *i, \
 //token_extraction_export
 char				*extract_export_token(char *args, size_t *i, \
 						t_error *error);
+
+//token_expansion_utils
+void				process_dollar_length(t_token *token, t_shell *s,
+						size_t *i, size_t *expanded_len);
+void				process_dollar_expansion(t_token *t, char *exp,
+						t_shell *s, t_parse_params *pars);
 
 #endif

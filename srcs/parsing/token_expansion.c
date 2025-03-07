@@ -6,21 +6,21 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:43:49 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/07 11:34:41 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/07 12:01:38 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 /*
-Calculates the required length for a token after expansion by:
-- Processing quotes (single and double)
-- Calculating expanded environment variable lengths
-- Counting regular characters
-Returns the total length needed for the expanded string
+ Calculates the required length for a token after expansion
+ - Tracks quote context to handle nested quotes
+ - Handles special cases for variable expansion
+ - Counts characters for the expanded version of the token
+ - Uses process_dollar_length for $ handling
+ Returns: Total length needed for expanded token
 */
-size_t	calculate_length_loop(t_token *token, \
-			t_shell *s, size_t *expanded_len)
+size_t	calculate_length_loop(t_token *token, t_shell *s, size_t *expanded_len)
 {
 	size_t	i;
 	int		in_squote;
@@ -30,21 +30,16 @@ size_t	calculate_length_loop(t_token *token, \
 	while (token->content[i])
 	{
 		if (((token->content[i] == '\'' && !in_dquote) \
-			|| (token->content[i] == '"' && !in_squote)) && \
-				token->type != TYPE_HEREDOC_CONTENT)
+			|| (token->content[i] == '"' && !in_squote))
+			&& token->type != TYPE_HEREDOC_CONTENT)
 		{
 			process_quote(token->content[i], &in_squote, &in_dquote);
 			i++;
-			continue ;
 		}
-		else if (token->content[i] == '$' && in_dquote && token->content[i + 1] != '_' && !ft_isalnum(token->content[i + 1]) && token->content[i + 1] != '?')
-		{
-			(*expanded_len)++;
-			i++;
-		}
-		else if (token->content[i] == '$' && \
-					!in_squote && token->content[i + 1])
-			get_var_length(token->content + i + 1, s, &i, expanded_len);
+		else if (token->content[i] == '$' && !in_squote)
+			process_dollar_length(token, s, &i, expanded_len);
+		else if (token->content[i] == '$' && in_dquote)
+			process_dollar_length(token, s, &i, expanded_len);
 		else
 		{
 			(*expanded_len)++;
@@ -71,27 +66,14 @@ size_t	calculate_expanded_length(t_token *token, t_shell *s)
 }
 
 /*
-Handles the expansion of a single environment variable within a token
-Updates the expanded string and position indices accordingly
+ Performs token content expansion by processing each character
+ - Handles quoted sections correctly
+ - Removes quote characters while preserving their content
+ - Expands environment variables based on quote context
+ - Uses process_dollar_expansion for variable replacement
+ - Handles special cases like heredoc content
 */
-
-static void	process_variable_expansion(char *expanded, const char *content, \
-			t_shell *s, t_parse_params *params)
-{
-	expanded[params->j] = '\0';
-	expand_var(content + params->i + 1, s, &params->i, expanded);
-	params->j = ft_strlen(expanded);
-}
-
-/*
-Performs the actual content expansion for a token:
-- Handles quoted sections (preserving content in single quotes)
-- Expands environment variables (except within single quotes)
-- Removes unnecessary quotes (keep them if type is heredoc quoted content)
-- Updates the token's content with the expanded version
-*/
-void	fill_token_content_after_expansion(t_token *t, char *exp, \
-						t_shell *s)
+void	fill_token_content_after_expansion(t_token *t, char *exp, t_shell *s)
 {
 	t_parse_params	pars;
 
@@ -99,22 +81,15 @@ void	fill_token_content_after_expansion(t_token *t, char *exp, \
 	exp[0] = '\0';
 	while (t->content[pars.i])
 	{
-		if (((t->content[pars.i] == '\'' && !pars.in_dquote) || \
-			(t->content[pars.i] == '"' && !pars.in_squote)) \
+		if (((t->content[pars.i] == '\'' && !pars.in_dquote) \
+			|| (t->content[pars.i] == '"' && !pars.in_squote))
 			&& t->type != TYPE_HEREDOC_CONTENT)
 		{
 			process_quote(t->content[pars.i], &pars.in_squote, &pars.in_dquote);
 			pars.i++;
-			continue ;
 		}
-		if (t->content[pars.i] == '$' && pars.in_dquote && t->content[pars.i + 1] != '_' && !ft_isalnum(t->content[pars.i + 1]) && t->content[pars.i + 1] != '?')
-		{
-			exp[pars.j++] = t->content[pars.i++];
-			exp[pars.j] = '\0';
-		}
-		else if (t->content[pars.i] == '$' && !pars.in_squote \
-			&& t->content[pars.i + 1])
-			process_variable_expansion(exp, t->content, s, &pars);
+		else if (t->content[pars.i] == '$')
+			process_dollar_expansion(t, exp, s, &pars);
 		else
 		{
 			exp[pars.j++] = t->content[pars.i++];
