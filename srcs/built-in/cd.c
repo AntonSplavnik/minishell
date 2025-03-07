@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 22:26:37 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/12 15:23:47 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/07 12:43:23 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,32 +40,24 @@ t_error	update_path_vars(char *old_path, t_env *env_list)
 }
 
 /*
-Built-in cd command implementation
-- Store the old path value to update the env var OLDPWD later
-- if cd does not have any args, get HOME value as "cd" w/o args redirect to HOME
-- else, get the path with the next token content
-- change directory with chdir. If successful, returns 0.
-- update the PWD and OLDPWD env var in the env_list.
-Returns: SUCCESS or error code
+* Handles the directory change process for the cd command
+* - Takes path from args or HOME environment variable
+* - Attempts to change directory with chdir
+* - Updates environment variables if successful
+* Returns: SUCCESS or appropriate error code
 */
-t_error	execute_cd(t_token *cmd, t_shell *s)
+static t_error	change_directory(char *path, char *old_path, t_shell *s)
 {
-	char	*path;
-	char	*old_path;
 	t_error	error;
 
-	old_path = getcwd(NULL, 0);
-	if (!old_path)
-		return (ERR_EXEC);
-	if (!cmd->next || cmd->next->type != TYPE_ARG)
-		path = get_var_value(s->env_list, "HOME", 0, 0);
-	else
-		path = cmd->next->content;
 	if (chdir(path) != 0)
 	{
 		free(old_path);
 		s->exit_status = 1;
-		print_error_builtin("cd", cmd->next->content, ": No such directory");
+		if (path)
+			print_error_builtin("cd", path, ": No such file or directory");
+		else
+			print_error_builtin("cd", "", ": No such file or directory");
 		return (ERR_CD);
 	}
 	error = update_path_vars(old_path, s->env_list);
@@ -75,4 +67,37 @@ t_error	execute_cd(t_token *cmd, t_shell *s)
 		s->exit_status = 0;
 	free(old_path);
 	return (error);
+}
+
+/*
+Built-in cd command implementation
+- Validates number of arguments
+- Gets current working directory for OLDPWD
+- Determines target path based on arguments
+- Delegates to change_directory for the actual directory change
+Returns: SUCCESS or error code
+ */
+t_error	execute_cd(char **args, t_token *cmd, t_shell *s)
+{
+	char	*path;
+	char	*old_path;
+	int		count_args;
+
+	count_args = 0;
+	while (args[count_args])
+		count_args++;
+	if (count_args > 2)
+	{
+		s->exit_status = 1;
+		print_error_builtin("cd", "", ": too many arguments");
+		return (ERR_CD);
+	}
+	old_path = getcwd(NULL, 0);
+	if (!old_path)
+		return (ERR_EXEC);
+	if (count_args == 1)
+		path = get_var_value(s->env_list, "HOME", 0, 0);
+	else
+		path = args[1];
+	return (change_directory(path, old_path, s));
 }
