@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 22:26:37 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/07 12:43:23 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/07 13:53:52 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ Built-in cd command implementation
 - Delegates to change_directory for the actual directory change
 Returns: SUCCESS or error code
  */
-t_error	execute_cd(char **args, t_token *cmd, t_shell *s)
+t_error	execute_cd(char **args, t_shell *s)
 {
 	char	*path;
 	char	*old_path;
