@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 16:27:25 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/05 14:51:21 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/07 16:33:44 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,13 @@ static char	*handle_line_input(char *content, char *line)
 	char	*temp;
 	char	*new_content;
 
+	if (content[0] == '\0')
+	{
+		new_content = ft_strdup(line);
+		free(content);
+		free(line);
+		return (new_content);
+	}
 	temp = ft_strjoin(content, "\n");
 	free(content);
 	if (!temp)
@@ -114,6 +121,12 @@ static char	*get_first_heredoc_content(char *args, size_t *i, \
 		(*i)++;
 		len++;
 	}
+	if (len > 0 && args[start] == '\n')
+		start++;
+	if (len > 0 && args[start + len] == '\n')
+		len--;
+	if (len > 0 && args[start + len - 1] == '\n')
+		len--;
 	return (ft_substr(args, start, len));
 }
 
