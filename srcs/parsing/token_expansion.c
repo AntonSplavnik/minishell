@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:43:49 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/07 10:36:42 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/07 11:34:41 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,11 @@ size_t	calculate_length_loop(t_token *token, \
 			process_quote(token->content[i], &in_squote, &in_dquote);
 			i++;
 			continue ;
+		}
+		else if (token->content[i] == '$' && in_dquote && token->content[i + 1] != '_' && !ft_isalnum(token->content[i + 1]) && token->content[i + 1] != '?')
+		{
+			(*expanded_len)++;
+			i++;
 		}
 		else if (token->content[i] == '$' && \
 					!in_squote && token->content[i + 1])
@@ -79,32 +84,6 @@ static void	process_variable_expansion(char *expanded, const char *content, \
 }
 
 /*
-Processes quoted content, copying the content between quotes to the output
-without including the quote characters themselves
-*/
-static void handle_quoted_contents(t_token *t, char *exp, t_parse_params *pars)
-{
-	char quote_char;
-
-	quote_char = t->content[pars->i];
-	pars->i++; // Skip opening quote
-
-	// Copy content between quotes
-	while (t->content[pars->i] && t->content[pars->i] != quote_char)
-	{
-	// Handle variable expansion inside double quotes
-	if (t->content[pars->i] == '$' && quote_char == '"' && t->content[pars->i + 1])
-		return; // Let the main function handle this case
-
-	exp[pars->j++] = t->content[pars->i++];
-	exp[pars->j] = '\0';
-	}
-
-	if (t->content[pars->i] == quote_char)
-	pars->i++; // Skip closing quote
-}
-
-/*
 Performs the actual content expansion for a token:
 - Handles quoted sections (preserving content in single quotes)
 - Expands environment variables (except within single quotes)
@@ -112,7 +91,7 @@ Performs the actual content expansion for a token:
 - Updates the token's content with the expanded version
 */
 void	fill_token_content_after_expansion(t_token *t, char *exp, \
-				t_shell *s)
+						t_shell *s)
 {
 	t_parse_params	pars;
 
@@ -120,38 +99,27 @@ void	fill_token_content_after_expansion(t_token *t, char *exp, \
 	exp[0] = '\0';
 	while (t->content[pars.i])
 	{
-	if (((t->content[pars.i] == '\'' && !pars.in_dquote) || \
-		(t->content[pars.i] == '"' && !pars.in_squote)) \
-		&& t->type != TYPE_HEREDOC_CONTENT)
-	{
-		if (t->type != TYPE_HEREDOC_CONTENT_QUOTED)
+		if (((t->content[pars.i] == '\'' && !pars.in_dquote) || \
+			(t->content[pars.i] == '"' && !pars.in_squote)) \
+			&& t->type != TYPE_HEREDOC_CONTENT)
 		{
-			// Update quote state
 			process_quote(t->content[pars.i], &pars.in_squote, &pars.in_dquote);
-
-			if (t->content[pars.i] == '\'' && !pars.in_squote)
-				handle_quoted_contents(t, exp, &pars);
-			else if (t->content[pars.i] == '"' && !pars.in_dquote)
-				handle_quoted_contents(t, exp, &pars);
-			else
-				pars.i++; // Just skip the quote character
-			continue;
+			pars.i++;
+			continue ;
 		}
-		else
+		if (t->content[pars.i] == '$' && pars.in_dquote && t->content[pars.i + 1] != '_' && !ft_isalnum(t->content[pars.i + 1]) && t->content[pars.i + 1] != '?')
 		{
-			// For heredoc quoted content, keep the quotes
 			exp[pars.j++] = t->content[pars.i++];
 			exp[pars.j] = '\0';
 		}
-	}
-	else if (t->content[pars.i] == '$' && !pars.in_squote \
-		&& t->content[pars.i + 1])
-		process_variable_expansion(exp, t->content, s, &pars);
-	else
-	{
-		exp[pars.j++] = t->content[pars.i++];
-		exp[pars.j] = '\0';
-	}
+		else if (t->content[pars.i] == '$' && !pars.in_squote \
+			&& t->content[pars.i + 1])
+			process_variable_expansion(exp, t->content, s, &pars);
+		else
+		{
+			exp[pars.j++] = t->content[pars.i++];
+			exp[pars.j] = '\0';
+		}
 	}
 	free(t->content);
 	t->content = exp;

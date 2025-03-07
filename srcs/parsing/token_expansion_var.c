@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 18:28:37 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/07 10:19:21 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/07 11:32:44 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ char	*get_var_value(t_env *env_list, char *key, int status, int *need_free)
 /* Extracts the environment variable name from a string starting after '$'
 Returns:
 - "?" for $? (exit status)
+- "$" for "$" (dollar sign in between quotes)
 - The variable name for valid identifiers (alphanumeric + underscore)
 - Empty string for invalid identifiers
 - NULL if memory allocation fails
