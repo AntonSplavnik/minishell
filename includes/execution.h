@@ -6,7 +6,7 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 12:46:41 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/06 17:03:13 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/07 12:34:55 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ t_error	execute_echo(char **args, t_shell *s);
 t_error	execute_pwd(t_shell *s);
 
 //cd.c
-t_error	execute_cd(t_token *cmd_token, t_shell *s);
+t_error	execute_cd(char **args, t_shell *s);
 
 //env.c
 t_error	execute_env(char **args, t_env *env_list, t_shell *s);

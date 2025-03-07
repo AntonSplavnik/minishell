@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 17:13:23 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/14 10:05:23 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/07 14:29:57 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,19 +22,48 @@ static int	ft_count_args(char **args)
 	return (count_args);
 }
 
+static int	has_overflow(size_t len, int sign, char *s)
+{
+	if (len > 19 || (len == 19 && sign == 1 \
+		&& ft_strcmp(s + (s[0] == '+' || s[0] == '-'), \
+		"9223372036854775807") > 0) || (len == 19 && sign == -1 && \
+		ft_strcmp(s + 1, "9223372036854775808") > 0))
+		return (1);
+	return (0);
+}
+
+/*
+Checks if the string represents a valid exit code:
+- Must contain only digits (with optional leading sign)
+- Must be within the range of a long long int
+- No overflow/underflow
+*/
 static int	is_valid_exit_code(char *s)
 {
-	int	i;
+	int		i;
+	int		sign;
+	size_t	len;
 
 	i = 0;
+	sign = 1;
 	if (s[i] == '+' || s[i] == '-')
+	{
+		if (s[i] == '-')
+			sign = -1;
 		i++;
+	}
+	if (!s[i])
+		return (0);
+	len = 0;
 	while (s[i])
 	{
 		if (!ft_isdigit(s[i]))
 			return (0);
+		len++;
 		i++;
 	}
+	if (has_overflow(len, sign, s))
+		return (0);
 	return (1);
 }
 
