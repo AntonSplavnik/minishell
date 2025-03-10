@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 15:58:40 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/07 12:03:48 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/07 15:01:24 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,15 @@ typedef struct s_quote_info
 }			t_quote_info;
 
 //Used during token extraction to store heredoc info
-typedef struct s_heredoc_info {
+typedef struct s_heredoc_info
+{
 	char	*delim;
 	int		is_quoted;
 }	t_heredoc_info;
 
 //Used during token expansion to pass more than 4 args
-typedef struct s_parse_params {
+typedef struct s_parse_params
+{
 	size_t	i;
 	size_t	j;
 	int		in_squote;

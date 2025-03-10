@@ -6,7 +6,7 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 16:56:54 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/06 17:24:05 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/09 13:19:45 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ If so, it executes it using execute_builtin(cmd, args, s).
 Otherwise, execute_external_command(cmd, args, s) is called to run an external program.
 Frees the allocated argument array before returning.
 */
-t_error	execute_single_command(t_token *cmd, t_shell *s)
+
+/* t_error	execute_single_command(t_token *cmd, t_shell *s)
 {
 	char	**args;
 	t_error	res;
@@ -52,7 +53,64 @@ t_error	execute_single_command(t_token *cmd, t_shell *s)
 
 	free_array(args);
 	return (res);
+} */
+
+t_error	execute_single_command(t_token *cmd, t_shell *s)
+{
+	char	**args;
+	t_error	res;
+	t_token	*clean_cmd;
+
+	res = handle_redirections_(cmd, s);
+	if (res != SUCCESS)
+		return (res);
+
+	clean_cmd = remove_redirections(cmd);
+	args = prepare_command_args(clean_cmd);
+	if (!args)
+	{
+		token_clear(&clean_cmd);
+		return (handle_malloc_error(s));
+	}
+
+	if (is_built_in(clean_cmd->content))
+		res = execute_built_in(clean_cmd, args, s);
+	else
+		res = execute_external_command(clean_cmd, args, s);
+
+	token_clear(&clean_cmd);
+	free_array(args);
+	return (res);
 }
+
+/* t_error	execute_single_command(t_token *cmd, t_shell *s)
+{
+	t_token	*clean_cmd;
+	char	**args;
+	t_error	res;
+	int		std_fds[2]; // [0]=stdin, [1]=stdout
+
+	save_std_fds(std_fds);
+	res = handle_redirections_(cmd, s);
+	if (res != SUCCESS)
+		return (restore_std_fds(std_fds), res);
+
+	clean_cmd = remove_redirections(cmd);
+	args = prepare_command_args(clean_cmd);
+	if (!args)
+		return (restore_std_fds(std_fds), handle_malloc_error(s));
+	if (is_built_in(clean_cmd->content))
+	{
+		res = execute_built_in(clean_cmd, args, s);
+		restore_std_fds(std_fds);
+	}
+	else
+		res = execute_external_command(clean_cmd, args, s, std_fds);
+
+	token_clear(&clean_cmd);
+	free_array(args);
+	return (res);
+} */
 
 /*
 Purpose:

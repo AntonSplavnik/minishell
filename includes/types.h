@@ -6,7 +6,7 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 16:08:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/05 13:27:31 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/07 14:57:40 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ typedef enum e_error
 	ERR_EXIT_ARGS = 9,
 	ERR_EXPORT = 10,
 	ERR_SIGNAL = 11,
+	ERR_REDIR = 12,
+	ERR_SYNTAX = 13,
 	//..add any other relevant error
 	//do not forget to add them in print_error function in errors.c
 }	t_error;
@@ -78,6 +80,7 @@ typedef struct s_shell
 	t_env	*env_list;
 	t_token	*token_list;
 	int		exit_status;
+	int		stdin_copy; // Added for heredoc
 }	t_shell;
 
 #endif

@@ -32,16 +32,18 @@ SRCS = $(SRCS_DIR)/main.c \
 		$(SRCS_DIR)/parsing/token_extraction_quotes.c	\
 		$(SRCS_DIR)/parsing/token_extraction_export.c	\
 		$(SRCS_DIR)/execution/command_path.c \
-		$(SRCS_DIR)/execution/execute_built_in.c \
+		$(SRCS_DIR)/execution/builtin/execute_built_in.c \
 		$(SRCS_DIR)/execution/execute_child.c \
 		$(SRCS_DIR)/execution/execute_command.c \
 		$(SRCS_DIR)/execution/execute_prepare_cmd_args.c\
 		$(SRCS_DIR)/execution/execute_single.c \
 		$(SRCS_DIR)/execution/execute_utils.c \
-		$(SRCS_DIR)/execution/pipes_exec.c \
-		$(SRCS_DIR)/execution/pipes_utils.c \
-		$(SRCS_DIR)/execution/pipes.c \
-		$(SRCS_DIR)/execution/redirections.c \
+		$(SRCS_DIR)/execution/pipes/pipes_exec.c \
+		$(SRCS_DIR)/execution/pipes/pipes_utils.c \
+		$(SRCS_DIR)/execution/pipes/pipes.c \
+		$(SRCS_DIR)/execution/redirections/redirections.c \
+		$(SRCS_DIR)/execution/redirections/redirections_utils.c \
+		$(SRCS_DIR)/execution/redirections/heredoc.c \
 		$(SRCS_DIR)/execution/signal_utils.c \
 		$(SRCS_DIR)/execution/token_utils.c \
 		$(SRCS_DIR)/built-in/echo.c \

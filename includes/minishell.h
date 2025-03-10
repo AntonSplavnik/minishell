@@ -27,6 +27,8 @@
 # include <termios.h>
 # include <errno.h>
 # include <limits.h>
+# include "types.h"
+
 
 /* Readline Libraries */
 # include <readline/readline.h>
@@ -39,6 +41,7 @@
 # include "parsing.h"
 # include "types.h"
 # include "execution.h"
+# include "redirections.h"
 
 # define PROMPT_COLOR "\001\033[1;36m\002"	// Cyan
 # define RESET_COLOR "\001\033[0m\002"		// Reset to default
