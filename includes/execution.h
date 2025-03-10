@@ -6,7 +6,7 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 12:46:41 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/10 17:53:12 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/10 18:18:08 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ int		count_command_args(t_token *cmd_token);
 t_error	execute_single_command(t_token *cmd, t_shell *s);
 t_error	execute_external_command(t_token *cmd, char **args, t_shell *s);
 t_error handle_builtin_redirections(t_token *cmd, t_shell *s, int std_fds[2]);
+int has_input_redirection(t_token *cmd);
 
 //execute_utils.c
 t_error	free_resources(char *cmd_path, t_shell *s, t_error result);

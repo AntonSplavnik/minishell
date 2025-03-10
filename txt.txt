@@ -1,2 +1,1 @@
-PLESE WORK!\nhello
-/home/asplavni/bin:/home/asplavni/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/asplavni/.local/bin:/home/asplavni/.local/bin
+txt.txt
