@@ -6,7 +6,7 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 14:59:38 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/07 12:35:31 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/10 15:08:16 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,3 +68,20 @@ t_error	execute_built_in(t_token *cmd_token, char **args, t_shell *s)
 	(void)s;
 	return (SUCCESS);
 }
+/*
+t_error	execute_builtin_with_redirs(t_token *cmd, char **args, t_shell *s)
+{
+	t_error	res;
+	int		original_stdout;
+	int		original_stdin;
+
+	original_stdout = dup(STDOUT_FILENO);
+	original_stdin = dup(STDIN_FILENO);
+	res = execute_built_in(cmd, args, s);
+	dup2(original_stdout, STDOUT_FILENO);
+	dup2(original_stdin, STDIN_FILENO);
+	close(original_stdout);
+	close(original_stdin);
+	return (res);
+}
+ */

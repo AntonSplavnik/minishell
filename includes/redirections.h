@@ -6,7 +6,7 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 14:13:32 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/07 15:13:32 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/10 17:49:50 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,5 +40,10 @@ t_redir_type get_redir_type(t_token_type type);
 t_error	handle_output(t_token *redir, t_shell *s);
 t_error	handle_input(t_token *redir, t_shell *s);
 t_error	handle_redirections_(t_token *cmd, t_shell *s);
+
+// fd_management.c
+void	save_standard_fds(int fds[2]);
+void	restore_standard_fds(int fds[2]);
+t_error	handle_heredoc_(t_token *redir, t_shell *s);
 
 #endif

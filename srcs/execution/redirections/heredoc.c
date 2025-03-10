@@ -6,7 +6,7 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 14:29:58 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/09 13:21:53 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/10 17:53:54 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,31 +50,4 @@ t_error	read_heredoc_input(int fd, char *delim)
 	if (line)
 		free(line);
 	return (SUCCESS);
-}
-
-t_error	handle_heredoc_(t_token *redir, t_shell *s)
-{
-	int		fd;
-	char	*content;
-	t_error	res;
-
-	res = SUCCESS;
-	fd = create_heredoc_file();
-	if (fd == -1)
-		return (file_error("heredoc", s));
-	content = redir->next->next->content;
-	if (write(fd, content, ft_strlen(content)) == -1)
-	{
-		close(fd);
-		return (file_error("heredoc", s));
-	}
-	close(fd);
-	fd = open("/tmp/minishell_heredoc", O_RDONLY);
-	if (fd == -1)
-		return (file_error("heredoc", s));
-	if (dup2(fd, STDIN_FILENO) == -1)
-		res = ERR_REDIR;
-	close(fd);
-	unlink("/tmp/minishell_heredoc");
-	return (res);
 }

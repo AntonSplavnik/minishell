@@ -6,7 +6,7 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 12:46:41 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/07 12:34:55 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/10 17:53:12 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 void	handle_child_process(char *cmd_path, char **args, t_shell *s);
 t_error	handle_parent_process(pid_t pid, char *cmd_path, t_shell *s);
 t_error	execute_child_process(char *cmd_path, char **args, t_shell *s);
-
+void	handle_child_redirections(t_token *cmd, t_shell *s);
 
 //execute_command.c
 t_error	execute_command(t_shell *s);
@@ -32,7 +32,7 @@ int		count_command_args(t_token *cmd_token);
 //execute_single.c
 t_error	execute_single_command(t_token *cmd, t_shell *s);
 t_error	execute_external_command(t_token *cmd, char **args, t_shell *s);
-
+t_error handle_builtin_redirections(t_token *cmd, t_shell *s, int std_fds[2]);
 
 //execute_utils.c
 t_error	free_resources(char *cmd_path, t_shell *s, t_error result);
@@ -62,7 +62,7 @@ t_error	execute_pipeline(t_shell *s, int cmd_count);
 
 //redirections.c
 t_error	handle_redirections(t_shell *s);
-// int	has_redirection(t_shell *s);
+
 
 //signal_utils.c
 void	handle_child_process_io(int in_fd, int out_fd);
@@ -83,6 +83,9 @@ char	*find_command_path(char *cmd, t_shell *s);
 //execute_built_in.c
 t_error	execute_built_in(t_token *cmd_token, char **args, t_shell *s);
 int		is_built_in(char *cmd);
+// t_error	execute_builtin_with_redirs(t_token *cmd, char **args, t_shell *s);
+
+
 
 //echo.c
 t_error	execute_echo(char **args, t_shell *s);

@@ -6,12 +6,12 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 17:35:44 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/07 17:46:55 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/10 15:00:04 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
+/*
 //Signal Handling Fixes
 void	setup_heredoc_signals(void)
 {
@@ -55,3 +55,4 @@ void	handle_child_process(char *cmd_path, char **args, t_shell *s)
 		exit(127);
 	}
 }
+ */

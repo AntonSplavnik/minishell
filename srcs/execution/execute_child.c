@@ -6,7 +6,7 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 16:54:47 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/06 16:48:15 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/10 17:48:35 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,22 +55,47 @@ t_error	handle_parent_process(pid_t pid, char *cmd_path, t_shell *s)
 	return (SUCCESS);
 }
 
-
 t_error	execute_child_process(char *cmd_path, char **args, t_shell *s)
 {
 	pid_t	pid;
-	t_error	result;
+	int		status;
 
-	result = SUCCESS;
-	if (set_signals_parent() != 0)
-		return (free_resources(cmd_path, s, ERR_SIGNAL));
+	signal(SIGINT, SIG_IGN);
 	pid = fork();
-	if (pid == -1)
-		return (free_resources(cmd_path, s, ERR_EXEC));
 	if (pid == 0)
-		handle_child_process(cmd_path, args, s);
+	{
+		signal(SIGINT, SIG_DFL);
+		execve(cmd_path, args, s->envp);
+		exit(127);
+	}
+	else if (pid > 0)
+	{
+		waitpid(pid, &status, 0);
+		handle_child_signal(status, s);
+	}
 	else
-		result = handle_parent_process(pid, cmd_path, s);
+		return (ERR_EXEC);
+	return (SUCCESS);
+}
 
-	return (result);
+void	handle_child_redirections(t_token *cmd, t_shell *s)
+{
+	t_token	*current;
+
+	current = cmd;
+	while (current)
+	{
+		if (is_redirection(current->type))
+		{
+			if (get_redir_type(current->type) == REDIR_HEREDOC)
+				handle_heredoc_(current, s);
+			else if (get_redir_type(current->type) == REDIR_IN)
+				handle_input(current, s);
+			else
+				handle_output(current, s);
+			current = current->next->next;
+		}
+		else
+			current = current->next;
+	}
 }

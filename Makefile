@@ -38,6 +38,7 @@ SRCS = $(SRCS_DIR)/main.c \
 		$(SRCS_DIR)/execution/execute_prepare_cmd_args.c\
 		$(SRCS_DIR)/execution/execute_single.c \
 		$(SRCS_DIR)/execution/execute_utils.c \
+		$(SRCS_DIR)/execution/fd_management.c \
 		$(SRCS_DIR)/execution/pipes/pipes_exec.c \
 		$(SRCS_DIR)/execution/pipes/pipes_utils.c \
 		$(SRCS_DIR)/execution/pipes/pipes.c \

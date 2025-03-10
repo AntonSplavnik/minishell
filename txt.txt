@@ -1,2 +1,2 @@
-hello
-[?2004h[1;36mminishell$ [0m[?2004l
+PLESE WORK!\nhello
+/home/asplavni/bin:/home/asplavni/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/asplavni/.local/bin:/home/asplavni/.local/bin
