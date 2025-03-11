@@ -6,7 +6,7 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 18:23:28 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/05 14:30:02 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/11 17:32:15 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ Creates a deep copy of a linked list of tokens.
 
 Functionality:
 Iterates through the source token list.
-Creates new token nodes using token_new and appends them to the new list using token_add_back.
+Creates new token nodes using token_new and appends them to the new list
+using token_add_back.
 Returns the copied list or NULL on failure.
 */
 t_token	*copy_tokens(t_token *src)
@@ -111,7 +112,7 @@ void	token_add_back(t_token **lst, t_token *new)
 	if (!*lst)
 	{
 		*lst = new;
-		return;
+		return ;
 	}
 	current = *lst;
 	while (current->next)

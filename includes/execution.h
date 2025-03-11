@@ -6,7 +6,7 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 12:46:41 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/10 18:18:08 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/11 18:31:25 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 # include "types.h"
 
 //execute_child.c
-void	handle_child_process(char *cmd_path, char **args, t_shell *s);
-t_error	handle_parent_process(pid_t pid, char *cmd_path, t_shell *s);
+// void	handle_child_process(char *cmd_path, char **args, t_shell *s);
+// t_error	handle_parent_process(pid_t pid, char *cmd_path, t_shell *s);
 t_error	execute_child_process(char *cmd_path, char **args, t_shell *s);
 void	handle_child_redirections(t_token *cmd, t_shell *s);
 

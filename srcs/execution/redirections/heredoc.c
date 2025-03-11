@@ -6,7 +6,7 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 14:29:58 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/10 17:53:54 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/11 18:35:15 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	create_heredoc_file(void)
 {
 	int	fd;
 
-	fd = open("/tmp/minishell_heredoc", O_CREAT|O_WRONLY|O_TRUNC, 0644);
+	fd = open("/tmp/minishell_heredoc", O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (fd == -1)
 		return (-1);
 	return (fd);
@@ -35,15 +35,15 @@ void	restore_stdin(t_shell *s)
 
 t_error	read_heredoc_input(int fd, char *delim)
 {
-	char *line;
-	int delim_len;
+	char	*line;
+	int		delim_len;
 
 	delim_len = ft_strlen(delim);
 	while (1)
 	{
 		line = readline("> ");
 		if (!line || ft_strncmp(line, delim, delim_len + 1) == 0)
-			break;
+			break ;
 		ft_putendl_fd(line, fd);
 		free(line);
 	}

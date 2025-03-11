@@ -6,7 +6,7 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 17:39:56 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/06 17:21:11 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/11 17:33:32 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@
 
 /*
 Purpose:
-Frees allocated resources and updates the shell’s exit status if an error occurred.
+Frees allocated resources and updates the shell’s exit status if an error
+occurred.
 
 Functionality:
 Frees the allocated cmd_path.

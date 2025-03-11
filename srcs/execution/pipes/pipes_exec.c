@@ -6,7 +6,7 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 15:26:40 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/06 16:46:08 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/11 17:49:41 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,8 @@ t_error	process_child(t_token *cmd, int prev_pipe, int cmd_count,
 
 /*
 Purpose:
-Sets the output file descriptor based on whether the command is part of a pipeline.
+Sets the output file descriptor based on whether the command is part of a
+pipeline.
 
 Functionality:
 If cmd_count > 0, assigns pipe_fd[1] (write end of the pipe) to out_fd.
@@ -78,4 +79,3 @@ void	set_output_fd(int cmd_count, int pipe_fd[2], int *out_fd)
 	else
 		*out_fd = STDOUT_FILENO;
 }
-

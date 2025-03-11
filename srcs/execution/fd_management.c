@@ -6,7 +6,7 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:09:10 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/10 18:27:34 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/11 18:34:08 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,34 @@ void	restore_standard_fds(int fds[2])
 	close(fds[0]);
 	close(fds[1]);
 }
+
+
+t_error	handle_heredoc_(t_token *redir, t_shell *s)
+{
+	int		fd;
+	char	*content;
+	t_error	res;
+
+	res = SUCCESS;
+	fd = create_heredoc_file();
+	if (fd == -1)
+		return (file_error("heredoc", s));
+	content = redir->next->next->content;
+	if (write(fd, content, ft_strlen(content)) == -1)
+		res = file_error("heredoc", s);
+	if (res == SUCCESS && content[ft_strlen(content)-1] != '\n')
+		write(fd, "\n", 1);
+	close(fd);
+	fd = open("/tmp/minishell_heredoc", O_RDONLY);
+	if (fd == -1)
+		return (file_error("heredoc", s));
+	if (dup2(fd, STDIN_FILENO) == -1)
+		res = ERR_REDIR;
+	close(fd);
+	unlink("/tmp/minishell_heredoc");
+	return (res);
+}
+
 /* t_error	handle_heredoc_(t_token *redir, t_shell *s)
 {
 	int		fd;
@@ -46,27 +74,3 @@ void	restore_standard_fds(int fds[2])
 	unlink("/tmp/minishell_heredoc");
 	return (res);
 } */
-t_error	handle_heredoc_(t_token *redir, t_shell *s)
-{
-    int     fd;
-    char    *content;
-    t_error res;
-
-    res = SUCCESS;
-    fd = create_heredoc_file();
-    if (fd == -1)
-        return (file_error("heredoc", s));
-    content = redir->next->next->content;
-    if (write(fd, content, ft_strlen(content)) == -1)
-        res = file_error("heredoc", s);
-    if (res == SUCCESS && content[ft_strlen(content)-1] != '\n')
-        write(fd, "\n", 1);
-    close(fd);
-    if ((fd = open("/tmp/minishell_heredoc", O_RDONLY)) == -1)
-        return (file_error("heredoc", s));
-    if (dup2(fd, STDIN_FILENO) == -1)
-        res = ERR_REDIR;
-    close(fd);
-    unlink("/tmp/minishell_heredoc");
-    return (res);
-}

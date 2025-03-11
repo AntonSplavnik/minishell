@@ -6,7 +6,7 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 17:40:24 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/06 16:53:04 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/11 17:57:00 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 	get_next_cmd
 */
 
-t_error process_parent(int *prev_pipe, int pipe_fd[2], int cmd_count)
+t_error	process_parent(int *prev_pipe, int pipe_fd[2], int cmd_count)
 {
 	if (*prev_pipe != -1)
 		close(*prev_pipe);
@@ -38,23 +38,24 @@ Handles execution of a single stage in a pipeline.
 Functionality:
 Extracts the next command from current tokens.
 Creates a pipe and forks a child process.
-Calls process_child for the child process or process_parent for the parent process.
+Calls process_child for the child process or process_parent for
+the parent process.
 */
 t_error	process_pipe_stage(t_shell *s, t_token **current,
 									int *prev_pipe, int cmd_count)
 {
-int	pipe_fd[2];
-pid_t   pid;
-t_token *cmd;
-t_error result;
+	int		pipe_fd[2];
+	pid_t	pid;
+	t_token	*cmd;
+	t_error	result;
 
-cmd = get_next_cmd(current);
-result = create_pipe_and_fork(cmd_count, pipe_fd, &pid);
-if (result != SUCCESS)
-return (result);
-if (pid == 0)
-return (process_child(cmd, *prev_pipe, cmd_count, pipe_fd, s));
-return (process_parent(prev_pipe, pipe_fd, cmd_count));
+	cmd = get_next_cmd(current);
+	result = create_pipe_and_fork(cmd_count, pipe_fd, &pid);
+	if (result != SUCCESS)
+		return (result);
+	if (pid == 0)
+		return (process_child(cmd, *prev_pipe, cmd_count, pipe_fd, s));
+	return (process_parent(prev_pipe, pipe_fd, cmd_count));
 }
 
 /*
@@ -89,8 +90,8 @@ Splits the token list at the pipe and returns the command segment before it.
 */
 t_token	*get_next_cmd(t_token **tokens)
 {
-	t_token *cmd_start;
-	t_token *current;
+	t_token	*cmd_start;
+	t_token	*current;
 
 	cmd_start = *tokens;
 	current = *tokens;

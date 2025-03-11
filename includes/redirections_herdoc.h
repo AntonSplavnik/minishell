@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redirections.h                                     :+:      :+:    :+:   */
+/*   redirections_herdoc.h                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 14:13:32 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/10 17:49:50 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/11 18:34:29 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ int		create_heredoc_file(void);
 void	save_stdin(t_shell *s);
 void	restore_stdin(t_shell *s);
 t_error	read_heredoc_input(int fd, char *delim);
-t_error	handle_heredoc_(t_token *redir, t_shell *s);
 
 // redirections_utils.c
 t_error	file_error(char *filename, t_shell *s);

@@ -6,12 +6,11 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 14:59:38 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/10 15:08:16 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/11 17:53:41 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 /*
 	is_built_in

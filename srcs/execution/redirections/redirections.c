@@ -6,13 +6,13 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 14:22:24 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/07 15:14:07 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/11 17:47:36 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_redir_type get_redir_type(t_token_type type)
+t_redir_type	get_redir_type(t_token_type type)
 {
 	t_redir_type	rtype;
 
@@ -33,7 +33,7 @@ t_error	handle_output(t_token *redir, t_shell *s)
 	int		flags;
 
 	filename = redir->next->content;
-	flags = O_WRONLY|O_CREAT;
+	flags = O_WRONLY | O_CREAT;
 	if (get_redir_type(redir->type) == REDIR_APPEND)
 		flags |= O_APPEND;
 	else
@@ -55,17 +55,17 @@ t_error	handle_input(t_token *redir, t_shell *s)
 	filename = redir->next->content;
 	fd = open(filename, O_RDONLY);
 	if (fd == -1)
-	    return (file_error(filename, s));
+		return (file_error(filename, s));
 	if (dup2(fd, STDIN_FILENO) == -1)
-	    return (ERR_REDIR);
+		return (ERR_REDIR);
 	close(fd);
 	return (SUCCESS);
 }
 
 t_error	handle_redirections_(t_token *cmd, t_shell *s)
 {
-	t_token *current;
-	t_error res;
+	t_token	*current;
+	t_error	res;
 
 	current = cmd;
 	res = SUCCESS;

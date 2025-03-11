@@ -6,7 +6,7 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 14:28:13 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/07 14:59:37 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/11 17:46:38 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,14 @@ t_error	syntax_error(char *msg, t_shell *s)
 int	is_redirection(t_token_type type)
 {
 	return (type == TYPE_REDIRIN || type == TYPE_REDIROUT
-			|| type == TYPE_REDIRAPPEND || type == TYPE_HEREDOC_OP);
+		|| type == TYPE_REDIRAPPEND || type == TYPE_HEREDOC_OP);
 }
-
 
 t_token	*remove_redirections(t_token *cmd)
 {
-	t_token *clean;
-	t_token *current;
-	t_token *new;
+	t_token	*clean;
+	t_token	*current;
+	t_token	*new;
 
 	clean = NULL;
 	current = cmd;
