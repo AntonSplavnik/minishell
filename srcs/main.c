@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:02:10 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/13 12:27:04 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/13 13:37:49 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,17 @@ static t_error	process_input(t_shell *s, char *args)
 	if (error != SUCCESS)
 		return (error);
 	last = get_last_token(s->token_list);
-	if (last && (last->type == TYPE_HEREDOC_OP || last->type == TYPE_PIPE \
-	|| last->type == TYPE_REDIRAPPEND || last->type == TYPE_REDIRIN \
-	|| last->type == TYPE_REDIROUT))
+	if ((s->token_list && ft_strcmp(s->token_list->content, "|") == 0) \
+	|| (last && (last->type == TYPE_HEREDOC_OP || \
+		!ft_strcmp(last->content, "|") || !ft_strcmp(last->content, ">>") \
+		|| !ft_strcmp(last->content, ">") || !ft_strcmp(last->content, "<<") \
+		|| !ft_strcmp(last->content, "<"))))
 	{
-		error = ERR_PARSING;
+		if (ft_strcmp(last->content, "|") == 0 || \
+			!ft_strcmp(s->token_list->content, "|"))
+			error = ERR_PARSING_PIPE;
+		else
+			error = ERR_PARSING_REDIR;
 		handle_error_free_tokens(error, &s->token_list, args);
 		return (error);
 	}
