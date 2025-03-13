@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 15:58:40 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/13 12:25:54 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/13 16:26:32 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,10 @@ void				init_expansion_params(size_t *i, size_t *j, \
 						int *in_squote, int *in_dquote);
 void				process_quote(char quote_char, int *in_squote, \
 						int *in_dquote);
+char				*extract_quoted_token_helper(char *args, \
+					size_t *i, t_error *error);
+size_t				handle_quoted_content(char *args, size_t *i, \
+						t_quote_info *quotes);
 
 //token_extraction_heredoc
 t_error				handle_heredoc(t_token **token_list, \

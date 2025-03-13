@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 14:54:55 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/07 10:45:28 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/13 16:28:58 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,68 +70,30 @@ static char	*extract_delimiter_token(const char *str, size_t *i, t_error *error)
 	return (token);
 }
 
-/*
-Processes quoted content to handle nested quotes:
-- Tracks position with index i
-- Counts length including both quote characters
-- Updates quote status in quote_info structure
-Returns: Length of quoted content including quotes
-*/
-static size_t	handle_quoted_content(char *args, size_t *i, \
-				t_quote_info *quotes)
+/* Helper function to extract quoted content and handle $ if needed */
+char	*extract_quoted_token(char *args, size_t *i, t_error *error)
 {
+	char	*token;
+	char	*new_token;
 	size_t	len;
 
-	len = 1;
+	token = extract_quoted_token_helper(args, i, error);
+	if (*error != SUCCESS || !token || args[*i] != '$')
+		return (token);
+	len = ft_strlen(token);
 	(*i)++;
-	while (args[*i])
+	new_token = malloc(len + 2);
+	if (!new_token)
 	{
-		if (args[*i] == quotes->quote_char)
-		{
-			quotes->num_quote = 2;
-			(*i)++;
-			len++;
-			break ;
-		}
-		(*i)++;
-		len++;
-	}
-	return (len);
-}
-
-/*
-Creates a token from quoted content:
-- Handles both single and double quotes
-- Validates matching closing quotes
-- Returns NULL if quotes are unmatched
-- Sets error to ERR_PARSING for quote errors
-Returns: Token string including quotes or NULL on error
-*/
-static char	*extract_quoted_token(char *args, size_t *i, t_error *error)
-{
-	t_quote_info	quotes;
-	size_t			start;
-	size_t			len;
-	char			*token;
-
-	quotes.quote_char = args[*i];
-	start = *i;
-	quotes.num_quote = 1;
-	len = handle_quoted_content(args, i, &quotes);
-	if (len == 1 || quotes.num_quote != 2)
-	{
-		*error = ERR_PARSING;
-		return (NULL);
-	}
-	if (len == 2 && (ft_isalnum(args[*i]) || args[*i] == '$'))
-		return (extract_double_quotes(args, i, error, quotes.quote_char));
-	token = ft_substr(args, start, len);
-	if (!token)
-	{
+		free(token);
 		*error = ERR_MALLOC;
 		return (NULL);
 	}
-	return (token);
+	ft_strcpy(new_token, token);
+	new_token[len] = '$';
+	new_token[len + 1] = '\0';
+	free(token);
+	return (new_token);
 }
 
 /*
