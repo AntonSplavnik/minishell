@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 16:27:25 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/07 16:33:44 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/13 12:26:20 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,47 @@
 #include <readline/readline.h>
 
 /*
-Processes a single line of heredoc input:
-- Takes current content and new line as input
-- Joins content with newline character
-- Appends new line to the result
-- Handles memory management for intermediate strings
-Returns: Updated content string or NULL if allocation fails
+** Collects heredoc content until delimiter is encountered
 */
-static char	*handle_line_input(char *content, char *line)
+static char	*collect_heredoc_content(char *delimiter, char *initial_content)
+{
+	char	*line;
+	char	*content;
+	char	*new_content;
+
+	if (!initial_content)
+		content = ft_strdup("");
+	else
+		content = initial_content;
+	if (!content)
+		return (NULL);
+	while (1)
+	{
+		line = readline("> ");
+		if (!line || ft_strcmp(line, delimiter) == 0)
+			return (handle_heredoc_cleanup(content, line));
+		new_content = handle_line_input(content, line);
+		if (!new_content)
+		{
+			free(line);
+			free(content);
+			return (NULL);
+		}
+		content = new_content;
+	}
+}
+
+/*
+ * Helper function to add a line to existing content
+ */
+char	*handle_line_input(char *content, char *line)
 {
 	char	*temp;
 	char	*new_content;
 
-	if (content[0] == '\0')
+	if (!content || content[0] == '\0')
 	{
 		new_content = ft_strdup(line);
-		free(content);
 		free(line);
 		return (new_content);
 	}
@@ -47,90 +72,6 @@ static char	*handle_line_input(char *content, char *line)
 }
 
 /*
-Processes heredoc input by collecting lines until delimiter is found:
-- Takes delimiter and initial content as parameters
-- Uses readline to get input line by line
-- Appends newline after each line
-- Stops when delimiter is encountered or EOF (Ctrl+D)
-Returns: Complete heredoc content as a single string with newlines
-*/
-static char	*collect_heredoc_content(char *delimiter, char *content)
-{
-	char	*line;
-	char	*new_content;
-
-	while (1)
-	{
-		line = readline("> ");
-		if (!line || ft_strcmp(line, delimiter) == 0)
-		{
-			free(line);
-			return (content);
-		}
-		new_content = handle_line_input(content, line);
-		if (!new_content)
-			return (NULL);
-		content = new_content;
-	}
-}
-
-/*
-Processes heredoc content and updates position:
-- Checks for newline and delimiter in input
-- Collects additional content if needed
-- Updates index position after processing
-Returns: SUCCESS
-*/
-static t_error	process_heredoc_content(char **content, \
-					t_heredoc_info *heredoc_info, char *args, size_t *i)
-{
-	char	*newline_pos;
-
-	newline_pos = ft_strchr(args + *i, '\n');
-	if (!(newline_pos && ft_strncmp(newline_pos + 1, \
-		heredoc_info->delim, ft_strlen(heredoc_info->delim)) == 0))
-		*content = collect_heredoc_content(heredoc_info->delim, *content);
-	if (newline_pos)
-		*i += ft_strlen(heredoc_info->delim) + 1;
-	return (SUCCESS);
-}
-
-/*
-Extracts initial heredoc content from input string until delimiter:
-- Iterates through args starting from index i
-- Keeps track of content length while searching
-- If newline followed by delimiter is found, stops before delimiter
-- Creates substring from start position with calculated length
-Returns: Substring containing heredoc content, or NULL if allocation fails
-Note: Updates i to point after the newline if delimiter is found
-*/
-
-static char	*get_first_heredoc_content(char *args, size_t *i, \
-											char *delim, size_t start)
-{
-	size_t	len;
-
-	len = 0;
-	if (args[start] == ' ')
-		start++;
-	while (args[*i])
-	{
-		if (args[*i] == '\n' && ft_strncmp(&args[*i + 1], \
-				delim, ft_strlen(delim)) == 0)
-			break ;
-		(*i)++;
-		len++;
-	}
-	if (len > 0 && args[start] == '\n')
-		start++;
-	if (len > 0 && args[start + len] == '\n')
-		len--;
-	if (len > 0 && args[start + len - 1] == '\n')
-		len--;
-	return (ft_substr(args, start, len));
-}
-
-/*
 Handles the extraction and creation of heredoc tokens:
 - Check if delimiter is quoted or not -
 add a flag and remove the quotes if quoted
@@ -143,28 +84,77 @@ add a flag and remove the quotes if quoted
 Returns: SUCCESS or ERR_MALLOC if memory allocation fails
 */
 
-t_error	handle_heredoc(t_token **token_list, char *delim, size_t *i, char *args)
+t_error	handle_heredoc(t_token **token_list, char *delim)
 {
 	char			*content;
-	size_t			start;
 	t_error			result;
 	t_heredoc_info	*heredoc_info;
 	t_token_type	content_type;
 
-	start = *i;
+	content = NULL;
 	heredoc_info = get_heredoc_info(delim);
 	if (!heredoc_info)
 		return (ERR_MALLOC);
-	content = get_first_heredoc_content(args, i, heredoc_info->delim, start);
+	content = collect_heredoc_content(heredoc_info->delim, NULL);
 	if (!content)
-		return (cleanup_heredoc(NULL, heredoc_info, ERR_MALLOC));
-	if (process_heredoc_content(&content, heredoc_info, args, i) != SUCCESS)
-		return (cleanup_heredoc(content, heredoc_info, ERR_MALLOC));
+	{
+		free(heredoc_info->delim);
+		free(heredoc_info);
+		return (ERR_MALLOC);
+	}
 	if (heredoc_info->is_quoted)
 		content_type = TYPE_HEREDOC_CONTENT_QUOTED;
 	else
 		content_type = TYPE_HEREDOC_CONTENT;
 	result = add_token(token_list, content, content_type);
-	cleanup_heredoc(content, heredoc_info, SUCCESS);
 	return (result);
+}
+
+/*
+** Process a single heredoc based on whether it's the last one
+*/
+static t_error	process_single_heredoc(t_token **token_list,
+	t_token *delim_token, int is_last)
+{
+	t_error	result;
+	char	*content;
+
+	if (is_last)
+	{
+		result = handle_heredoc(token_list, delim_token->content);
+		if (result != SUCCESS)
+			return (result);
+	}
+	else
+	{
+		content = collect_heredoc_content(delim_token->content, NULL);
+		if (content)
+			free(content);
+	}
+	return (SUCCESS);
+}
+
+/*
+** Process all heredocs for a command but only store the last one's content
+*/
+t_error	process_heredocs(t_token **token_list)
+{
+	int		heredoc_count;
+	t_token	*delim_tokens[MAX_HEREDOCS];
+	int		i;
+	t_error	result;
+
+	heredoc_count = find_heredoc_delimiters(*token_list, delim_tokens);
+	if (heredoc_count == 0)
+		return (SUCCESS);
+	i = 0;
+	while (i < heredoc_count)
+	{
+		result = process_single_heredoc(token_list, delim_tokens[i], \
+			(i == heredoc_count - 1));
+		if (result != SUCCESS)
+			return (result);
+		i++;
+	}
+	return (SUCCESS);
 }

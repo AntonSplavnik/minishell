@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 15:58:40 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/07 12:03:48 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/13 12:25:54 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define PARSING_H
 
 # include "types.h"
+
+# define MAX_HEREDOCS 16
 
 //Used during token extraction to store
 //quote information and pass it to different functions
@@ -79,14 +81,17 @@ void				process_quote(char quote_char, int *in_squote, \
 
 //token_extraction_heredoc
 t_error				handle_heredoc(t_token **token_list, \
-						char *delimiter, size_t *i, char *args);
+						char *delimiter);
+t_error				process_heredocs(t_token **token_list);
+char				*handle_line_input(char *content, char *line);
 
 //token_extraction_heredoc_utils
 int					*get_heredoc_state_ptr(void);
 void				reset_heredoc_state(void);
 t_heredoc_info		*get_heredoc_info(char *delim);
-t_error				cleanup_heredoc(char *content, \
-						t_heredoc_info *info, t_error status);
+char				*handle_heredoc_cleanup(char *content, char *line);
+int					find_heredoc_delimiters(t_token *token_list, \
+							t_token *delim_tokens[MAX_HEREDOCS]);
 
 //token_extraction_quotes
 char				*extract_double_quotes(char *args, size_t *i, \

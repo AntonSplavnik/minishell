@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 22:26:37 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/10 21:41:27 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/13 12:30:13 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ t_error	execute_cd(char **args, t_shell *s)
 	while (args[count_args])
 		count_args++;
 	old_path = getcwd(NULL, 0);
-	if (count_args > 2 || ft_strcmp(args[1], old_path) == 0)
+	if (count_args > 2)
 	{
 		s->exit_status = 1;
 		print_error_builtin("cd", "", "too many arguments");
