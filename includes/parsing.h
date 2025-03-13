@@ -6,16 +6,16 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 15:58:40 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/13 17:39:31 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/13 18:26:51 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSING_H
 # define PARSING_H
 
-#include "minishell.h"
-
 # define MAX_HEREDOCS 16
+
+# include "minishell.h"
 
 //Used during token extraction to store
 //quote information and pass it to different functions

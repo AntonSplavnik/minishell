@@ -40,8 +40,8 @@
 # include "parsing.h"
 # include "types.h"
 # include "execution.h"
-# include "redirections_herdoc.h"
-#include "pipes.h"
+# include "redirections_heredoc.h"
+# include "pipes.h"
 
 # define PROMPT_COLOR "\001\033[1;36m\002"	// Cyan
 # define RESET_COLOR "\001\033[0m\002"		// Reset to default
