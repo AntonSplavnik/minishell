@@ -6,20 +6,12 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 14:45:59 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/06 17:24:10 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/13 13:07:31 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/*
-	count_command_args
-	prepare_command_args
-*/
-
-/*
-Return the number of args needed for the command execution
-*/
 int	count_command_args(t_token *cmd_token)
 {
 	t_token	*current;
@@ -36,11 +28,6 @@ int	count_command_args(t_token *cmd_token)
 	return (arg_count);
 }
 
-/*
-Prepares command arguments array from token list
-Returns array of strings suitable for execve:
-- args[0] should be the file name
-*/
 char	**prepare_command_args(t_token *cmd_token)
 {
 	t_token	*current;

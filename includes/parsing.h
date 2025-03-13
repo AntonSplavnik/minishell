@@ -6,14 +6,12 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 15:58:40 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/07 15:01:24 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/13 15:53:54 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSING_H
 # define PARSING_H
-
-# include "types.h"
 
 //Used during token extraction to store
 //quote information and pass it to different functions

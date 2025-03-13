@@ -6,19 +6,12 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 16:08:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/07 14:57:40 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/13 16:20:23 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TYPES_H
 # define TYPES_H
-
-typedef struct s_pipe
-{
-	int		prev_pipe;
-	int		next_pipe[2];
-	pid_t	pid;
-} t_pipe;
 
 //When you add token type, add it in the utils to print file as well
 typedef enum e_token_type
@@ -80,7 +73,8 @@ typedef struct s_shell
 	t_env	*env_list;
 	t_token	*token_list;
 	int		exit_status;
-	int		stdin_copy; // Added for heredoc
+	int		stdin_copy;
+	pid_t	last_pid;
 }	t_shell;
 
 #endif

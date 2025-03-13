@@ -6,7 +6,7 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 14:28:13 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/11 17:46:38 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/13 15:35:23 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,14 @@ t_token	*remove_redirections(t_token *cmd)
 		{
 			new = token_new(current->content, current->type);
 			token_add_back(&clean, new);
+			current = current->next;
 		}
 		else
+		{
 			current = current->next;
-		current = current->next;
+			if (current)
+				current = current->next;
+		}
 	}
 	return (clean);
 }

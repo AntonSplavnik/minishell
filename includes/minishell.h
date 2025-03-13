@@ -29,7 +29,6 @@
 # include <limits.h>
 # include "types.h"
 
-
 /* Readline Libraries */
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -42,6 +41,7 @@
 # include "types.h"
 # include "execution.h"
 # include "redirections_herdoc.h"
+#include "pipes.h"
 
 # define PROMPT_COLOR "\001\033[1;36m\002"	// Cyan
 # define RESET_COLOR "\001\033[0m\002"		// Reset to default

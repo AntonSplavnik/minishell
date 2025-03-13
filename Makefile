@@ -32,7 +32,7 @@ SRCS = $(SRCS_DIR)/main.c \
 		$(SRCS_DIR)/parsing/token_extraction_quotes.c	\
 		$(SRCS_DIR)/parsing/token_extraction_export.c	\
 		$(SRCS_DIR)/execution/command_path.c \
-		$(SRCS_DIR)/execution/builtin/execute_built_in.c \
+		$(SRCS_DIR)/execution/builtin/execute_builtin.c \
 		$(SRCS_DIR)/execution/execute_child.c \
 		$(SRCS_DIR)/execution/execute_command.c \
 		$(SRCS_DIR)/execution/execute_prepare_cmd_args.c\
@@ -47,16 +47,16 @@ SRCS = $(SRCS_DIR)/main.c \
 		$(SRCS_DIR)/execution/redirections/heredoc.c \
 		$(SRCS_DIR)/execution/signal_utils.c \
 		$(SRCS_DIR)/execution/token_utils.c \
-		$(SRCS_DIR)/built-in/echo.c \
-		$(SRCS_DIR)/built-in/pwd.c \
-		$(SRCS_DIR)/built-in/cd.c \
-		$(SRCS_DIR)/built-in/env.c \
-		$(SRCS_DIR)/built-in/exit.c \
-		$(SRCS_DIR)/built-in/unset.c \
-		$(SRCS_DIR)/built-in/export.c \
-		$(SRCS_DIR)/built-in/export_handlers.c \
-		$(SRCS_DIR)/built-in/export_array.c \
-		$(SRCS_DIR)/built-in/export_format.c \
+		$(SRCS_DIR)/builtin/echo.c \
+		$(SRCS_DIR)/builtin/pwd.c \
+		$(SRCS_DIR)/builtin/cd.c \
+		$(SRCS_DIR)/builtin/env.c \
+		$(SRCS_DIR)/builtin/exit.c \
+		$(SRCS_DIR)/builtin/unset.c \
+		$(SRCS_DIR)/builtin/export.c \
+		$(SRCS_DIR)/builtin/export_handlers.c \
+		$(SRCS_DIR)/builtin/export_array.c \
+		$(SRCS_DIR)/builtin/export_format.c \
 		$(SRCS_DIR)/env/init_env.c \
 		$(SRCS_DIR)/env/manipulate_env.c \
 		$(SRCS_DIR)/init/init_data.c \

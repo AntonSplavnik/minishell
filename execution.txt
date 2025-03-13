@@ -1,0 +1,894 @@
+//token_utils.c
+
+
+t_token	*copy_tokens(t_token *src)
+{
+	t_token	*dst;
+	t_token	*new;
+	t_token	*current;
+
+	dst = NULL;
+	current = src;
+	while (current)
+	{
+		new = token_new(current->content, current->type);
+		if (!new)
+		{
+			token_clear(&dst);
+			return (NULL);
+		}
+		token_add_back(&dst, new);
+		current = current->next;
+	}
+	return (dst);
+}
+
+void	token_clear(t_token **tokens)
+{
+	t_token	*current;
+	t_token	*next;
+
+	current = *tokens;
+	while (current)
+	{
+		next = current->next;
+		free(current->content);
+		free(current);
+		current = next;
+	}
+	*tokens = NULL;
+}
+
+t_token	*token_new(char *content, int type)
+{
+	t_token	*new;
+
+	new = malloc(sizeof(t_token));
+	if (!new)
+		return (NULL);
+	new->content = ft_strdup(content);
+	if (!new->content)
+	{
+		free(new);
+		return (NULL);
+	}
+	new->type = type;
+	new->next = NULL;
+	return (new);
+}
+
+void	token_add_back(t_token **lst, t_token *new)
+{
+	t_token	*current;
+
+	if (!*lst)
+	{
+		*lst = new;
+		return ;
+	}
+	current = *lst;
+	while (current->next)
+		current = current->next;
+	current->next = new;
+}
+
+//signal_utils.c
+
+
+void	handle_child_process_io(int in_fd, int out_fd)
+{
+	if (in_fd != STDIN_FILENO)
+	{
+		dup2(in_fd, STDIN_FILENO);
+		close(in_fd);
+	}
+	if (out_fd != STDOUT_FILENO)
+	{
+		dup2(out_fd, STDOUT_FILENO);
+		close(out_fd);
+	}
+}
+
+void	handle_child_signal(int status, t_shell *s)
+{
+	if (WTERMSIG(status) == SIGINT)
+	{
+		s->exit_status = 130;
+		write(1, "\n", 1);
+	}
+	else if (WTERMSIG(status) == SIGQUIT)
+	{
+		s->exit_status = 131;
+		write(2, "Quit: 3\n", 9);
+	}
+}
+
+//fd_management.c
+
+
+void	save_standard_fds(int fds[2])
+{
+	fds[0] = dup(STDIN_FILENO);
+	fds[1] = dup(STDOUT_FILENO);
+}
+
+void	restore_standard_fds(int fds[2])
+{
+	dup2(fds[0], STDIN_FILENO);
+	dup2(fds[1], STDOUT_FILENO);
+	close(fds[0]);
+	close(fds[1]);
+}
+
+t_error	handle_heredoc_(t_token *redir, t_shell *s)
+{
+	int		fd;
+	char	*content;
+	t_error	res;
+
+	res = SUCCESS;
+	fd = create_heredoc_file();
+	if (fd == -1)
+		return (file_error("heredoc", s));
+	content = redir->next->next->content;
+	if (write(fd, content, ft_strlen(content)) == -1)
+		res = file_error("heredoc", s);
+	if (res == SUCCESS && content[ft_strlen(content)-1] != '\n')
+		write(fd, "\n", 1);
+	close(fd);
+	fd = open("/tmp/minishell_heredoc", O_RDONLY);
+	if (fd == -1)
+		return (file_error("heredoc", s));
+	if (dup2(fd, STDIN_FILENO) == -1)
+		res = ERR_REDIR;
+	close(fd);
+	unlink("/tmp/minishell_heredoc");
+	return (res);
+}
+
+//execute_utils.c
+
+t_error	free_resources(char *cmd_path, t_shell *s, t_error result)
+{
+	free(cmd_path);
+	if (result != SUCCESS)
+		s->exit_status = 1;
+	return (result);
+}
+
+t_error	handle_malloc_error(t_shell *s)
+{
+	s->exit_status = 1;
+	return (ERR_MALLOC);
+}
+
+void	handle_exit_status(int status, t_shell *s)
+{
+	if (g_sig == SIGINT)
+		s->exit_status = 130;
+	else if (g_sig == SIGQUIT)
+	{
+		s->exit_status = 131;
+		write(1, "\n", 1);
+	}
+	else if (WIFEXITED(status))
+		s->exit_status = WEXITSTATUS(status);
+}
+
+
+//execute_single.c
+
+
+t_error	execute_single_command(t_token *cmd, t_shell *s)
+{
+	t_token	*clean_cmd;
+	char	**args;
+	t_error	res;
+	int		std_fds[2];
+
+	save_standard_fds(std_fds);
+	res = handle_redirections_(cmd, s);
+	if (res != SUCCESS)
+		return (restore_standard_fds(std_fds), res);
+	clean_cmd = remove_redirections(cmd);
+	args = prepare_command_args(clean_cmd);
+	if (!args)
+		return (restore_standard_fds(std_fds), handle_malloc_error(s));
+	if (is_builtin(clean_cmd->content))
+	{
+		res = execute_builtin(clean_cmd, args, s);
+		restore_standard_fds(std_fds);
+	}
+	else
+		res = execute_external_command(clean_cmd, args, s);
+	token_clear(&clean_cmd);
+	restore_standard_fds(std_fds);
+	free_array(args);
+	return (res);
+}
+
+t_error	handle_builtin_redirections(t_token *cmd, t_shell *s, int std_fds[2])
+{
+	t_error	res;
+
+	res = handle_redirections_(cmd, s);
+	if (res != SUCCESS)
+		restore_standard_fds(std_fds);
+	return (res);
+}
+
+t_error	execute_external_command(t_token *cmd, char **args, t_shell *s)
+{
+	char	*cmd_path;
+	t_error	res;
+
+	cmd_path = find_command_path(cmd->content, s);
+	if (!cmd_path)
+		return (ERR_CMD_NOT_FOUND);
+	res = execute_child_process(cmd_path, args, s);
+	free(cmd_path);
+	return (res);
+}
+
+// execute_prepare_cmd_args.c
+
+int	count_command_args(t_token *cmd_token)
+{
+	t_token	*current;
+	int		arg_count;
+
+	arg_count = 1;
+	current = cmd_token->next;
+	while (current && current->type != TYPE_PIPE)
+	{
+		if (current->type == TYPE_ARG)
+			arg_count++;
+		current = current->next;
+	}
+	return (arg_count);
+}
+
+char	**prepare_command_args(t_token *cmd_token)
+{
+	t_token	*current;
+	char	**args;
+	int		arg_count;
+	int		i;
+
+	arg_count = count_command_args(cmd_token);
+	args = malloc(sizeof(char *) * (arg_count + 1));
+	if (!args)
+		return (NULL);
+	args[0] = ft_strdup(cmd_token->content);
+	i = 1;
+	current = cmd_token->next;
+	while (current && current->type != TYPE_PIPE)
+	{
+		if (current->type == TYPE_ARG)
+		{
+			args[i] = ft_strdup(current->content);
+			i++;
+		}
+		current = current->next;
+	}
+	args[i] = NULL;
+	return (args);
+}
+
+//execute_command.c
+
+
+t_error	execute_command(t_shell *s)
+{
+	t_token	*cmd_copy;
+	t_error	res;
+
+	cmd_copy = copy_tokens(s->token_list);
+	if (!cmd_copy)
+		return (ERR_MALLOC);
+	if (has_pipe(s))
+		res = handle_pipe_operations(s);
+	else
+		res = execute_single_command(cmd_copy, s);
+	token_clear(&cmd_copy);
+	return (res);
+}
+
+//execute_child.c
+
+
+t_error	execute_child_process(char *cmd_path, char **args, t_shell *s)
+{
+	pid_t	pid;
+	int		status;
+
+	signal(SIGINT, SIG_IGN);
+	pid = fork();
+	if (pid == 0)
+	{
+		signal(SIGINT, SIG_DFL);
+		execve(cmd_path, args, s->envp);
+		exit(127);
+	}
+	else if (pid > 0)
+	{
+		waitpid(pid, &status, 0);
+		handle_child_signal(status, s);
+	}
+	else
+		return (ERR_EXEC);
+	return (SUCCESS);
+}
+
+void	handle_child_redirections(t_token *cmd, t_shell *s)
+{
+	t_token	*current;
+
+	current = cmd;
+	while (current)
+	{
+		if (is_redirection(current->type))
+		{
+			if (get_redir_type(current->type) == REDIR_HEREDOC)
+				handle_heredoc_(current, s);
+			else if (get_redir_type(current->type) == REDIR_IN)
+				handle_input(current, s);
+			else
+				handle_output(current, s);
+			current = current->next->next;
+		}
+		else
+			current = current->next;
+	}
+}
+
+//command_path.c
+
+
+char	*try_path_dir(char *dir, char *cmd, t_shell *s)
+{
+	char	*temp;
+	char	*full_path;
+
+	temp = ft_strjoin(dir, "/");
+	if (!temp)
+		return (NULL);
+	full_path = ft_strjoin(temp, cmd);
+	free(temp);
+	if (!full_path)
+		return (NULL);
+	if (access(full_path, F_OK) == 0)
+	{
+		if (access(full_path, X_OK) == 0)
+			return (full_path);
+		else
+		{
+			s->exit_status = 126;
+			free(full_path);
+			return (NULL);
+		}
+	}
+	free(full_path);
+	return (NULL);
+}
+
+static char	*search_in_paths(char **path_dirs, char *cmd, t_shell *s)
+{
+	int		i;
+	char	*full_path;
+
+	i = 0;
+	while (path_dirs[i])
+	{
+		full_path = try_path_dir(path_dirs[i], cmd, s);
+		if (full_path)
+		{
+			free_array(path_dirs);
+			return (full_path);
+		}
+		if (s->exit_status != 126)
+			s->exit_status = 127;
+		i++;
+	}
+	free_array(path_dirs);
+	return (NULL);
+}
+
+char	*check_direct_path(char *cmd, t_shell *s)
+{
+	if (access(cmd, F_OK) != 0)
+	{
+		s->exit_status = 127;
+		return (NULL);
+	}
+	if (access(cmd, X_OK) != 0)
+	{
+		s->exit_status = 126;
+		return (NULL);
+	}
+	return (ft_strdup(cmd));
+}
+
+char	*find_command_path(char *cmd, t_shell *s)
+{
+	char	*path_env;
+	char	**path_dirs;
+
+	if (ft_strchr(cmd, '/'))
+		return (check_direct_path(cmd, s));
+	path_env = get_var_value(s->env_list, "PATH", 0, 0);
+	if (ft_strcmp(path_env, "") == 0)
+	{
+		s->exit_status = 127;
+		return (NULL);
+	}
+	path_dirs = ft_split(path_env, ':');
+	if (!path_dirs)
+		return (NULL);
+	return (search_in_paths(path_dirs, cmd, s));
+}
+
+// redirections
+
+//redirections.c
+
+
+t_redir_type	get_redir_type(t_token_type type)
+{
+	t_redir_type	rtype;
+
+	rtype = REDIR_OUT;
+	if (type == TYPE_REDIROUT)
+		return (REDIR_OUT);
+	if (type == TYPE_REDIRAPPEND)
+		return (REDIR_APPEND);
+	if (type == TYPE_REDIRIN)
+		return (REDIR_IN);
+	return (REDIR_HEREDOC);
+}
+
+t_error	handle_output(t_token *redir, t_shell *s)
+{
+	int		fd;
+	char	*filename;
+	int		flags;
+
+	filename = redir->next->content;
+	flags = O_WRONLY | O_CREAT;
+	if (get_redir_type(redir->type) == REDIR_APPEND)
+		flags |= O_APPEND;
+	else
+		flags |= O_TRUNC;
+	fd = open(filename, flags, 0644);
+	if (fd == -1)
+		return (file_error(filename, s));
+	if (dup2(fd, STDOUT_FILENO) == -1)
+		return (ERR_REDIR);
+	close(fd);
+	return (SUCCESS);
+}
+
+t_error	handle_input(t_token *redir, t_shell *s)
+{
+	int		fd;
+	char	*filename;
+
+	filename = redir->next->content;
+	fd = open(filename, O_RDONLY);
+	if (fd == -1)
+		return (file_error(filename, s));
+	if (dup2(fd, STDIN_FILENO) == -1)
+		return (ERR_REDIR);
+	close(fd);
+	return (SUCCESS);
+}
+
+t_error	handle_redirections_(t_token *cmd, t_shell *s)
+{
+	t_token	*current;
+	t_error	res;
+
+	current = cmd;
+	res = SUCCESS;
+	while (current && res == SUCCESS)
+	{
+		if (is_redirection(current->type))
+		{
+			if (!current->next || current->next->type == TYPE_PIPE)
+				return (syntax_error("near unexpected token", s));
+			if (get_redir_type(current->type) == REDIR_HEREDOC)
+				res = handle_heredoc_(current, s);
+			else if (get_redir_type(current->type) == REDIR_IN)
+				res = handle_input(current, s);
+			else
+				res = handle_output(current, s);
+			current = current->next->next;
+		}
+		else
+			current = current->next;
+	}
+	return (res);
+}
+
+//redirections_utils.c
+
+t_error	file_error(char *filename, t_shell *s)
+{
+	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	ft_putstr_fd(filename, STDERR_FILENO);
+	ft_putstr_fd(": ", STDERR_FILENO);
+	ft_putendl_fd(strerror(errno), STDERR_FILENO);
+	s->exit_status = 1;
+	return (ERR_REDIR);
+}
+
+t_error	syntax_error(char *msg, t_shell *s)
+{
+	ft_putstr_fd("minishell: syntax error: ", STDERR_FILENO);
+	ft_putendl_fd(msg, STDERR_FILENO);
+	s->exit_status = 2;
+	return (ERR_SYNTAX);
+}
+
+int	is_redirection(t_token_type type)
+{
+	return (type == TYPE_REDIRIN || type == TYPE_REDIROUT
+		|| type == TYPE_REDIRAPPEND || type == TYPE_HEREDOC_OP);
+}
+
+t_token	*remove_redirections(t_token *cmd)
+{
+	t_token	*clean;
+	t_token	*current;
+	t_token	*new;
+
+	clean = NULL;
+	current = cmd;
+	while (current)
+	{
+		if (!is_redirection(current->type))
+		{
+			new = token_new(current->content, current->type);
+			token_add_back(&clean, new);
+		}
+		else
+			current = current->next;
+		current = current->next;
+	}
+	return (clean);
+}
+
+
+//heredoc.c
+
+
+int	create_heredoc_file(void)
+{
+	int	fd;
+
+	fd = open("/tmp/minishell_heredoc", O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	if (fd == -1)
+		return (-1);
+	return (fd);
+}
+
+void	save_stdin(t_shell *s)
+{
+	s->stdin_copy = dup(STDIN_FILENO);
+}
+
+void	restore_stdin(t_shell *s)
+{
+	dup2(s->stdin_copy, STDIN_FILENO);
+	close(s->stdin_copy);
+}
+
+t_error	read_heredoc_input(int fd, char *delim)
+{
+	char	*line;
+	int		delim_len;
+
+	delim_len = ft_strlen(delim);
+	while (1)
+	{
+		line = readline("> ");
+		if (!line || ft_strncmp(line, delim, delim_len + 1) == 0)
+			break ;
+		ft_putendl_fd(line, fd);
+		free(line);
+	}
+	if (line)
+		free(line);
+	return (SUCCESS);
+}
+
+//pipes
+
+//pipes.c
+
+
+int	has_pipe(t_shell *s)
+{
+	return (count_pipes(s->token_list) > 0);
+}
+
+t_error	handle_pipe_operations(t_shell *s)
+{
+	int		pipe_count;
+	int		cmd_count;
+
+	pipe_count = count_pipes(s->token_list);
+	if (pipe_count == 0)
+		return (ERR_PARSING);
+	cmd_count = pipe_count + 1;
+	return (execute_pipeline(s, cmd_count));
+}
+
+t_error	execute_pipeline(t_shell *s, int cmd_count)
+{
+	int		prev_pipe;
+	t_token	*current;
+	t_error	result;
+
+	prev_pipe = -1;
+	current = s->token_list;
+	result = SUCCESS;
+	while (cmd_count-- > 0 && result == SUCCESS)
+		result = process_pipe_stage(s, &current, &prev_pipe, cmd_count);
+	while (waitpid(-1, NULL, 0) > 0)
+		;
+	return (result);
+}
+
+//pipes_utils.c
+
+t_error	process_parent(int *prev_pipe, int pipe_fd[2], int cmd_count)
+{
+	if (*prev_pipe != -1)
+		close(*prev_pipe);
+	if (cmd_count > 0)
+	{
+		*prev_pipe = pipe_fd[0];
+		close(pipe_fd[1]);
+	}
+	return (SUCCESS);
+}
+
+t_error	process_pipe_stage(t_shell *s, t_token **current,
+									int *prev_pipe, int cmd_count)
+{
+	int		pipe_fd[2];
+	pid_t	pid;
+	t_token	*cmd;
+	t_error	result;
+
+	cmd = get_next_cmd(current);
+	result = create_pipe_and_fork(cmd_count, pipe_fd, &pid);
+	if (result != SUCCESS)
+		return (result);
+	if (pid == 0)
+		return (process_child(cmd, *prev_pipe, cmd_count, pipe_fd, s));
+	return (process_parent(prev_pipe, pipe_fd, cmd_count));
+}
+
+int	count_pipes(t_token *tokens)
+{
+	int	count;
+
+	count = 0;
+	while (tokens)
+	{
+		if (ft_strcmp(tokens->content, "|") == 0)
+			count++;
+		tokens = tokens->next;
+	}
+	return (count);
+}
+
+t_token	*get_next_cmd(t_token **tokens)
+{
+	t_token	*cmd_start;
+	t_token	*current;
+
+	cmd_start = *tokens;
+	current = *tokens;
+	while (current && ft_strcmp(current->content, "|") != 0)
+		current = current->next;
+	if (current)
+	{
+		*tokens = current->next;
+		current->next = NULL;
+	}
+	else
+		*tokens = NULL;
+	return (cmd_start);
+}
+
+//pipes_exec.c
+
+t_error	create_pipe_and_fork(int cmd_count, int pipe_fd[2], pid_t *pid)
+{
+	if (cmd_count > 0 && pipe(pipe_fd) == -1)
+		return (ERR_EXEC);
+	*pid = fork();
+	if (*pid == -1)
+		return (ERR_EXEC);
+	return (SUCCESS);
+}
+
+t_error	process_child(t_token *cmd, int prev_pipe, int cmd_count,
+										int pipe_fd[2], t_shell *s)
+{
+	int	out_fd;
+
+	set_output_fd(cmd_count, pipe_fd, &out_fd);
+	handle_child_process_io(prev_pipe, out_fd);
+	if (prev_pipe != -1)
+		close(prev_pipe);
+	if (cmd_count > 0)
+		close(pipe_fd[0]);
+	execute_single_command(cmd, s);
+	exit(s->exit_status);
+	return (SUCCESS);
+}
+
+void	set_output_fd(int cmd_count, int pipe_fd[2], int *out_fd)
+{
+	if (cmd_count > 0)
+		*out_fd = pipe_fd[1];
+	else
+		*out_fd = STDOUT_FILENO;
+}
+
+//builtin
+
+//execute_built_in.c
+
+int	is_builtin(char *cmd)
+{
+	if (ft_strcmp(cmd, "echo") == 0)
+		return (1);
+	if (ft_strcmp(cmd, "cd") == 0)
+		return (1);
+	if (ft_strcmp(cmd, "pwd") == 0)
+		return (1);
+	if (ft_strcmp(cmd, "export") == 0)
+		return (1);
+	if (ft_strcmp(cmd, "unset") == 0)
+		return (1);
+	if (ft_strcmp(cmd, "env") == 0)
+		return (1);
+	if (ft_strcmp(cmd, "exit") == 0)
+		return (1);
+	return (0);
+}
+
+t_error	execute_builtin(t_token *cmd_token, char **args, t_shell *s)
+{
+	if (ft_strcmp(cmd_token->content, "echo") == 0)
+		return (execute_echo(args, s));
+	if (ft_strcmp(cmd_token->content, "pwd") == 0)
+		return (execute_pwd(s));
+	if (ft_strcmp(cmd_token->content, "cd") == 0)
+		return (execute_cd(args, s));
+	if (ft_strcmp(cmd_token->content, "env") == 0)
+		return (execute_env(args, s->env_list, s));
+	if (ft_strcmp(cmd_token->content, "exit") == 0)
+		return (execute_exit(args, s));
+	if (ft_strcmp(cmd_token->content, "unset") == 0)
+		return (execute_unset(args, s));
+	if (ft_strcmp(cmd_token->content, "export") == 0)
+		return (execute_export(args, s));
+	(void)args;
+	(void)s;
+	return (SUCCESS);
+}
+
+//headers
+
+//types.h
+typedef struct s_pipe
+{
+	int		prev_pipe;
+	int		next_pipe[2];
+	pid_t	pid;
+} t_pipe;
+
+//When you add token type, add it in the utils to print file as well
+typedef enum e_token_type
+{
+	TYPE_ARG, //all regular words or arguments
+	TYPE_COMMAND, //built-in commands
+	TYPE_DQUOTE, // double quote
+	TYPE_SQUOTE, //single quote
+	TYPE_PIPE, // pipe
+	TYPE_REDIRIN, //< (input redirection)
+	TYPE_REDIROUT, // > (output redirection)
+	TYPE_REDIRAPPEND, // >> (append output redirection)
+	TYPE_HEREDOC_OP, // << (here document)
+	TYPE_HEREDOC_DELIM, // heredoc delimiter
+	TYPE_HEREDOC_CONTENT, // heredoc content in between delimiters
+	TYPE_HEREDOC_CONTENT_QUOTED, // heredoc content with quote
+	TOKEN_EMPTY,
+}			t_token_type;
+
+typedef struct s_token
+{
+	t_token_type	type;
+	char			*content;
+	struct s_token	*next;
+}			t_token;
+
+typedef enum e_error
+{
+	SUCCESS = 0,
+	ERR_LAUNCH = 1,
+	ERR_MALLOC = 2,
+	ERR_PARSING = 3,
+	ERR_ENV = 4,
+	ERR_CMD_NOT_FOUND = 5,
+	ERR_EXEC = 6,
+	ERR_ENV_EXEC = 7,
+	ERR_CD = 8,
+	ERR_EXIT_ARGS = 9,
+	ERR_EXPORT = 10,
+	ERR_SIGNAL = 11,
+	ERR_REDIR = 12,
+	ERR_SYNTAX = 13,
+	//..add any other relevant error
+	//do not forget to add them in print_error function in errors.c
+}	t_error;
+
+typedef struct s_env
+{
+	char			*content;
+	char			*key;
+	char			*value;
+	struct s_env	*next;
+}			t_env;
+
+//Main Shell structure, to enhanced and figure out how to use it
+typedef struct s_shell
+{
+	char	**envp;
+	t_env	*env_list;
+	t_token	*token_list;
+	int		exit_status;
+	int		stdin_copy; // Added for heredoc
+}	t_shell;
+
+//redirections.h
+
+
+// Redirection types
+typedef enum e_redir_type
+{
+	REDIR_OUT,
+	REDIR_APPEND,
+	REDIR_IN,
+	REDIR_HEREDOC
+} t_redir_type;
+
+// heredoc.c
+int		create_heredoc_file(void);
+void	save_stdin(t_shell *s);
+void	restore_stdin(t_shell *s);
+t_error	read_heredoc_input(int fd, char *delim);
+
+// redirections_utils.c
+t_error	file_error(char *filename, t_shell *s);
+t_error	syntax_error(char *msg, t_shell *s);
+int		is_redirection(t_token_type type);
+t_token	*remove_redirections(t_token *cmd);
+
+// redirections.c
+t_redir_type get_redir_type(t_token_type type);
+t_error	handle_output(t_token *redir, t_shell *s);
+t_error	handle_input(t_token *redir, t_shell *s);
+t_error	handle_redirections_(t_token *cmd, t_shell *s);
+
+// fd_management.c
+void	save_standard_fds(int fds[2]);
+void	restore_standard_fds(int fds[2]);
+t_error	handle_heredoc_(t_token *redir, t_shell *s);
+

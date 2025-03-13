@@ -1,29 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute_built_in.c                                 :+:      :+:    :+:   */
+/*   execute_builtin.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 14:59:38 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/11 17:53:41 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/13 13:17:05 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/*
-	is_built_in
-	execute_built_in
-*/
-
-/*
-Checks if a command is one of the shell's built-in commands:
-- Compares command name against list of built-ins
-- Built-ins are: echo, cd, pwd, export, unset, env, exit
-Returns: 1 if command is built-in, 0 otherwise
-*/
-int	is_built_in(char *cmd)
+int	is_builtin(char *cmd)
 {
 	if (ft_strcmp(cmd, "echo") == 0)
 		return (1);
@@ -42,12 +31,7 @@ int	is_built_in(char *cmd)
 	return (0);
 }
 
-/*Executes built-in shell commands:
-- Currently placeholder implementation
-- Will handle: echo, cd, pwd, export, unset, env, exit
-Returns: SUCCESS or appropriate error code
-*/
-t_error	execute_built_in(t_token *cmd_token, char **args, t_shell *s)
+t_error	execute_builtin(t_token *cmd_token, char **args, t_shell *s)
 {
 	if (ft_strcmp(cmd_token->content, "echo") == 0)
 		return (execute_echo(args, s));
@@ -67,20 +51,3 @@ t_error	execute_built_in(t_token *cmd_token, char **args, t_shell *s)
 	(void)s;
 	return (SUCCESS);
 }
-/*
-t_error	execute_builtin_with_redirs(t_token *cmd, char **args, t_shell *s)
-{
-	t_error	res;
-	int		original_stdout;
-	int		original_stdin;
-
-	original_stdout = dup(STDOUT_FILENO);
-	original_stdin = dup(STDIN_FILENO);
-	res = execute_built_in(cmd, args, s);
-	dup2(original_stdout, STDOUT_FILENO);
-	dup2(original_stdin, STDIN_FILENO);
-	close(original_stdout);
-	close(original_stdin);
-	return (res);
-}
- */

@@ -6,21 +6,11 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 17:57:49 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/26 17:57:09 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/13 13:07:56 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/*
-- Searches for executable in PATH directories:
-	- look for the full path (= path_dir[i] + / + command name).
-	- check if this path with "access":
-		- The flag F_OK check if the file exits.
-		- The flag X_OK gives execute permission.
-		- If no permission, exit status is 126 (found but not executable)
-- Returns full path if found, NULL if not found
-*/
 
 char	*try_path_dir(char *dir, char *cmd, t_shell *s)
 {
@@ -49,14 +39,6 @@ char	*try_path_dir(char *dir, char *cmd, t_shell *s)
 	return (NULL);
 }
 
-/*
-Searches for executable in PATH directories:
-- Iterates through each directory in PATH
-- Attempts to find executable using try_path_dir
-- If executable is not found, set exit status to 127
-- Handles memory cleanup of path_dirs array
-Returns: Full path to executable if found, NULL otherwise
-*/
 static char	*search_in_paths(char **path_dirs, char *cmd, t_shell *s)
 {
 	int		i;
@@ -79,15 +61,6 @@ static char	*search_in_paths(char **path_dirs, char *cmd, t_shell *s)
 	return (NULL);
 }
 
-/*
-Check if the command file exist.
-If it does not exist, set exit status to 127.
-If it does exit, check execution right.
-If no execution rights, set exit status to 126.
-Returns:
-- NULL if file is not found or not executable
-- direct path on success
-*/
 char	*check_direct_path(char *cmd, t_shell *s)
 {
 	if (access(cmd, F_OK) != 0)
@@ -103,16 +76,6 @@ char	*check_direct_path(char *cmd, t_shell *s)
 	return (ft_strdup(cmd));
 }
 
-/*
-Locates full path for a command:
-- Handles direct paths (containing '/')
-- If cmd file does not exist, set exit status to 127
-- If cmd file exists but permission is denied, set exit status to 126
-- Gets PATH variable from environment
-- Splits PATH into directory list
-- Searches directories for executable
-Returns: Full path to command if found, NULL if not found or error
-*/
 char	*find_command_path(char *cmd, t_shell *s)
 {
 	char	*path_env;
