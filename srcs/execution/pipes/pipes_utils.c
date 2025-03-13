@@ -6,16 +6,19 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 17:40:24 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/13 16:35:46 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/13 18:35:27 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_error	process_parent(int *prev_pipe, int pipe_fd[2], int cmd_count)
+t_error process_parent(int *prev_pipe, int pipe_fd[2], int cmd_count)
 {
 	if (*prev_pipe != -1)
+	{
 		close(*prev_pipe);
+		*prev_pipe = -1;
+	}
 	if (cmd_count > 0)
 	{
 		*prev_pipe = pipe_fd[0];
@@ -23,6 +26,7 @@ t_error	process_parent(int *prev_pipe, int pipe_fd[2], int cmd_count)
 	}
 	return (SUCCESS);
 }
+
 
 t_error	process_pipe_stage(t_shell *s, t_token **current, int *prev_pipe,
 															int cmd_count)

@@ -6,7 +6,7 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 17:40:11 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/13 16:34:30 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/13 19:21:15 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,3 +54,34 @@ t_error	execute_pipeline(t_shell *s, int cmd_count)
 	}
 	return (result);
 }
+/* t_error execute_pipeline(t_shell *s, int cmd_count)
+{
+    int prev_pipe;
+    t_token *current;
+    t_error result;
+    int status;
+    pid_t pid;
+
+    prev_pipe = -1;
+    current = s->token_list;
+    result = SUCCESS;
+    while (cmd_count > 0 && result == SUCCESS)
+    {
+        result = process_pipe_stage(s, &current, &prev_pipe, cmd_count);
+        cmd_count = cmd_count - 1;
+    }
+    if (prev_pipe != -1)
+    {
+        close(prev_pipe);
+        prev_pipe = -1;
+    }
+    pid = wait(&status);
+    while (pid > 0)
+    {
+        if (pid == s->last_pid)
+            s->exit_status = WEXITSTATUS(status);
+        pid = wait(&status);
+    }
+    return (result);
+}
+ */
