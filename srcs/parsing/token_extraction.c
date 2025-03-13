@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 14:54:55 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/13 16:28:58 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/13 16:41:02 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,22 +78,25 @@ char	*extract_quoted_token(char *args, size_t *i, t_error *error)
 	size_t	len;
 
 	token = extract_quoted_token_helper(args, i, error);
-	if (*error != SUCCESS || !token || args[*i] != '$')
-		return (token);
-	len = ft_strlen(token);
-	(*i)++;
-	new_token = malloc(len + 2);
-	if (!new_token)
+	if (args[*i] == '$' && (!args[*i + 1] || is_space(args[*i + 1])))
 	{
+		len = ft_strlen(token);
+		(*i)++;
+		new_token = malloc(len + 2);
+		if (!new_token)
+		{
+			free(token);
+			*error = ERR_MALLOC;
+			return (NULL);
+		}
+		ft_strcpy(new_token, token);
+		new_token[len] = '$';
+		new_token[len + 1] = '\0';
 		free(token);
-		*error = ERR_MALLOC;
-		return (NULL);
+		return (new_token);
 	}
-	ft_strcpy(new_token, token);
-	new_token[len] = '$';
-	new_token[len + 1] = '\0';
-	free(token);
-	return (new_token);
+	else
+		return (token);
 }
 
 /*
