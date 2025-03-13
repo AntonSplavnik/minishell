@@ -6,27 +6,49 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 12:12:24 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/05 14:51:06 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/13 12:23:45 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 /*
-Handles memory cleanup for heredoc processing:
-- Frees heredoc content if provided
-- Frees heredoc info structure and its members
+** Find all heredoc delimiter tokens in a command
 */
-t_error	cleanup_heredoc(char *content, t_heredoc_info *info, t_error status)
+int	find_heredoc_delimiters(t_token *token_list, \
+t_token *delim_tokens[MAX_HEREDOCS])
 {
-	if (content)
-		free(content);
-	if (info)
+	int		heredoc_count;
+	t_token	*current;
+
+	heredoc_count = 0;
+	current = token_list;
+	while (current)
 	{
-		free(info->delim);
-		free(info);
+		if (current->type == TYPE_HEREDOC_DELIM)
+		{
+			if (heredoc_count < MAX_HEREDOCS)
+				delim_tokens[heredoc_count++] = current;
+		}
+		if (current->type == TYPE_PIPE)
+			break ;
+		current = current->next;
 	}
-	return (status);
+	return (heredoc_count);
+}
+
+/*
+** Handles the free and return steps for collect_heredoc_content
+*/
+char	*handle_heredoc_cleanup(char *content, char *line)
+{
+	if (!line)
+	{
+		free(content);
+		return (ft_strdup(""));
+	}
+	free(line);
+	return (content);
 }
 
 /*
