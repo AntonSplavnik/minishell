@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 11:21:21 by abillote          #+#    #+#             */
-/*   Updated: 2025/01/15 12:11:45 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/13 12:18:51 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,32 +124,30 @@ Main tokenization function that processes input string:
 - Frees temporary strings and handles errors
 Returns: SUCCESS or appropriate error code
 */
-
 t_error	input_to_token(t_token **token_list, char *args)
 {
 	size_t	i;
 	t_error	error;
 	char	*token;
-	t_token	*last;
+	int		need_heredoc_processing;
 
 	i = 0;
+	need_heredoc_processing = 0;
 	while (args[i])
 	{
 		error = ft_split_token(token_list, args, &i, &token);
 		if (error != SUCCESS)
 			return (error);
 		if (!token)
-			return (SUCCESS);
+			break ;
+		if (ft_strcmp(token, "<<") == 0)
+			need_heredoc_processing = 1;
 		error = add_token(token_list, token, get_token_type(token, token_list));
 		free(token);
-		if (error == SUCCESS)
-		{
-			last = get_last_token(*token_list);
-			if (last && last->type == TYPE_HEREDOC_DELIM)
-				error = handle_heredoc(token_list, last->content, &i, args);
-		}
 		if (error != SUCCESS)
 			return (handle_error_free_tokens(error, token_list, NULL));
 	}
-	return (SUCCESS);
+	if (need_heredoc_processing)
+		error = process_heredocs(token_list);
+	return (error);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   types.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 16:08:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/13 16:20:23 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/13 17:38:42 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,10 @@ typedef enum e_error
 	ERR_EXIT_ARGS = 9,
 	ERR_EXPORT = 10,
 	ERR_SIGNAL = 11,
-	ERR_REDIR = 12,
-	ERR_SYNTAX = 13,
-	//..add any other relevant error
-	//do not forget to add them in print_error function in errors.c
+	ERR_PARSING_PIPE = 12,
+	ERR_PARSING_REDIR = 13,
+	ERR_REDIR = 14,
+	ERR_SYNTAX = 15,
 }	t_error;
 
 typedef struct s_env

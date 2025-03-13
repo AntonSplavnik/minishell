@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:08:53 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/14 10:04:25 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/13 16:29:14 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,11 @@ void	print_error(t_error error_code)
 	}
 	else if (error_code == 9)
 		ft_putendl_fd("minishell: exit: too many arguments", 2);
+	else if (error_code == 12)
+		ft_putendl_fd("minishell: syntax error near unexpected token `|'", 2);
+	else if (error_code == 13)
+		ft_putendl_fd("minishell: syntax error near \
+			unexpected token `newline'", 2);
 }
 
 /*
