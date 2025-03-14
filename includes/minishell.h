@@ -54,6 +54,7 @@ char				*ft_strndup(const char *s, size_t n);
 int					ft_strcmp(const char *s1, const char *s2);
 char				*ft_strcpy(char *dest, const char *src);
 char				*ft_strstr(const char *big, const char *little);
+char				*ft_strncpy(char *dest, const char *src, size_t n);
 
 //free.c
 void				free_token_list(t_token **token_list);
