@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 11:21:21 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/13 12:18:51 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/14 11:57:39 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ Returns: Appropriate token type from t_token_type enum
 */
 t_token_type	get_token_type(char *input, t_token **token_list)
 {
-	int	*expect_heredoc_delim;
+	int				*expect_heredoc_delim;
+	t_token_type	other_type;
 
 	expect_heredoc_delim = get_heredoc_state_ptr();
 	if (*expect_heredoc_delim)
@@ -56,6 +57,10 @@ t_token_type	get_token_type(char *input, t_token **token_list)
 		*expect_heredoc_delim = 1;
 		return (TYPE_HEREDOC_OP);
 	}
+	other_type = get_other_types(input);
+	if (other_type == TYPE_REDIRIN || other_type == TYPE_REDIROUT || \
+		other_type == TYPE_REDIRAPPEND || other_type == TYPE_HEREDOC_OP)
+		return (other_type);
 	if (is_command(token_list) == 1)
 		return (TYPE_COMMAND);
 	return (get_other_types(input));

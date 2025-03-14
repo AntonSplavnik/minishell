@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 12:46:41 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/13 13:41:19 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/13 18:27:11 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ int		count_command_args(t_token *cmd_token);
 //execute_single.c
 t_error	execute_single_command(t_token *cmd, t_shell *s);
 t_error	execute_external_command(t_token *cmd, char **args, t_shell *s);
-t_error handle_builtin_redirections(t_token *cmd, t_shell *s, int std_fds[2]);
-int has_input_redirection(t_token *cmd);
+t_error	handle_builtin_redirections(t_token *cmd, t_shell *s, int std_fds[2]);
+int		has_input_redirection(t_token *cmd);
 
 //execute_utils.c
 t_error	free_resources(char *cmd_path, t_shell *s, t_error result);
@@ -53,7 +53,6 @@ char	*find_command_path(char *cmd, t_shell *s);
 //execute_builtin.c
 t_error	execute_builtin(t_token *cmd_token, char **args, t_shell *s);
 int		is_builtin(char *cmd);
-
 
 //echo.c
 t_error	execute_echo(char **args, t_shell *s);

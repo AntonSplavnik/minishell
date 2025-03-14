@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:02:10 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/13 17:40:17 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/14 11:32:35 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ static int	handle_loop_iteration(t_shell *s)
 		return (1);
 	}
 	//Comment or uncomment the following line to debug and print token list
-	// print_token(s->token_list);
+	//print_token(s->token_list);
 	if (s->token_list && s->token_list->type == TYPE_COMMAND)
 		error = execute_command(s);
 	if (error != SUCCESS)
