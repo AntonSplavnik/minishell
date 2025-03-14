@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 14:54:55 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/14 11:11:18 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/14 11:36:50 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ static char	*extract_delimiter_token(const char *str, size_t *i, t_error *error)
 	j = *i;
 	while (is_space(str[j]))
 		j++;
-	if (str[j] == '<' || str[j] == '>' || str[j] == '|')
+	if (ft_strcmp(token, "|") && (str[j] == '<' || str[j] == '>' || str[j] == '|'))
 	{
 		*error = ERR_PARSING;
 		free(token);
@@ -285,7 +285,6 @@ t_error	ft_split_token(t_token **token_list, char *args, \
 	t_error	error;
 	int		is_export_with_equals;
 
-	//printf("1. args[*i] is %c\n", args[*i]);
 	error = SUCCESS;
 	is_export_with_equals = (*token_list \
 			&& ft_strcmp((*token_list)->content, "export") == 0 \
@@ -297,7 +296,6 @@ t_error	ft_split_token(t_token **token_list, char *args, \
 		*token = NULL;
 		return (SUCCESS);
 	}
-	//printf("2. args[*i] is %c\n", args[*i]);
 	if (is_export_with_equals)
 		*token = extract_export_token(args, i, &error);
 	else if ((args[*i] == '"' || args[*i] == '\''))
@@ -308,6 +306,5 @@ t_error	ft_split_token(t_token **token_list, char *args, \
 		*token = extract_unquoted_token(args, i, &error);
 	if (error != SUCCESS)
 		return (handle_error_free_tokens(error, token_list, NULL));
-	//printf("3.token is %s\n", *token);
 	return (SUCCESS);
 }
