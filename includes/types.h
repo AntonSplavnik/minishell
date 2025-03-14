@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 16:08:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/13 17:38:42 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/14 12:18:43 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,18 @@
 //When you add token type, add it in the utils to print file as well
 typedef enum e_token_type
 {
-	TYPE_ARG, //all regular words or arguments
-	TYPE_COMMAND, //built-in commands
-	TYPE_DQUOTE, // double quote
-	TYPE_SQUOTE, //single quote
-	TYPE_PIPE, // pipe
-	TYPE_REDIRIN, //< (input redirection)
-	TYPE_REDIROUT, // > (output redirection)
-	TYPE_REDIRAPPEND, // >> (append output redirection)
-	TYPE_HEREDOC_OP, // << (here document)
-	TYPE_HEREDOC_DELIM, // heredoc delimiter
-	TYPE_HEREDOC_CONTENT, // heredoc content in between delimiters
-	TYPE_HEREDOC_CONTENT_QUOTED, // heredoc content with quote
+	TYPE_ARG,
+	TYPE_COMMAND,
+	TYPE_DQUOTE,
+	TYPE_SQUOTE,
+	TYPE_PIPE,
+	TYPE_REDIRIN,
+	TYPE_REDIROUT,
+	TYPE_REDIRAPPEND,
+	TYPE_HEREDOC_OP,
+	TYPE_HEREDOC_DELIM,
+	TYPE_HEREDOC_CONTENT,
+	TYPE_HEREDOC_CONTENT_QUOTED,
 	TOKEN_EMPTY,
 }			t_token_type;
 

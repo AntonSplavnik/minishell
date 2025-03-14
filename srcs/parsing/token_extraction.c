@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 14:54:55 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/13 16:41:02 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/14 12:07:14 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ static char	*extract_delimiter_token(const char *str, size_t *i, t_error *error)
 	j = *i;
 	while (is_space(str[j]))
 		j++;
-	if (str[j] == '<' || str[j] == '>' || str[j] == '|')
+	if (ft_strcmp(token, "|") && (str[j] == '<' || \
+		str[j] == '>' || str[j] == '|'))
 	{
 		*error = ERR_PARSING;
 		free(token);
@@ -70,33 +71,56 @@ static char	*extract_delimiter_token(const char *str, size_t *i, t_error *error)
 	return (token);
 }
 
-/* Helper function to extract quoted content and handle $ if needed */
+/*
+Helper function to extract content without quotes
+Returns allocated string with content between quotes
+*/
+char	*extract_content_without_quotes(char *token, size_t *len)
+{
+	size_t	token_len;
+	char	*content;
+
+	token_len = ft_strlen(token);
+	if (token_len >= 2 && \
+		((token[0] == '"' && token[token_len - 1] == '"') || \
+		(token[0] == '\'' && token[token_len - 1] == '\'')))
+	{
+		*len = token_len - 2;
+		content = malloc(*len + 1);
+		if (!content)
+			return (NULL);
+		ft_strncpy(content, token + 1, *len);
+		content[*len] = '\0';
+		return (content);
+	}
+	else
+	{
+		*len = token_len;
+		return (ft_strdup(token));
+	}
+}
+
+/*
+Extract quoted token and handle adjacent quotes/special chars
+*/
 char	*extract_quoted_token(char *args, size_t *i, t_error *error)
 {
 	char	*token;
 	char	*new_token;
-	size_t	len;
 
 	token = extract_quoted_token_helper(args, i, error);
-	if (args[*i] == '$' && (!args[*i + 1] || is_space(args[*i + 1])))
+	if (!token)
+		return (NULL);
+	token = handle_dollar_after_quote(args, i, token, error);
+	if (!token)
+		return (NULL);
+	new_token = handle_adjacent_quotes(args, i, token, error);
+	if (new_token)
 	{
-		len = ft_strlen(token);
-		(*i)++;
-		new_token = malloc(len + 2);
-		if (!new_token)
-		{
-			free(token);
-			*error = ERR_MALLOC;
-			return (NULL);
-		}
-		ft_strcpy(new_token, token);
-		new_token[len] = '$';
-		new_token[len + 1] = '\0';
 		free(token);
 		return (new_token);
 	}
-	else
-		return (token);
+	return (token);
 }
 
 /*
@@ -125,7 +149,7 @@ t_error	ft_split_token(t_token **token_list, char *args, \
 	}
 	if (is_export_with_equals)
 		*token = extract_export_token(args, i, &error);
-	else if ((args[*i] == '"' || args[*i] == '\'') && is_space(args[*i - 1]))
+	else if ((args[*i] == '"' || args[*i] == '\''))
 		*token = extract_quoted_token(args, i, &error);
 	else if (is_delimiter(args[*i]))
 		*token = extract_delimiter_token(args, i, &error);

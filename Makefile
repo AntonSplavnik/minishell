@@ -31,6 +31,7 @@ SRCS = $(SRCS_DIR)/main.c \
 		$(SRCS_DIR)/parsing/token_extraction_heredoc_utils.c \
 		$(SRCS_DIR)/parsing/token_extraction_quotes.c	\
 		$(SRCS_DIR)/parsing/token_extraction_export.c	\
+		$(SRCS_DIR)/parsing/token_extraction_string.c	\
 		$(SRCS_DIR)/execution/command_path.c \
 		$(SRCS_DIR)/execution/builtin/execute_builtin.c \
 		$(SRCS_DIR)/execution/execute_child.c \
@@ -64,6 +65,7 @@ SRCS = $(SRCS_DIR)/main.c \
 		$(SRCS_DIR)/utils/ft_strcmp.c \
 		$(SRCS_DIR)/utils/ft_strcpy.c \
 		$(SRCS_DIR)/utils/ft_strstr.c \
+		$(SRCS_DIR)/utils/ft_strncpy.c \
 		$(SRCS_DIR)/signals/signals_interactive.c \
 		$(SRCS_DIR)/signals/signals_child_parent.c \
 		$(SRCS_DIR)/free.c \

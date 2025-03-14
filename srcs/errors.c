@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:08:53 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/13 16:29:14 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/14 10:50:57 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	print_error(t_error error_code)
 		if (errno == EACCES)
 			ft_putendl_fd("minishell: Permission denied", 2);
 		else
-			ft_putendl_fd("minishell: Command not found", 2);
+			ft_putendl_fd("minishell: command not found", 2);
 	}
 	else if (error_code == 9)
 		ft_putendl_fd("minishell: exit: too many arguments", 2);
