@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 13:38:17 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/13 18:27:28 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/14 14:30:26 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,5 @@ t_token	*get_next_cmd(t_token **tokens);
 int		has_pipe(t_shell *s);
 t_error	handle_pipe_operations(t_shell *s);
 t_error	execute_pipeline(t_shell *s, int cmd_count);
-void	wait_for_children_and_set_exit_status(pid_t last_pid, t_shell *s);
 
 #endif

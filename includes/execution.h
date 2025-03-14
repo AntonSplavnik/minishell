@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 12:46:41 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/13 18:27:11 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/14 15:22:07 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	handle_child_redirections(t_token *cmd, t_shell *s);
 
 //execute_command.c
 t_error	execute_command(t_shell *s);
+int is_empty_command(t_token *tokens);
 
 //execute_prepare_cmd_args.c
 char	**prepare_command_args(t_token *cmd_token);
