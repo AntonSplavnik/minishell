@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 14:22:24 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/13 14:33:06 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/14 10:32:54 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,6 @@
 
 t_redir_type	get_redir_type(t_token_type type)
 {
-	t_redir_type	rtype;
-
-	rtype = REDIR_OUT;
 	if (type == TYPE_REDIROUT)
 		return (REDIR_OUT);
 	if (type == TYPE_REDIRAPPEND)
