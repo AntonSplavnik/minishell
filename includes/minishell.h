@@ -58,7 +58,8 @@ char				*ft_strncpy(char *dest, const char *src, size_t n);
 
 //main_utils.c
 int					only_whitespace(char *s);
-void				set_exit_status(t_error error, t_shell *s);
+int					set_exit_status(t_error error, t_shell *s, char *args);
+int					cleanup_signals(t_shell *s, char *args);
 
 //free.c
 void				free_token_list(t_token **token_list);
@@ -95,10 +96,14 @@ t_error				set_env_content(t_env *new_envvar, char *env);
 
 //SIGNALS
 
-//signals_set_up.c
+//signals
 int					set_signals_interactive(void);
 int					set_signals_child(void);
 int					set_signals_parent(void);
+int					set_signals_heredoc(void);
+t_error				check_heredoc_signal(void);
+t_error				handle_heredoc_interruption(char **content_ptr, \
+						int stdin_copy);
 
 //TO DELETE BEFORE SUB
 //utils_to_print

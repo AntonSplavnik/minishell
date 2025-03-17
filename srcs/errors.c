@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:08:53 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/14 10:50:57 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/17 15:05:29 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ void	print_error(t_error error_code)
 	else if (error_code == 12)
 		ft_putendl_fd("minishell: syntax error near unexpected token `|'", 2);
 	else if (error_code == 13)
-		ft_putendl_fd("minishell: syntax error near \
-			unexpected token `newline'", 2);
+		ft_putendl_fd("minishell: syntax error near "
+			"unexpected token `newline'", 2);
 }
 
 /*
@@ -84,12 +84,13 @@ Returns: The error code passed in
 t_error	handle_error_free_tokens(t_error error_code, \
 								t_token **token_list, char *args)
 {
-	if (token_list)
+	if (token_list && *token_list)
 		free_token_list(token_list);
 	if (args)
 		free(args);
 	reset_heredoc_state();
-	print_error(error_code);
+	if (error_code != ERR_SIGNAL)
+		print_error(error_code);
 	return (error_code);
 }
 
