@@ -6,7 +6,7 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 16:54:47 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/17 14:16:12 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/17 15:41:48 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void	handle_child_redirections(t_token *cmd, t_shell *s)
 		if (is_redirection(current->type))
 		{
 			if (get_redir_type(current->type) == REDIR_HEREDOC)
-				handle_heredoc_(current, s);
+				handle_heredoc_execution(current, s);
 			else if (get_redir_type(current->type) == REDIR_IN)
 				handle_input(current, s);
 			else

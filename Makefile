@@ -20,6 +20,7 @@ all : $(NAME)
 
 #Source files
 SRCS = $(SRCS_DIR)/main.c \
+		$(SRCS_DIR)/main_utils.c \
 		$(SRCS_DIR)/parsing/token_creation.c \
 		$(SRCS_DIR)/parsing/token_extraction_utils.c \
 		$(SRCS_DIR)/parsing/token_extraction.c \

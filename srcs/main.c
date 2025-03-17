@@ -6,7 +6,7 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:02:10 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/17 14:09:48 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/17 15:59:17 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,6 @@
 #define RESET_COLOR "\001\033[0m\002"		// Reset to default
 
 int	g_sig = 0;
-
-/*
-Helper function to set exit status after processing input
-*/
-void	set_exit_status(t_error error, t_shell *s)
-{
-	if (error == ERR_MALLOC)
-		s->exit_status = 1;
-	else
-		s->exit_status = 2;
-}
 
 /*
 Gets user input from readline:
@@ -130,23 +119,9 @@ Returns: 1 to continue loop, 0 to exit
 	return (1);
 } */
 
-static int	only_whitespace(char *s)
+static int	process_command(t_shell *s, char *args)
 {
-	int	i;
-
-	i = 0;
-	while (s[i])
-	{
-		if (s[i] != ' ' && s[i] != '\t' && s[i] != '\n')
-			return (0);
-		i = i + 1;
-	}
-	return (1);
-}
-
-static int process_command(t_shell *s, char *args)
-{
-	t_error error;
+	t_error	error;
 
 	if (only_whitespace(args))
 	{
@@ -172,9 +147,9 @@ static int process_command(t_shell *s, char *args)
 	return (1);
 }
 
-static int handle_loop_iteration(t_shell *s)
+static int	handle_loop_iteration(t_shell *s)
 {
-	char *args;
+	char	*args;
 
 	if (set_signals_interactive())
 		return (0);

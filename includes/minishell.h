@@ -56,6 +56,10 @@ char				*ft_strcpy(char *dest, const char *src);
 char				*ft_strstr(const char *big, const char *little);
 char				*ft_strncpy(char *dest, const char *src, size_t n);
 
+//main_utils.c
+int					only_whitespace(char *s);
+void				set_exit_status(t_error error, t_shell *s);
+
 //free.c
 void				free_token_list(t_token **token_list);
 void				free_env_list(t_env **env_list);

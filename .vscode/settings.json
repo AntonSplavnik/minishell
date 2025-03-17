@@ -9,6 +9,10 @@
 		"readline.h": "c",
 		"signal.h": "c",
 		"unistd.h": "c",
+<<<<<<< HEAD
 		"ioctl.h": "c"
+=======
+		"pipes.h": "c"
+>>>>>>> 9d5430d31dbdbee5dbca21202823d4a0508a1196
 	}
 }
