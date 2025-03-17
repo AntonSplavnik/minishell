@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 14:13:32 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/13 18:19:38 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/17 10:07:44 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,6 @@ t_error			handle_redirections_(t_token *cmd, t_shell *s);
 // fd_management.c
 void			save_standard_fds(int fds[2]);
 void			restore_standard_fds(int fds[2]);
-t_error			handle_heredoc_(t_token *redir, t_shell *s);
+t_error			handle_heredoc_execution(t_token *redir, t_shell *s);
 
 #endif

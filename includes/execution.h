@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 12:46:41 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/14 15:22:07 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/17 10:07:36 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	handle_child_redirections(t_token *cmd, t_shell *s);
 
 //execute_command.c
 t_error	execute_command(t_shell *s);
-int is_empty_command(t_token *tokens);
+int		is_empty_command(t_token *tokens);
 
 //execute_prepare_cmd_args.c
 char	**prepare_command_args(t_token *cmd_token);
@@ -38,8 +38,8 @@ int		is_builtin(char *cmd);
 void	handle_exit_status(int status, t_shell *s);
 
 //signal_utils.c
-void	handle_child_process_io(int in_fd, int out_fd);
 void	handle_child_signal(int status, t_shell *s);
+void	handle_child_process_io(int in_fd, int out_fd);
 
 //token_utils.c
 t_token	*copy_tokens(t_token *src);
