@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:02:10 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/14 11:32:35 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/17 10:08:01 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,6 @@
 #define RESET_COLOR "\001\033[0m\002"		// Reset to default
 
 int	g_sig = 0;
-
-/*
-Helper function to set exit status after processing input
-*/
-void	set_exit_status(t_error error, t_shell *s)
-{
-	if (error == ERR_MALLOC)
-		s->exit_status = 1;
-	else
-		s->exit_status = 2;
-}
 
 /*
 Gets user input from readline:
@@ -99,7 +88,7 @@ Manages a single iteration of the shell loop:
 - Maintains shell state
 Returns: 1 to continue loop, 0 to exit
 */
-static int	handle_loop_iteration(t_shell *s)
+/* static int	handle_loop_iteration(t_shell *s)
 {
 	char	*args;
 	t_error	error;
@@ -128,6 +117,46 @@ static int	handle_loop_iteration(t_shell *s)
 	free_token_list(&s->token_list);
 	free(args);
 	return (1);
+} */
+
+static int	process_command(t_shell *s, char *args)
+{
+	t_error	error;
+
+	if (only_whitespace(args))
+	{
+		free(args);
+		s->exit_status = 0;
+		return (1);
+	}
+	error = process_input(s, args);
+	if (error != SUCCESS)
+	{
+		set_exit_status(error, s);
+		free(args);
+		return (1);
+	}
+	if (s->token_list && s->token_list->type == TYPE_COMMAND)
+		error = execute_command(s);
+	if (error != SUCCESS)
+	{
+		return (handle_error_free_tokens(error, &s->token_list, args));
+	}
+	free_token_list(&s->token_list);
+	free(args);
+	return (1);
+}
+
+static int	handle_loop_iteration(t_shell *s)
+{
+	char	*args;
+
+	if (set_signals_interactive())
+		return (0);
+	args = get_input(s);
+	if (!args)
+		return (0);
+	return (process_command(s, args));
 }
 
 int	main(int argc, char **argv, char **env)

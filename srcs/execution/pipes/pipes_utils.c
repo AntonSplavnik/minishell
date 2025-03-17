@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 17:40:24 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/13 16:35:46 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/17 10:07:49 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,10 @@
 t_error	process_parent(int *prev_pipe, int pipe_fd[2], int cmd_count)
 {
 	if (*prev_pipe != -1)
+	{
 		close(*prev_pipe);
+		*prev_pipe = -1;
+	}
 	if (cmd_count > 0)
 	{
 		*prev_pipe = pipe_fd[0];

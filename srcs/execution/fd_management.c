@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fd_management.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:09:10 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/13 13:06:58 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/17 10:07:55 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	restore_standard_fds(int fds[2])
 	close(fds[1]);
 }
 
-t_error	handle_heredoc_(t_token *redir, t_shell *s)
+t_error	handle_heredoc_execution(t_token *redir, t_shell *s)
 {
 	int		fd;
 	char	*content;

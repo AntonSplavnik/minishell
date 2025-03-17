@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_child.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 16:54:47 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/13 16:19:16 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/17 10:07:53 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static void	update_exit_status(int status, t_shell *s)
 	}
 }
 
-t_error	execute_child_process(char *cmd_path, char **args, t_shell *s)
+/* t_error	execute_child_process(char *cmd_path, char **args, t_shell *s)
 {
 	pid_t	pid;
 	int		status;
@@ -60,6 +60,44 @@ t_error	execute_child_process(char *cmd_path, char **args, t_shell *s)
 		return (ERR_EXEC);
 	}
 	return (SUCCESS);
+} */
+
+void	handle_child_errors(char *cmd_path)
+{
+	int	exit_code;
+
+	exit_code = 127;
+	if (errno == EISDIR || errno == EACCES)
+		exit_code = 126;
+	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	ft_putstr_fd(cmd_path, STDERR_FILENO);
+	if (errno == EISDIR)
+		ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
+	else if (errno == EACCES)
+		ft_putstr_fd(": Permission denied\n", STDERR_FILENO);
+	else
+		ft_putstr_fd(": command not found\n", STDERR_FILENO);
+	exit(exit_code);
+}
+
+t_error	execute_child_process(char *cmd_path, char **args, t_shell *s)
+{
+	pid_t	pid;
+	int		status;
+
+	signal(SIGINT, SIG_IGN);
+	pid = fork();
+	if (pid == -1)
+		return (ERR_EXEC);
+	if (pid == 0)
+	{
+		signal(SIGINT, SIG_DFL);
+		execve(cmd_path, args, s->envp);
+		handle_child_errors(cmd_path);
+	}
+	waitpid(pid, &status, 0);
+	update_exit_status(status, s);
+	return (SUCCESS);
 }
 
 void	handle_child_redirections(t_token *cmd, t_shell *s)
@@ -72,7 +110,7 @@ void	handle_child_redirections(t_token *cmd, t_shell *s)
 		if (is_redirection(current->type))
 		{
 			if (get_redir_type(current->type) == REDIR_HEREDOC)
-				handle_heredoc_(current, s);
+				handle_heredoc_execution(current, s);
 			else if (get_redir_type(current->type) == REDIR_IN)
 				handle_input(current, s);
 			else

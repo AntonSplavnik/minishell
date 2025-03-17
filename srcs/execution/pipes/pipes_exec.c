@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes_exec.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 15:26:40 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/13 16:36:13 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/17 10:07:48 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_error	create_pipe_and_fork(int cmd_count, int pipe_fd[2], pid_t *pid)
 	return (SUCCESS);
 }
 
-t_error	process_child(t_token *cmd, t_pipe_info *pinfo, t_shell *s)
+/* t_error	process_child(t_token *cmd, t_pipe_info *pinfo, t_shell *s)
 {
 	int	out_fd;
 
@@ -37,6 +37,25 @@ t_error	process_child(t_token *cmd, t_pipe_info *pinfo, t_shell *s)
 	{
 		close(pinfo->pipe_fd[0]);
 		break ;
+	}
+	execute_single_command(cmd, s);
+	exit(s->exit_status);
+	return (SUCCESS);
+} */
+
+t_error	process_child(t_token *cmd, t_pipe_info *pinfo, t_shell *s)
+{
+	int	out_fd;
+
+	set_output_fd(pinfo->cmd_count, pinfo->pipe_fd, &out_fd);
+	handle_child_process_io(pinfo->prev_pipe, out_fd);
+	if (pinfo->cmd_count > 0)
+	{
+		if (pinfo->pipe_fd[0] != -1)
+		{
+			close(pinfo->pipe_fd[0]);
+			pinfo->pipe_fd[0] = -1;
+		}
 	}
 	execute_single_command(cmd, s);
 	exit(s->exit_status);

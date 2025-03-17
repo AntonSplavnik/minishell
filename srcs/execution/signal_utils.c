@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 17:40:48 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/13 13:06:50 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/17 10:07:57 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 void	handle_child_process_io(int in_fd, int out_fd)
 {
-	if (in_fd != STDIN_FILENO)
+	if (in_fd != STDIN_FILENO && in_fd != -1)
 	{
 		dup2(in_fd, STDIN_FILENO);
 		close(in_fd);
 	}
-	if (out_fd != STDOUT_FILENO)
+	if (out_fd != STDOUT_FILENO && out_fd != -1)
 	{
 		dup2(out_fd, STDOUT_FILENO);
 		close(out_fd);
