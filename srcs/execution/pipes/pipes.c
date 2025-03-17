@@ -6,7 +6,7 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 17:40:11 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/14 14:30:20 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/15 15:45:20 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ t_error	handle_pipe_operations(t_shell *s)
 t_error	execute_pipeline(t_shell *s, int cmd_count)
 {
 	int		prev_pipe;
+	int		status;
 	t_token	*current;
 	t_error	result;
-	int		status;
 	pid_t	pid;
 
 	prev_pipe = -1;

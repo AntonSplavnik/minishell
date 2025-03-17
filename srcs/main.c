@@ -6,7 +6,7 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:02:10 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/14 17:17:59 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/17 14:09:48 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static char	*get_input(t_shell *s)
 {
 	char	*args;
 
-	args = readline(PROMPT_COLOR "minishell$ " RESET_COLOR);
+	args = readline(PROMPT_COLOR "minishell$ 🐚 " RESET_COLOR);
 	if (g_sig == SIGINT)
 	{
 		s->exit_status = 130;

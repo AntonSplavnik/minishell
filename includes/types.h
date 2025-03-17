@@ -3,15 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   types.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 16:08:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/14 12:18:43 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/15 16:59:17 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TYPES_H
 # define TYPES_H
+
+#include "minishell.h"
 
 //When you add token type, add it in the utils to print file as well
 typedef enum e_token_type
@@ -75,6 +77,7 @@ typedef struct s_shell
 	int		exit_status;
 	int		stdin_copy;
 	pid_t	last_pid;
+	int		std_fds[2];
 }	t_shell;
 
 #endif

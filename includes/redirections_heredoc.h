@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections_heredoc.h                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 14:13:32 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/13 18:19:38 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/15 18:23:30 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ t_error			handle_input(t_token *redir, t_shell *s);
 t_error			handle_redirections_(t_token *cmd, t_shell *s);
 
 // fd_management.c
-void			save_standard_fds(int fds[2]);
-void			restore_standard_fds(int fds[2]);
+void			save_standard_fds(t_shell *s);
+void			restore_standard_fds(t_shell *s);
 t_error			handle_heredoc_(t_token *redir, t_shell *s);
 
 #endif

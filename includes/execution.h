@@ -6,7 +6,7 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 12:46:41 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/14 15:22:07 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/15 18:25:49 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	handle_child_redirections(t_token *cmd, t_shell *s);
 
 //execute_command.c
 t_error	execute_command(t_shell *s);
-int is_empty_command(t_token *tokens);
+int		is_empty_command(t_token *tokens);
 
 //execute_prepare_cmd_args.c
 char	**prepare_command_args(t_token *cmd_token);
@@ -28,7 +28,7 @@ int		count_command_args(t_token *cmd_token);
 //execute_single.c
 t_error	execute_single_command(t_token *cmd, t_shell *s);
 t_error	execute_external_command(t_token *cmd, char **args, t_shell *s);
-t_error	handle_builtin_redirections(t_token *cmd, t_shell *s, int std_fds[2]);
+t_error	handle_builtin_redirections(t_token *cmd, t_shell *s);
 int		has_input_redirection(t_token *cmd);
 
 //execute_utils.c

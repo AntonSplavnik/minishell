@@ -6,7 +6,7 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 16:54:47 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/14 17:32:33 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/17 14:16:12 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,25 @@ static void	update_exit_status(int status, t_shell *s)
 	}
 }
 
-/* t_error	execute_child_process(char *cmd_path, char **args, t_shell *s)
+void	execute_child_process_helper(char *cmd_path, int a)
+{
+	if (a == 1)
+	{
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd(cmd_path, STDERR_FILENO);
+		ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
+		exit(126);
+	}
+	else
+	{
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd(cmd_path, STDERR_FILENO);
+		ft_putstr_fd(": Permission denied\n", STDERR_FILENO);
+		exit(126);
+	}
+}
+
+t_error	execute_child_process(char *cmd_path, char **args, t_shell *s)
 {
 	pid_t	pid;
 	int		status;
@@ -48,6 +66,10 @@ static void	update_exit_status(int status, t_shell *s)
 	{
 		signal(SIGINT, SIG_DFL);
 		execve(cmd_path, args, s->envp);
+		if (errno == EISDIR)
+			execute_child_process_helper(cmd_path, 1);
+		if (errno == EACCES)
+			execute_child_process_helper(cmd_path, 0);
 		exit(127);
 	}
 	else if (pid > 0)
@@ -56,49 +78,9 @@ static void	update_exit_status(int status, t_shell *s)
 		update_exit_status(status, s);
 	}
 	else
-	{
 		return (ERR_EXEC);
-	}
 	return (SUCCESS);
-} */
-
-t_error execute_child_process(char *cmd_path, char **args, t_shell *s)
-{
-    pid_t pid;
-    int status;
-
-    signal(SIGINT, SIG_IGN);
-    pid = fork();
-    if (pid == 0)
-    {
-        signal(SIGINT, SIG_DFL);
-        execve(cmd_path, args, s->envp);
-        if (errno == EISDIR)
-        {
-            ft_putstr_fd("minishell: ", STDERR_FILENO);
-            ft_putstr_fd(cmd_path, STDERR_FILENO);
-            ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
-            exit(126);
-        }
-        if (errno == EACCES)
-        {
-            ft_putstr_fd("minishell: ", STDERR_FILENO);
-            ft_putstr_fd(cmd_path, STDERR_FILENO);
-            ft_putstr_fd(": Permission denied\n", STDERR_FILENO);
-            exit(126);
-        }
-        exit(127);
-    }
-    else if (pid > 0)
-    {
-        waitpid(pid, &status, 0);
-        update_exit_status(status, s);
-    }
-    else
-        return (ERR_EXEC);
-    return (SUCCESS);
 }
-
 
 void	handle_child_redirections(t_token *cmd, t_shell *s)
 {
