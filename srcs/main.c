@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:02:10 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/17 10:08:01 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/17 11:50:23 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,12 +71,12 @@ static t_error	process_input(t_shell *s, char *args)
 			error = ERR_PARSING_PIPE;
 		else
 			error = ERR_PARSING_REDIR;
-		handle_error_free_tokens(error, &s->token_list, args);
+		handle_error_free_tokens(error, &s->token_list, NULL);
 		return (error);
 	}
 	error = expand_tokens(s);
 	if (error != SUCCESS)
-		handle_error_free_tokens(error, &s->token_list, args);
+		handle_error_free_tokens(error, &s->token_list, NULL);
 	return (error);
 }
 
@@ -136,12 +136,12 @@ static int	process_command(t_shell *s, char *args)
 		free(args);
 		return (1);
 	}
-	if (s->token_list && s->token_list->type == TYPE_COMMAND)
+	if (s->token_list)
 		error = execute_command(s);
+	if (s->exit_status == 127)
+		error = ERR_CMD_NOT_FOUND;
 	if (error != SUCCESS)
-	{
 		return (handle_error_free_tokens(error, &s->token_list, args));
-	}
 	free_token_list(&s->token_list);
 	free(args);
 	return (1);
