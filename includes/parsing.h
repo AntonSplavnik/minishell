@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 15:58:40 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/14 12:18:14 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/17 15:18:44 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define PARSING_H
 
 # define MAX_HEREDOCS 16
+# define ERR_DELIMITER 100
 
 # include "minishell.h"
 
@@ -88,18 +89,30 @@ void			process_quote(char quote_char, int *in_squote, \
 						int *in_dquote);
 
 //token_extraction_heredoc
-t_error			handle_heredoc(t_token **token_list, \
-						char *delimiter);
-t_error			process_heredocs(t_token **token_list);
+t_error			init_heredoc_collection(char *delimiter, char **content_ptr, \
+							int *stdin_copy);
+t_error			collect_heredoc_content(char *delimiter, char **content_ptr);
 char			*handle_line_input(char *content, char *line);
+t_token_type	get_heredoc_content_type(t_heredoc_info *heredoc_info);
+
+//token_extraction_heredoc_processing
+int				find_heredoc_delimiters(t_token *token_list,
+					t_token *delim_tokens[MAX_HEREDOCS]);
+t_error			process_heredocs(t_token **token_list);
+t_error			process_single_heredoc(t_token **token_list, \
+						t_token *delim_token,
+					int is_last);
+t_error			handle_heredoc(t_token **token_list, char *delim);
+t_error			process_heredoc_line(char *line, char *delimiter, \
+					char **content_ptr);
 
 //token_extraction_heredoc_utils
-int				find_heredoc_delimiters(t_token *token_list, \
-					t_token *delim_tokens[MAX_HEREDOCS]);
 char			*handle_heredoc_cleanup(char *content, char *line);
 t_heredoc_info	*get_heredoc_info(char *delim);
 int				*get_heredoc_state_ptr(void);
 void			reset_heredoc_state(void);
+void			cleanup_heredoc_info(t_heredoc_info *heredoc_info, \
+					char *content);
 
 //token_extraction_quotes
 char			*extract_double_quotes(char *args, size_t *i, \
