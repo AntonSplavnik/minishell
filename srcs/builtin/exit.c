@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 17:13:23 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/17 14:16:10 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/17 18:49:02 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,6 @@ static int	has_overflow(size_t len, int sign, char *s)
 		ft_strcmp(s + 1, "9223372036854775808") > 0))
 		return (1);
 	return (0);
-}
-
-void restore_std_fds_from_shell(t_shell *s)
-{
-    dup2(s->std_fds[0], STDIN_FILENO);
-    dup2(s->std_fds[1], STDOUT_FILENO);
-    close(s->std_fds[0]);
-    close(s->std_fds[1]);
-    s->std_fds[0] = -1;
-    s->std_fds[1] = -1;
 }
 
 /*
@@ -114,7 +104,16 @@ When a larger number is used, it is wrapped around using modulo 256)
 	exit(exit_code % 256);
 } */
 
-t_error execute_exit(char **args, t_shell *s)
+void	simple_exit(t_shell *s, char **args)
+{
+	int	exit_code;
+
+	exit_code = s->exit_status;
+	free_all(s, args);
+	exit(exit_code);
+}
+
+t_error	execute_exit(char **args, t_shell *s)
 {
 	int count_args;
 	int exit_code;
@@ -122,12 +121,8 @@ t_error execute_exit(char **args, t_shell *s)
 	count_args = ft_count_args(args);
 	restore_standard_fds(s);
 	if (count_args == 1)
-	{
-		exit_code = s->exit_status;
-		free_all(s, args);
-		exit(exit_code);
-	}
-	if (! is_valid_exit_code(args[1]))
+		simple_exit(s, args);
+	if (!is_valid_exit_code(args[1]))
 	{
 		print_error_builtin("exit", args[1], ": numeric argument required");
 		free_all(s, args);

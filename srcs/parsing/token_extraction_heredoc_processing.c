@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/17 15:02:42 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/17 18:38:10 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,10 @@ t_error	process_single_heredoc(t_token **token_list, t_token *delim_token,
 	temp_content = NULL;
 	result = collect_heredoc_content(delim_token->content, &temp_content);
 	if (temp_content)
+	{
 		free(temp_content);
+		temp_content = NULL;
+	}
 	return (result);
 }
 

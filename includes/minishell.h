@@ -49,6 +49,10 @@
 //global variable for signals
 extern int			g_sig;
 
+//to delete
+static int token_alloc_count = 0;
+static int token_free_count = 0;
+
 //utils
 char				*ft_strndup(const char *s, size_t n);
 int					ft_strcmp(const char *s1, const char *s2);

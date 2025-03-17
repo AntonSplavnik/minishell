@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 13:31:19 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/17 15:03:54 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/17 18:38:49 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,12 @@ void	reset_signal_state(void)
 */
 t_error	handle_heredoc_interruption(char **content_ptr, int stdin_copy)
 {
-	free(*content_ptr);
-	*content_ptr = NULL;
+
+	if (*content_ptr)
+	{
+		free(*content_ptr);
+		*content_ptr = NULL;
+	}
 	dup2(stdin_copy, STDIN_FILENO);
 	close(stdin_copy);
 	set_signals_interactive();

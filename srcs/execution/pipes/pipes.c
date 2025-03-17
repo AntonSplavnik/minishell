@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 17:40:11 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/15 15:45:20 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/17 18:02:07 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,14 @@ t_error	handle_pipe_operations(t_shell *s)
 {
 	int		pipe_count;
 	int		cmd_count;
+	t_error	result;
 
 	pipe_count = count_pipes(s->token_list);
 	if (pipe_count == 0)
 		return (ERR_PARSING);
 	cmd_count = pipe_count + 1;
-	return (execute_pipeline(s, cmd_count));
+	result = execute_pipeline(s, cmd_count);
+	return (result);
 }
 
 t_error	execute_pipeline(t_shell *s, int cmd_count)
@@ -45,6 +47,8 @@ t_error	execute_pipeline(t_shell *s, int cmd_count)
 		cmd_count = cmd_count - 1;
 		result = process_pipe_stage(s, &current, &prev_pipe, cmd_count);
 	}
+	if (prev_pipe != -1)
+		close(prev_pipe);
 	pid = wait(&status);
 	while (pid > 0)
 	{

@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 17:40:24 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/17 10:07:49 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/17 17:51:44 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,15 @@ t_error	process_pipe_stage(t_shell *s, t_token **current, int *prev_pipe,
 		pinfo.cmd_count = cmd_count;
 		pinfo.pipe_fd[0] = pipe_fd[0];
 		pinfo.pipe_fd[1] = pipe_fd[1];
-		return (process_child(cmd, &pinfo, s));
+		result = process_child(cmd, &pinfo, s);
+		token_clear(&cmd);
+		exit(s->exit_status);
 	}
 	else
 	{
 		if (cmd_count == 0)
 			s->last_pid = pid;
+		token_clear(&cmd);
 		return (process_parent(prev_pipe, pipe_fd, cmd_count));
 	}
 }
@@ -74,6 +77,7 @@ t_token	*get_next_cmd(t_token **tokens)
 {
 	t_token	*cmd_start;
 	t_token	*current;
+	t_token	*cmd_copy;
 
 	cmd_start = *tokens;
 	current = *tokens;
@@ -86,5 +90,8 @@ t_token	*get_next_cmd(t_token **tokens)
 	}
 	else
 		*tokens = NULL;
-	return (cmd_start);
+	if (current)
+		current->next = *tokens;
+	cmd_copy = copy_tokens(cmd_start);
+	return (cmd_copy);
 }
