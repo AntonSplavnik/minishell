@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 16:27:25 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/13 12:26:20 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/17 15:04:30 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,39 +14,78 @@
 #include <readline/readline.h>
 
 /*
-** Collects heredoc content until delimiter is encountered
+** Initializes heredoc content collection process
+** Returns: SUCCESS, ERR_MALLOC, or ERR_EXEC
 */
-static char	*collect_heredoc_content(char *delimiter, char *initial_content)
+t_error	init_heredoc_collection(char *delimiter, char **content_ptr, \
+									int *stdin_copy)
+{
+	*stdin_copy = dup(STDIN_FILENO);
+	if (*stdin_copy == -1)
+		return (ERR_EXEC);
+	if (!delimiter || !content_ptr)
+	{
+		close(*stdin_copy);
+		return (ERR_MALLOC);
+	}
+	*content_ptr = ft_strdup("");
+	if (!*content_ptr)
+	{
+		close(*stdin_copy);
+		return (ERR_MALLOC);
+	}
+	if (set_signals_heredoc())
+	{
+		free(*content_ptr);
+		*content_ptr = NULL;
+		close(*stdin_copy);
+		return (ERR_SIGNAL);
+	}
+	g_sig = 0;
+	return (SUCCESS);
+}
+
+/*
+** Clean up resources when exiting heredoc collection
+*/
+t_error	cleanup_heredoc_collection(int stdin_copy, t_error return_code)
+{
+	close(stdin_copy);
+	set_signals_interactive();
+	return (return_code);
+}
+
+/*
+** Main heredoc content collection loop
+** Returns SUCCESS on normal completion or error code on failure
+*/
+t_error	collect_heredoc_content(char *delimiter,
+								char **content_ptr)
 {
 	char	*line;
-	char	*content;
-	char	*new_content;
+	int		stdin_copy;
+	t_error	result;
 
-	if (!initial_content)
-		content = ft_strdup("");
-	else
-		content = initial_content;
-	if (!content)
-		return (NULL);
+	result = init_heredoc_collection(delimiter, content_ptr, &stdin_copy);
+	if (result != SUCCESS)
+		return (result);
 	while (1)
 	{
 		line = readline("> ");
-		if (!line || ft_strcmp(line, delimiter) == 0)
-			return (handle_heredoc_cleanup(content, line));
-		new_content = handle_line_input(content, line);
-		if (!new_content)
-		{
-			free(line);
-			free(content);
-			return (NULL);
-		}
-		content = new_content;
+		result = process_heredoc_line(line, delimiter, content_ptr);
+		if (result == ERR_SIGNAL)
+			return (handle_heredoc_interruption(content_ptr, stdin_copy));
+		if (result == ERR_DELIMITER)
+			return (cleanup_heredoc_collection(stdin_copy, SUCCESS));
+		if (result != SUCCESS)
+			return (cleanup_heredoc_collection(stdin_copy, ERR_MALLOC));
 	}
 }
 
 /*
- * Helper function to add a line to existing content
- */
+** Adds a line to existing heredoc content
+** Returns new concatenated content or NULL on error
+*/
 char	*handle_line_input(char *content, char *line)
 {
 	char	*temp;
@@ -72,89 +111,12 @@ char	*handle_line_input(char *content, char *line)
 }
 
 /*
-Handles the extraction and creation of heredoc tokens:
-- Check if delimiter is quoted or not -
-add a flag and remove the quotes if quoted
-- Searches for the unquoted delimiter in the input string (= args)
-- If delimiter not found in args, prompts for input
- using process_heredoc_content
-- Creates appropriate token type based on quoted status
-- Creates a new token with the heredoc content
-- Updates index to skip over the processed content
-Returns: SUCCESS or ERR_MALLOC if memory allocation fails
+** Determines token type based on heredoc info
+** Returns appropriate token type
 */
-
-t_error	handle_heredoc(t_token **token_list, char *delim)
+t_token_type	get_heredoc_content_type(t_heredoc_info *heredoc_info)
 {
-	char			*content;
-	t_error			result;
-	t_heredoc_info	*heredoc_info;
-	t_token_type	content_type;
-
-	content = NULL;
-	heredoc_info = get_heredoc_info(delim);
-	if (!heredoc_info)
-		return (ERR_MALLOC);
-	content = collect_heredoc_content(heredoc_info->delim, NULL);
-	if (!content)
-	{
-		free(heredoc_info->delim);
-		free(heredoc_info);
-		return (ERR_MALLOC);
-	}
 	if (heredoc_info->is_quoted)
-		content_type = TYPE_HEREDOC_CONTENT_QUOTED;
-	else
-		content_type = TYPE_HEREDOC_CONTENT;
-	result = add_token(token_list, content, content_type);
-	return (result);
-}
-
-/*
-** Process a single heredoc based on whether it's the last one
-*/
-static t_error	process_single_heredoc(t_token **token_list,
-	t_token *delim_token, int is_last)
-{
-	t_error	result;
-	char	*content;
-
-	if (is_last)
-	{
-		result = handle_heredoc(token_list, delim_token->content);
-		if (result != SUCCESS)
-			return (result);
-	}
-	else
-	{
-		content = collect_heredoc_content(delim_token->content, NULL);
-		if (content)
-			free(content);
-	}
-	return (SUCCESS);
-}
-
-/*
-** Process all heredocs for a command but only store the last one's content
-*/
-t_error	process_heredocs(t_token **token_list)
-{
-	int		heredoc_count;
-	t_token	*delim_tokens[MAX_HEREDOCS];
-	int		i;
-	t_error	result;
-
-	heredoc_count = find_heredoc_delimiters(*token_list, delim_tokens);
-	if (heredoc_count == 0)
-		return (SUCCESS);
-	i = 0;
-	while (i < heredoc_count)
-	{
-		result = process_single_heredoc(token_list, delim_tokens[i], \
-			(i == heredoc_count - 1));
-		if (result != SUCCESS)
-			return (result);
-		i++;
-	}
-	return (SUCCESS);
+		return (TYPE_HEREDOC_CONTENT_QUOTED);
+	return (TYPE_HEREDOC_CONTENT);
 }

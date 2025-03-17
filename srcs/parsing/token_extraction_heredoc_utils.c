@@ -6,35 +6,22 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 12:12:24 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/13 12:23:45 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/17 15:05:41 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-/*
-** Find all heredoc delimiter tokens in a command
-*/
-int	find_heredoc_delimiters(t_token *token_list, \
-t_token *delim_tokens[MAX_HEREDOCS])
+void	cleanup_heredoc_info(t_heredoc_info *heredoc_info, char *content)
 {
-	int		heredoc_count;
-	t_token	*current;
-
-	heredoc_count = 0;
-	current = token_list;
-	while (current)
+	if (content)
+		free(content);
+	if (heredoc_info)
 	{
-		if (current->type == TYPE_HEREDOC_DELIM)
-		{
-			if (heredoc_count < MAX_HEREDOCS)
-				delim_tokens[heredoc_count++] = current;
-		}
-		if (current->type == TYPE_PIPE)
-			break ;
-		current = current->next;
+		if (heredoc_info->delim)
+			free(heredoc_info->delim);
+		free(heredoc_info);
 	}
-	return (heredoc_count);
 }
 
 /*
