@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 17:40:24 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/17 17:51:44 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/17 18:59:35 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,19 +79,31 @@ t_token	*get_next_cmd(t_token **tokens)
 	t_token	*current;
 	t_token	*cmd_copy;
 
+	// Find the first command (skipping empty tokens)
 	cmd_start = *tokens;
-	current = *tokens;
-	while (current && ft_strcmp(current->content, "|") != 0)
-		current = current->next;
-	if (current)
+	while (cmd_start && cmd_start->content[0] == '\0')
+		cmd_start = cmd_start->next;
+
+	// If no valid command, return NULL
+	if (!cmd_start)
 	{
-		*tokens = current->next;
-		current->next = NULL;
+		*tokens = NULL;
+		return (NULL);
+	}
+
+	// Find end of this command (either pipe or end of list)
+	current = cmd_start;
+	while (current->next && ft_strcmp(current->next->content, "|") != 0)
+		current = current->next;
+
+	// Cut the command from the original list
+	if (current->next)
+	{
+		*tokens = current->next->next;  // Skip pipe
+		current->next->next = NULL;     // Detach pipe
 	}
 	else
-		*tokens = NULL;
-	if (current)
-		current->next = *tokens;
+		*tokens = NULL;  // No more tokens
 	cmd_copy = copy_tokens(cmd_start);
 	return (cmd_copy);
 }
