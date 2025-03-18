@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 16:27:25 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/17 18:32:58 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/18 10:41:18 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ char	*handle_line_input(char *content, char *line)
 	{
 		new_content = ft_strdup(line);
 		free(line);
+		free(content);
 		return (new_content);
 	}
 	temp = ft_strjoin(content, "\n");

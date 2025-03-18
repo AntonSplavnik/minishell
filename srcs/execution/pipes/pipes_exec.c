@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 15:26:40 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/17 10:07:48 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/18 10:51:04 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ t_error	process_child(t_token *cmd, t_pipe_info *pinfo, t_shell *s)
 {
 	int	out_fd;
 
+	set_signals_child();
 	set_output_fd(pinfo->cmd_count, pinfo->pipe_fd, &out_fd);
 	handle_child_process_io(pinfo->prev_pipe, out_fd);
 	if (pinfo->cmd_count > 0)

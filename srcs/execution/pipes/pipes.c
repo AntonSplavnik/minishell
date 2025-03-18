@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 17:40:11 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/18 10:19:47 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/18 11:19:26 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,14 @@ t_error	execute_pipeline(t_shell *s, int cmd_count)
 	t_token	*current;
 	t_error	result;
 	pid_t	pid;
+	int		is_sigint;
 
+	is_sigint = 0;
 	prev_pipe = -1;
 	current = s->token_list;
 	result = SUCCESS;
+	signal(SIGINT, SIG_IGN);
+	signal(SIGINT, signal_handler_parent);
 	while (cmd_count > 0 && result == SUCCESS)
 	{
 		cmd_count = cmd_count - 1;
@@ -57,10 +61,42 @@ t_error	execute_pipeline(t_shell *s, int cmd_count)
 		close(prev_pipe);
 	pid = wait(&status);
 	while (pid > 0)
-	{
-		if (pid == s->last_pid)
-			s->exit_status = WEXITSTATUS(status);
-		pid = wait(&status);
-	}
+    {
+        if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+            is_sigint = 1;
+
+        if (pid == s->last_pid)
+        {
+            if (WIFEXITED(status))
+                s->exit_status = WEXITSTATUS(status);
+            else if (WIFSIGNALED(status))
+                s->exit_status = 128 + WTERMSIG(status);
+        }
+        pid = wait(&status);
+    }
+
+     // Always print a newline to the terminal for SIGINT in pipeline
+	 if (is_sigint)
+	 {
+		 // Save stdout and restore it after writing the newline
+		 int saved_stdout = dup(STDOUT_FILENO);
+		 if (saved_stdout != -1)
+		 {
+			 // Force output to the terminal
+			 int tty = open("/dev/tty", O_WRONLY);
+			 if (tty != -1)
+			 {
+				 dup2(tty, STDOUT_FILENO);
+				 write(STDOUT_FILENO, "\n\n", 1);
+				 close(tty);
+			 }
+			 // Restore original stdout
+			 dup2(saved_stdout, STDOUT_FILENO);
+			 close(saved_stdout);
+		 }
+	 }
+
+    // Restore interactive signal handling
+    set_signals_interactive();
 	return (result);
 }

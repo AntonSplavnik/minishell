@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:02:10 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/17 16:02:45 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/18 10:57:53 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ static int	handle_loop_iteration(t_shell *s)
 
 	if (set_signals_interactive())
 		return (0);
+	g_sig = 0;
 	args = get_input(s);
 	if (!args)
 		return (0);

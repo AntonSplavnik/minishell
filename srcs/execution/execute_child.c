@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_child.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 16:54:47 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/17 15:41:48 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/18 11:51:15 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,13 @@ static void	update_exit_status(int status, t_shell *s)
 		if (WTERMSIG(status) == SIGINT)
 		{
 			s->exit_status = 130;
-			write(1, "\n", 1);
+			if (isatty(STDOUT_FILENO))
+				write(1, "\n", 1);
 			return ;
 		}
 		if (WTERMSIG(status) == SIGQUIT)
 		{
 			s->exit_status = 131;
-			write(2, "Quit: 3\n", 9);
 			return ;
 		}
 		s->exit_status = 128 + WTERMSIG(status);
@@ -65,6 +65,7 @@ t_error	execute_child_process(char *cmd_path, char **args, t_shell *s)
 	if (pid == 0)
 	{
 		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		execve(cmd_path, args, s->envp);
 		if (errno == EISDIR)
 			execute_child_process_helper(cmd_path, 1);
