@@ -34,6 +34,7 @@ SRCS = $(SRCS_DIR)/main.c \
 		$(SRCS_DIR)/parsing/token_extraction_quotes.c	\
 		$(SRCS_DIR)/parsing/token_extraction_export.c	\
 		$(SRCS_DIR)/parsing/token_extraction_string.c	\
+		$(SRCS_DIR)/parsing/token_extraction_string_unquoted.c	\
 		$(SRCS_DIR)/execution/command_path.c \
 		$(SRCS_DIR)/execution/builtin/execute_builtin.c \
 		$(SRCS_DIR)/execution/execute_child.c \
@@ -44,6 +45,7 @@ SRCS = $(SRCS_DIR)/main.c \
 		$(SRCS_DIR)/execution/fd_management.c \
 		$(SRCS_DIR)/execution/pipes/pipes_exec.c \
 		$(SRCS_DIR)/execution/pipes/pipes_utils.c \
+		$(SRCS_DIR)/execution/pipes/pipes_process.c \
 		$(SRCS_DIR)/execution/pipes/pipes.c \
 		$(SRCS_DIR)/execution/redirections/redirections.c \
 		$(SRCS_DIR)/execution/redirections/redirections_utils.c \
@@ -73,7 +75,6 @@ SRCS = $(SRCS_DIR)/main.c \
 		$(SRCS_DIR)/signals/signals_heredoc.c \
 		$(SRCS_DIR)/free.c \
 		$(SRCS_DIR)/errors.c \
-		$(SRCS_DIR)/utils_to_print.c
 
 #Object files
 OBJS = $(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)

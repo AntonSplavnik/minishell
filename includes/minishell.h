@@ -49,10 +49,6 @@
 //global variable for signals
 extern int			g_sig;
 
-//to delete
-static int token_alloc_count = 0;
-static int token_free_count = 0;
-
 //utils
 char				*ft_strndup(const char *s, size_t n);
 int					ft_strcmp(const char *s1, const char *s2);
@@ -109,11 +105,5 @@ t_error				check_heredoc_signal(void);
 t_error				handle_heredoc_interruption(char **content_ptr, \
 						int stdin_copy);
 void				signal_handler_parent(int signum);
-
-//TO DELETE BEFORE SUB
-//utils_to_print
-void				print_token(t_token *token_list);
-extern const char	*g_token_type_str[];
-void				print_env(t_env *env_list);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 15:58:40 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/17 15:18:44 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/18 15:42:01 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,5 +141,11 @@ char			*handle_adjacent_quotes(char *args, size_t *i, \
 					char *token, t_error *error);
 char			*handle_dollar_after_quote(char *args, \
 					size_t *i, char *token, t_error *error);
+
+char			*handle_adjacent_unquoted(char *args, size_t *i,
+					char *token, t_error *error);
+char			*create_combined_token(char *token, char *unquoted_part,
+					t_error *error);
+int				is_adjacent_unquoted_char(char c);
 
 #endif
