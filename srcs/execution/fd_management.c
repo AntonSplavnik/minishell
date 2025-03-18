@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   fd_management.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:09:10 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/17 16:20:01 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/18 12:53:16 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "minishell.h"
 

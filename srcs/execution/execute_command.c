@@ -6,16 +6,16 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 17:39:28 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/18 11:58:56 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/18 12:53:29 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static t_error execute_nonpipe_command(t_shell *s)
+static t_error	execute_nonpipe_command(t_shell *s)
 {
-	t_token *cmd_copy;
-	t_error res;
+	t_token	*cmd_copy;
+	t_error	res;
 
 	cmd_copy = copy_tokens(s->token_list);
 	if (!cmd_copy)
