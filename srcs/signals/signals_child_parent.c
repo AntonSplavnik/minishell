@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 15:23:20 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/17 14:35:53 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/18 11:15:07 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,9 @@ void	signal_handler_parent(int signum)
 {
 	g_sig = signum;
 	if (signum == SIGINT)
-		write(2, "\n", 1);
+		write(STDERR_FILENO, "\n", 1);
 	else if (signum == SIGQUIT)
-		write(2, "Quit (core dumped)\n", 18);
+		write(STDERR_FILENO, "Quit (core dumped)\n", 18);
 }
 
 /*

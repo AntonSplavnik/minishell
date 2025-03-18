@@ -104,6 +104,7 @@ int					set_signals_heredoc(void);
 t_error				check_heredoc_signal(void);
 t_error				handle_heredoc_interruption(char **content_ptr, \
 						int stdin_copy);
+void				signal_handler_parent(int signum);
 
 //TO DELETE BEFORE SUB
 //utils_to_print

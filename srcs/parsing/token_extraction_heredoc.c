@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 16:27:25 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/17 15:04:30 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/18 12:03:26 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,14 @@ t_error	init_heredoc_collection(char *delimiter, char **content_ptr, \
 /*
 ** Clean up resources when exiting heredoc collection
 */
-t_error	cleanup_heredoc_collection(int stdin_copy, t_error return_code)
+t_error	cleanup_heredoc_collection(int stdin_copy, \
+			t_error return_code, char **content_ptr)
 {
+	if (return_code != SUCCESS && *content_ptr)
+	{
+		free(*content_ptr);
+		*content_ptr = NULL;
+	}
 	close(stdin_copy);
 	set_signals_interactive();
 	return (return_code);
@@ -74,11 +80,14 @@ t_error	collect_heredoc_content(char *delimiter,
 		line = readline("> ");
 		result = process_heredoc_line(line, delimiter, content_ptr);
 		if (result == ERR_SIGNAL)
-			return (handle_heredoc_interruption(content_ptr, stdin_copy));
+			return (handle_heredoc_interruption(content_ptr, \
+					stdin_copy));
 		if (result == ERR_DELIMITER)
-			return (cleanup_heredoc_collection(stdin_copy, SUCCESS));
+			return (cleanup_heredoc_collection(stdin_copy, \
+					SUCCESS, content_ptr));
 		if (result != SUCCESS)
-			return (cleanup_heredoc_collection(stdin_copy, ERR_MALLOC));
+			return (cleanup_heredoc_collection(stdin_copy, \
+					ERR_MALLOC, content_ptr));
 	}
 }
 
@@ -95,6 +104,7 @@ char	*handle_line_input(char *content, char *line)
 	{
 		new_content = ft_strdup(line);
 		free(line);
+		free(content);
 		return (new_content);
 	}
 	temp = ft_strjoin(content, "\n");

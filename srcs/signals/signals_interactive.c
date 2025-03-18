@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 11:17:51 by abillote          #+#    #+#             */
-/*   Updated: 2025/02/19 11:59:48 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/18 12:01:46 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,19 @@ Signal handler function:
 
 void	signal_handler_interactive(int signum)
 {
+	int	tty;
+
 	g_sig = signum;
 	if (signum == SIGINT)
 	{
-		write(1, "\n", 1);
+		tty = open("/dev/tty", O_WRONLY);
+		if (tty != -1)
+		{
+			write(tty, "\n\n", 1);
+			close(tty);
+		}
+		else
+			write(1, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();

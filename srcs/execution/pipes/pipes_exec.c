@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 15:26:40 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/17 10:07:48 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/18 12:44:06 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,31 +22,11 @@ t_error	create_pipe_and_fork(int cmd_count, int pipe_fd[2], pid_t *pid)
 	return (SUCCESS);
 }
 
-/* t_error	process_child(t_token *cmd, t_pipe_info *pinfo, t_shell *s)
-{
-	int	out_fd;
-
-	set_output_fd(pinfo->cmd_count, pinfo->pipe_fd, &out_fd);
-	handle_child_process_io(pinfo->prev_pipe, out_fd);
-	while (pinfo->prev_pipe != -1)
-	{
-		close(pinfo->prev_pipe);
-		break ;
-	}
-	while (pinfo->cmd_count > 0)
-	{
-		close(pinfo->pipe_fd[0]);
-		break ;
-	}
-	execute_single_command(cmd, s);
-	exit(s->exit_status);
-	return (SUCCESS);
-} */
-
 t_error	process_child(t_token *cmd, t_pipe_info *pinfo, t_shell *s)
 {
 	int	out_fd;
 
+	set_signals_child();
 	set_output_fd(pinfo->cmd_count, pinfo->pipe_fd, &out_fd);
 	handle_child_process_io(pinfo->prev_pipe, out_fd);
 	if (pinfo->cmd_count > 0)
@@ -68,4 +48,28 @@ void	set_output_fd(int cmd_count, int pipe_fd[2], int *out_fd)
 		*out_fd = pipe_fd[1];
 	else
 		*out_fd = STDOUT_FILENO;
+}
+
+t_error	process_parent(int *prev_pipe, int pipe_fd[2], int cmd_count)
+{
+	if (*prev_pipe != -1)
+	{
+		close(*prev_pipe);
+		*prev_pipe = -1;
+	}
+	if (cmd_count > 0)
+	{
+		*prev_pipe = pipe_fd[0];
+		close(pipe_fd[1]);
+	}
+	return (SUCCESS);
+}
+
+void	setup_pipe_info(t_pipe_info *pinfo, int *prev_pipe,
+			int pipe_fd[2], int cmd_count)
+{
+	pinfo->prev_pipe = *prev_pipe;
+	pinfo->cmd_count = cmd_count;
+	pinfo->pipe_fd[0] = pipe_fd[0];
+	pinfo->pipe_fd[1] = pipe_fd[1];
 }
