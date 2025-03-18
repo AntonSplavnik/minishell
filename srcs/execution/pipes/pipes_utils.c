@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 17:40:24 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/17 18:59:35 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/18 10:20:08 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,9 @@ t_error	process_pipe_stage(t_shell *s, t_token **current, int *prev_pipe,
 	t_pipe_info	pinfo;
 
 	cmd = get_next_cmd(current);
+	// printf("in process pipe stage, after get next cmd, token list is\n");
+	// print_token(s->token_list);
+	// printf("\n");
 	result = create_pipe_and_fork(cmd_count, pipe_fd, &pid);
 	if (result != SUCCESS)
 		return (result);
@@ -75,9 +78,10 @@ int	count_pipes(t_token *tokens)
 
 t_token	*get_next_cmd(t_token **tokens)
 {
-	t_token	*cmd_start;
-	t_token	*current;
-	t_token	*cmd_copy;
+	t_token *cmd_start;
+	t_token *current;
+	t_token *cmd_copy = NULL;
+	int token_count = 0;
 
 	// Find the first command (skipping empty tokens)
 	cmd_start = *tokens;
@@ -88,22 +92,38 @@ t_token	*get_next_cmd(t_token **tokens)
 	if (!cmd_start)
 	{
 		*tokens = NULL;
-		return (NULL);
+		return NULL;
 	}
 
-	// Find end of this command (either pipe or end of list)
+	// Count tokens until pipe or end of list
 	current = cmd_start;
-	while (current->next && ft_strcmp(current->next->content, "|") != 0)
-		current = current->next;
-
-	// Cut the command from the original list
-	if (current->next)
+	while (current && ft_strcmp(current->content, "|") != 0)
 	{
-		*tokens = current->next->next;  // Skip pipe
-		current->next->next = NULL;     // Detach pipe
+		token_count++;
+		current = current->next;
 	}
+
+	// Copy only the command tokens (not including pipe)
+	current = cmd_start;
+	for (int i = 0; i < token_count; i++)
+	{
+		t_token *new_token = token_new(current->content, current->type);
+		if (!new_token)
+		{
+			token_clear(&cmd_copy);
+			return NULL;
+		}
+		token_add_back(&cmd_copy, new_token);
+		current = current->next;
+	}
+
+	// Update tokens pointer to point after the pipe
+	if (current && ft_strcmp(current->content, "|") == 0)
+		*tokens = current->next;  // Skip the pipe token
 	else
 		*tokens = NULL;  // No more tokens
-	cmd_copy = copy_tokens(cmd_start);
-	return (cmd_copy);
+	// printf("in get next cmd, after detaching pipe list is\n");
+	// print_token(*tokens);
+	// printf("\n");
+	return cmd_copy;
 }

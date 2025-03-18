@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 17:40:11 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/17 18:02:07 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/18 10:19:47 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,13 @@ t_error	execute_pipeline(t_shell *s, int cmd_count)
 	while (cmd_count > 0 && result == SUCCESS)
 	{
 		cmd_count = cmd_count - 1;
+		// printf("in execute pipeline before process pipe stage token list is\n");
+		// print_token(s->token_list);
+		// printf("\n");
 		result = process_pipe_stage(s, &current, &prev_pipe, cmd_count);
+		// printf("in execute pipeline after process pipe stage, token list is\n");
+		// print_token(s->token_list);
+		// printf("\n");
 	}
 	if (prev_pipe != -1)
 		close(prev_pipe);

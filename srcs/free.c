@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 12:43:11 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/17 18:49:22 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/18 10:20:20 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,8 @@ void	free_token_list(t_token **token_list)
 	while (*token_list)
 	{
 		temp = *token_list;
+		// token_free_count++;
+		// printf("Token freed: %s - Nb of token freed: %d\n", temp->content, token_free_count);
 		*token_list = (*token_list)->next;
 		free(temp->content);
 		free(temp);
