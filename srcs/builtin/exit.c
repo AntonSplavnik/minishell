@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 17:13:23 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/17 19:01:53 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/18 12:00:16 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,8 +115,8 @@ void	simple_exit(t_shell *s, char **args)
 
 t_error	execute_exit(char **args, t_shell *s)
 {
-	int count_args;
-	int exit_code;
+	int	count_args;
+	int	exit_code;
 
 	count_args = ft_count_args(args);
 	restore_standard_fds(s);

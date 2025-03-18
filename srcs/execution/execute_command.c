@@ -6,11 +6,24 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 17:39:28 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/17 18:05:16 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/18 11:58:56 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static t_error execute_nonpipe_command(t_shell *s)
+{
+	t_token *cmd_copy;
+	t_error res;
+
+	cmd_copy = copy_tokens(s->token_list);
+	if (!cmd_copy)
+		return (ERR_MALLOC);
+	res = execute_single_command(cmd_copy, s);
+	token_clear(&cmd_copy);
+	return (res);
+}
 
 t_error	execute_command(t_shell *s)
 {
@@ -35,12 +48,6 @@ t_error	execute_command(t_shell *s)
 	if (has_pipe(s))
 		res = handle_pipe_operations(s);
 	else
-	{
-		cmd_copy = copy_tokens(s->token_list);
-		if (!cmd_copy)
-			return (ERR_MALLOC);
-		res = execute_single_command(cmd_copy, s);
-		token_clear(&cmd_copy);
-	}
+		res = execute_nonpipe_command(s);
 	return (res);
 }
