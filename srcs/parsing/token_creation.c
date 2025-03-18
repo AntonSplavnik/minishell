@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 11:21:21 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/18 10:20:14 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/18 12:03:40 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,6 @@ t_token	*create_token(char *input, t_token_type type)
 	}
 	new_token->type = type;
 	new_token->next = NULL;
-	// token_alloc_count++;
-	// printf("Token added: %s - Nb of token allocated: %d\n", new_token->content, token_alloc_count);
 	return (new_token);
 }
 
