@@ -6,26 +6,11 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 17:40:24 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/18 10:20:08 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/18 12:45:53 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-t_error	process_parent(int *prev_pipe, int pipe_fd[2], int cmd_count)
-{
-	if (*prev_pipe != -1)
-	{
-		close(*prev_pipe);
-		*prev_pipe = -1;
-	}
-	if (cmd_count > 0)
-	{
-		*prev_pipe = pipe_fd[0];
-		close(pipe_fd[1]);
-	}
-	return (SUCCESS);
-}
 
 t_error	process_pipe_stage(t_shell *s, t_token **current, int *prev_pipe,
 															int cmd_count)
@@ -37,18 +22,12 @@ t_error	process_pipe_stage(t_shell *s, t_token **current, int *prev_pipe,
 	t_pipe_info	pinfo;
 
 	cmd = get_next_cmd(current);
-	// printf("in process pipe stage, after get next cmd, token list is\n");
-	// print_token(s->token_list);
-	// printf("\n");
 	result = create_pipe_and_fork(cmd_count, pipe_fd, &pid);
 	if (result != SUCCESS)
 		return (result);
 	if (pid == 0)
 	{
-		pinfo.prev_pipe = *prev_pipe;
-		pinfo.cmd_count = cmd_count;
-		pinfo.pipe_fd[0] = pipe_fd[0];
-		pinfo.pipe_fd[1] = pipe_fd[1];
+		setup_pipe_info(&pinfo, prev_pipe, pipe_fd, cmd_count);
 		result = process_child(cmd, &pinfo, s);
 		token_clear(&cmd);
 		exit(s->exit_status);
@@ -76,54 +55,74 @@ int	count_pipes(t_token *tokens)
 	return (count);
 }
 
-t_token	*get_next_cmd(t_token **tokens)
+static t_token	*copy_command_tokens(t_token *cmd_start, int token_count)
 {
-	t_token *cmd_start;
-	t_token *current;
-	t_token *cmd_copy = NULL;
-	int token_count = 0;
+	t_token	*cmd_copy;
+	t_token	*current;
+	t_token	*new_token;
+	int		i;
 
-	// Find the first command (skipping empty tokens)
-	cmd_start = *tokens;
-	while (cmd_start && cmd_start->content[0] == '\0')
-		cmd_start = cmd_start->next;
-
-	// If no valid command, return NULL
-	if (!cmd_start)
-	{
-		*tokens = NULL;
-		return NULL;
-	}
-
-	// Count tokens until pipe or end of list
+	i = 0;
+	cmd_copy = NULL;
 	current = cmd_start;
-	while (current && ft_strcmp(current->content, "|") != 0)
+	while (i < token_count)
 	{
-		token_count++;
-		current = current->next;
-	}
-
-	// Copy only the command tokens (not including pipe)
-	current = cmd_start;
-	for (int i = 0; i < token_count; i++)
-	{
-		t_token *new_token = token_new(current->content, current->type);
+		new_token = token_new(current->content, current->type);
 		if (!new_token)
 		{
 			token_clear(&cmd_copy);
-			return NULL;
+			return (NULL);
 		}
 		token_add_back(&cmd_copy, new_token);
 		current = current->next;
+		i++;
 	}
+	return (cmd_copy);
+}
 
-	// Update tokens pointer to point after the pipe
+static void	find_command_range(t_token **tokens, t_token **start, \
+								int *count)
+{
+	t_token	*current;
+
+	*start = *tokens;
+	while (*start && (*start)->content[0] == '\0')
+		*start = (*start)->next;
+	*count = 0;
+	if (*start)
+	{
+		current = *start;
+		while (current && ft_strcmp(current->content, "|") != 0)
+		{
+			(*count)++;
+			current = current->next;
+		}
+	}
+}
+
+t_token	*get_next_cmd(t_token **tokens)
+{
+	t_token	*cmd_start;
+	t_token	*current;
+	t_token	*cmd_copy;
+	int		token_count;
+
+	find_command_range(tokens, &cmd_start, &token_count);
+	if (!cmd_start)
+	{
+		*tokens = NULL;
+		return (NULL);
+	}
+	cmd_copy = copy_command_tokens(cmd_start, token_count);
+	current = cmd_start;
+	while (token_count > 0)
+	{
+		current = current->next;
+		token_count--;
+	}
 	if (current && ft_strcmp(current->content, "|") == 0)
-		*tokens = current->next;  // Skip the pipe token
+		*tokens = current->next;
 	else
-		*tokens = NULL;  // No more tokens
-	// printf("in get next cmd, after detaching pipe list is\n");
-	// print_token(*tokens);
-	// printf("\n");
-	return cmd_copy;
+		*tokens = NULL;
+	return (cmd_copy);
 }
