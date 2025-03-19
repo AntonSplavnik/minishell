@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   token_extraction_heredoc_processing.c              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/17 15:02:42 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/18 12:36:44 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
-#include <readline/readline.h>
+#include "minishell.h"
 
 /*
 ** Process a single line in heredoc collection

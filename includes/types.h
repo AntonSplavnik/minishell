@@ -6,7 +6,7 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 16:08:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/15 16:59:17 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/17 17:15:51 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ typedef struct s_shell
 	int		stdin_copy;
 	pid_t	last_pid;
 	int		std_fds[2];
+	int		printed_newline;
 }	t_shell;
 
 #endif

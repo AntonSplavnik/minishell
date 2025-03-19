@@ -6,7 +6,7 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:02:10 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/17 16:02:45 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/19 13:39:17 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ static int	process_command(t_shell *s, char *args)
 		return (cleanup_signals(s, args));
 	if (error != SUCCESS)
 		return (set_exit_status(error, s, args));
+	// print_token(s->token_list);
 	if (s->token_list)
 		error = execute_command(s);
 	if (error == ERR_SIGNAL)

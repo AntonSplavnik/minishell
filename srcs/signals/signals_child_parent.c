@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   signals_child_parent.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 15:23:20 by abillote          #+#    #+#             */
-/*   Updated: 2025/03/17 14:35:53 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/19 13:37:30 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 /*
 Set up signal handling for child process:

@@ -6,7 +6,7 @@
 /*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 14:13:32 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/17 15:40:26 by asplavni         ###   ########.fr       */
+/*   Updated: 2025/03/18 12:47:52 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ typedef enum e_redir_type
 int				create_heredoc_file(void);
 void			save_stdin(t_shell *s);
 void			restore_stdin(t_shell *s);
-t_error			read_heredoc_input(int fd, char *delim);
 
 // redirections_utils.c
 t_error			file_error(char *filename, t_shell *s);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: asplavni <asplavni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 14:22:24 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/17 10:07:51 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/19 13:42:46 by asplavni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,6 @@ t_error	handle_redirections_(t_token *cmd, t_shell *s)
 	{
 		if (is_redirection(current->type))
 		{
-			if (!current->next || current->next->type == TYPE_PIPE)
-				return (syntax_error("near unexpected token", s));
 			if (get_redir_type(current->type) == REDIR_HEREDOC)
 				res = handle_heredoc_execution(current, s);
 			else if (get_redir_type(current->type) == REDIR_IN)
