@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 17:40:24 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/18 15:49:34 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/20 11:49:03 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,11 @@ static t_token	*copy_command_tokens(t_token *cmd_start, int token_count)
 	while (i < token_count)
 	{
 		new_token = token_new(current->content, current->type);
+		new_token = token_new(current->content, current->type);
 		if (!new_token)
 		{
 			token_clear(&cmd_copy);
+			return (NULL);
 			return (NULL);
 		}
 		token_add_back(&cmd_copy, new_token);
