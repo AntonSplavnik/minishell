@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 17:40:11 by asplavni          #+#    #+#             */
-/*   Updated: 2025/03/20 11:49:14 by abillote         ###   ########.fr       */
+/*   Updated: 2025/03/18 15:57:04 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ t_error	execute_pipeline(t_shell *s, int cmd_count)
 	current = s->token_list;
 	result = SUCCESS;
 	signal(SIGINT, SIG_IGN);
+	signal(SIGINT, signal_handler_parent);
 	while (cmd_count > 0 && result == SUCCESS)
 	{
 		cmd_count = cmd_count - 1;

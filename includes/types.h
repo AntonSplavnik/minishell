@@ -5,11 +5,10 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/20 11:48:21 by abillote         ###   ########.fr       */
+/*   Created: 2025/03/20 12:00:12 by abillote          #+#    #+#             */
+/*   Updated: 2025/03/20 12:00:16 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #ifndef TYPES_H
 # define TYPES_H

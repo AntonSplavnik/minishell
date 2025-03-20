@@ -5,11 +5,10 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/20 11:49:40 by abillote         ###   ########.fr       */
+/*   Created: 2025/03/10 14:09:10 by asplavni          #+#    #+#             */
+/*   Updated: 2025/03/18 15:51:31 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "minishell.h"
 
